@@ -1,15 +1,17 @@
 const prompt = require("prompt");
 const chalk = require("chalk");
 const conf = new (require("conf"))();
-const { exec } = require("child_process");
 const createRepos = require("../tasks/github");
 const {
   installAppDependencies,
   installApiDependencies,
 } = require("../tasks/dependencies");
+const linkValetSite = require("../tasks/valet");
 
-async function create() {
-  console.log(chalk.greenBright.bold("⚡️ Creating new Lisa project ⚡️"));
+async function create({ skipGithub }) {
+  console.log(
+    chalk.greenBright.bold("⚡️⚡️⚡️ Creating new Lisa project ⚡⚡️⚡️️")
+  );
   console.log();
 
   prompt.start();
@@ -23,7 +25,7 @@ async function create() {
         description: "Enter the name of your new project",
         message: "Please use only lowercase and hyphens only.",
         required: true,
-        pattern: /^[a-z-]+$/,
+        pattern: /^[a-z0-9-]+$/,
       },
     },
   };
@@ -32,10 +34,16 @@ async function create() {
 
   conf.set("projectName", projectName);
 
-  console.log();
-  console.log(chalk.greenBright(`✅ Project name set to ${projectName}`));
+  let appName = `${projectName}-app`;
+  let apiName = `${projectName}-api`;
 
-  await createRepos();
+  conf.set("apiName", apiName);
+  conf.set("appName", appName);
+
+  console.log();
+  console.log(chalk.greenBright(`🎉 Project name set to ${projectName}`));
+
+  await createRepos(skipGithub);
 
   console.log();
   console.log(chalk.cyanBright("🪚 Install dependencies."));
@@ -44,7 +52,9 @@ async function create() {
   let apiPromise = installApiDependencies();
 
   await Promise.all([appPromise, apiPromise]);
-  console.log(chalk.greenBright("✅ All dependencies installed."));
+  console.log(chalk.greenBright("🎉 All dependencies installed."));
+
+  await linkValetSite();
 }
 
 module.exports = create;
