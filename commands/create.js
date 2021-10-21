@@ -69,6 +69,8 @@ async function create({ skipGithub }) {
 
   await linkValetSite();
   await addVaultPassword();
+
+  chalk.greenBright.bold("⚡️⚡️⚡️ All done! ⚡⚡️⚡️️");
 }
 
 module.exports = create;

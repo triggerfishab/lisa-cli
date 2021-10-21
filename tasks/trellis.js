@@ -3,7 +3,7 @@ const fs = require("fs");
 const conf = new (require("conf"))();
 var generator = require("generate-password");
 
-function addVaultPassword() {
+async function addVaultPassword() {
   let apiName = conf.get("apiName");
   let path = `${apiName}/trellis/.vault_pass`;
   let password = generator.generate({
