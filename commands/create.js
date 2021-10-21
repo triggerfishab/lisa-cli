@@ -15,6 +15,18 @@ async function create({ skipGithub }) {
   );
   console.log();
 
+  let nodeVersion = process.version.match(/^v(\d+)/)[1];
+
+  if (nodeVersion < 12) {
+    console.log();
+    console.log(
+      chalk.bgRedBright.bold(
+        `🚔🚔🚔 You are running node version ${nodeVersion}. Please update to latest Node version. 🚔🚔🚔`
+      )
+    );
+    process.exit();
+  }
+
   prompt.start();
   prompt.message = "";
   prompt.delimiter = chalk.greenBright(" >");
