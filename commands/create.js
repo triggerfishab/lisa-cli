@@ -7,6 +7,7 @@ const {
   installApiDependencies,
 } = require("../tasks/dependencies");
 const linkValetSite = require("../tasks/valet");
+const { addVaultPassword } = require("../tasks/trellis");
 
 async function create({ skipGithub }) {
   console.log(
@@ -37,8 +38,8 @@ async function create({ skipGithub }) {
   let appName = `${projectName}-app`;
   let apiName = `${projectName}-api`;
 
-  conf.set("apiName", apiName);
   conf.set("appName", appName);
+  conf.set("apiName", apiName);
 
   console.log();
   console.log(chalk.greenBright(`🎉 Project name set to ${projectName}`));
@@ -55,6 +56,7 @@ async function create({ skipGithub }) {
   console.log(chalk.greenBright("🎉 All dependencies installed."));
 
   await linkValetSite();
+  await addVaultPassword();
 }
 
 module.exports = create;
