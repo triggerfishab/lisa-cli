@@ -18,7 +18,7 @@ async function setupTrellisDevelopmentFiles() {
   let path = `${trellisPath}/group_vars/development`;
   let siteName = `${projectName}.${tld}`;
   let apiDomain = `${apiName}.${tld}`;
-  let lisaVaultPass = await getLisaVaultPass();
+  // let lisaVaultPass = await getLisaVaultPass();
 
   console.log();
   console.log(
