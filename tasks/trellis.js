@@ -1,7 +1,7 @@
 const chalk = require("chalk");
 const fs = require("fs");
 const conf = new (require("conf"))();
-var generator = require("generate-password");
+const generator = require("generate-password");
 
 async function addVaultPassword() {
   let apiName = conf.get("apiName");

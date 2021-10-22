@@ -1,6 +1,4 @@
-const prompt = require("prompt");
 const chalk = require("chalk");
-const conf = new (require("conf"))();
 const createRepos = require("../tasks/github");
 const {
   installAppDependencies,
@@ -8,6 +6,7 @@ const {
 } = require("../tasks/dependencies");
 const linkValetSite = require("../tasks/valet");
 const { addVaultPassword } = require("../tasks/trellis");
+const { askForAppName } = require("../lib/app-name");
 
 async function create({ skipGithub }) {
   console.log(
@@ -27,31 +26,7 @@ async function create({ skipGithub }) {
     process.exit();
   }
 
-  prompt.start();
-  prompt.message = "";
-  prompt.delimiter = chalk.greenBright(" >");
-
-  let projectNamePrompt = {
-    properties: {
-      projectName: {
-        type: "string",
-        description: "Enter the name of your new project",
-        message: "Please use only lowercase and hyphens only.",
-        required: true,
-        pattern: /^[a-z0-9-]+$/,
-      },
-    },
-  };
-
-  let { projectName } = await prompt.get(projectNamePrompt);
-
-  conf.set("projectName", projectName);
-
-  let appName = `${projectName}-app`;
-  let apiName = `${projectName}-api`;
-
-  conf.set("appName", appName);
-  conf.set("apiName", apiName);
+  askForAppName();
 
   console.log();
   console.log(chalk.greenBright(`🎉 Project name set to ${projectName}`));

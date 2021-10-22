@@ -8,12 +8,17 @@ async function linkValetSite() {
   console.log(chalk.cyanBright("🪚 Linking site to Valet."));
 
   let apiName = conf.get("apiName");
-  let tld = await exec("valet tld");
+  let tld = getValetTld();
   await exec(`valet link --secure ${apiName}`, { cwd: `${apiName}/site` });
 
-  console.log(
-    chalk.green(`🎉 Site linked as https://${apiName}.${tld.stdout.trim()}.`)
-  );
+  console.log(chalk.green(`🎉 Site linked as https://${apiName}.${tld}.`));
 }
 
-module.exports = linkValetSite;
+async function getValetTld() {
+  let tld = await exec("valet tld");
+
+  return tld.stdout.trim();
+}
+
+const valetModule = (module.exports = linkValetSite);
+valetModule.getValetTld = getValetTld;
