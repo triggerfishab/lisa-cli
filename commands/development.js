@@ -6,17 +6,17 @@ const { getValetTld } = require("../tasks/valet");
 const { getLisaVaultPass } = require("../lib/vault-pass");
 const util = require("util");
 const exec = util.promisify(require("child_process").exec);
-const conf = new (require("conf"))();
+
 const generator = require("generate-password");
+const { getTrellisPath, getGroupVarsPath } = require("../lib/trellis");
 
 async function setupTrellisDevelopmentFiles() {
   let projectName = await getProjectName();
   let tld = await getValetTld();
+  let trellisPath = getTrellisPath();
 
-  let apiName = conf.get("apiName");
-  let trellisPath = `${apiName}/trellis`;
-  let developmentGroupVarsPath = `${trellisPath}/group_vars/development`;
-  let allGroupVarsPath = `${trellisPath}/group_vars/all`;
+  let developmentGroupVarsPath = getGroupVarsPath("development");
+  let allGroupVarsPath = getGroupVarsPath("all");
   let siteName = `${projectName}.${tld}`;
   let apiDomain = `${apiName}.${tld}`;
   let lisaVaultPass = await getLisaVaultPass();

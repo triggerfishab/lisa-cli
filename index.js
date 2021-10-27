@@ -3,6 +3,7 @@
 const { program } = require("commander");
 const create = require("./commands/create");
 const setupTrellisDevelopmentFiles = require("./commands/development");
+const configureTrellisForKinsta = require("./commands/kinsta");
 const setupSendgridAccount = require("./commands/sendgrid");
 const resetConf = require("./lib/conf");
 
@@ -23,5 +24,11 @@ program
   .command("sendgrid setup")
   .description("Setup Sendgrid account")
   .action(setupSendgridAccount);
+
+program
+  .command("kinsta")
+  .description("Setup Kinsta configuration files in Trellis project")
+  .option("--config-file <file>", "File with configuration options from Kinsta")
+  .action(configureTrellisForKinsta);
 
 program.parse();

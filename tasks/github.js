@@ -1,9 +1,12 @@
 const conf = new (require("conf"))();
 const chalk = require("chalk");
+const { program } = require("commander");
 const util = require("util");
 const exec = util.promisify(require("child_process").exec);
 
-async function createRepos(skipGithub) {
+async function createRepos() {
+  let { skipGithub } = program.opts();
+
   if (skipGithub) {
     return;
   }

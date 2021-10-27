@@ -8,7 +8,7 @@ const linkValetSite = require("../tasks/valet");
 const { addVaultPassword } = require("../tasks/trellis");
 const { askForProjectName } = require("../lib/app-name");
 
-async function create({ skipGithub }) {
+async function create() {
   console.log(
     chalk.greenBright.bold("⚡️⚡️⚡️ Creating new Lisa project ⚡⚡️⚡️️")
   );
@@ -31,7 +31,7 @@ async function create({ skipGithub }) {
   console.log();
   console.log(chalk.greenBright(`🎉 Project name set to ${projectName}`));
 
-  await createRepos(skipGithub);
+  await createRepos();
 
   console.log();
   console.log(chalk.cyanBright("🪚 Install dependencies."));
