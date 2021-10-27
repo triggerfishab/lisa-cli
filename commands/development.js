@@ -69,6 +69,8 @@ async function setupTrellisDevelopmentFiles() {
       `ansible-vault encrypt ${allGroupVarsPath}/vault.yml --vault-password-file ${trellisPath}/.vault_pass`
     );
 
+    fs.unlink(lisaVaultPassFile, () => {});
+
     console.log(
       chalk.greenBright(
         `🎉 ${allGroupVarsPath}/vault.yml encrypted with new vault pass.`
