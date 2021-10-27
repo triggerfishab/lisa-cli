@@ -26,7 +26,7 @@ async function create({ skipGithub }) {
     process.exit();
   }
 
-  askForAppName();
+  await askForAppName();
 
   console.log();
   console.log(chalk.greenBright(`🎉 Project name set to ${projectName}`));
