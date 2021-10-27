@@ -6,7 +6,7 @@ const {
 } = require("../tasks/dependencies");
 const linkValetSite = require("../tasks/valet");
 const { addVaultPassword } = require("../tasks/trellis");
-const { askForAppName } = require("../lib/app-name");
+const { askForProjectName } = require("../lib/app-name");
 
 async function create({ skipGithub }) {
   console.log(
@@ -26,7 +26,7 @@ async function create({ skipGithub }) {
     process.exit();
   }
 
-  await askForAppName();
+  let projectName = await askForProjectName();
 
   console.log();
   console.log(chalk.greenBright(`🎉 Project name set to ${projectName}`));
