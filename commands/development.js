@@ -15,10 +15,11 @@ async function setupTrellisDevelopmentFiles() {
 
   let apiName = conf.get("apiName");
   let trellisPath = `${apiName}/trellis`;
-  let path = `${trellisPath}/group_vars/development`;
+  let developmentGroupVarsPath = `${trellisPath}/group_vars/development`;
+  let allGroupVarsPath = `${trellisPath}/group_vars/all`;
   let siteName = `${projectName}.${tld}`;
   let apiDomain = `${apiName}.${tld}`;
-  // let lisaVaultPass = await getLisaVaultPass();
+  let lisaVaultPass = await getLisaVaultPass();
 
   console.log();
   console.log(
@@ -27,7 +28,7 @@ async function setupTrellisDevelopmentFiles() {
 
   try {
     let wordpressSites = yaml.load(
-      fs.readFileSync(`${path}/wordpress_sites.yml`, "utf8")
+      fs.readFileSync(`${developmentGroupVarsPath}/wordpress_sites.yml`, "utf8")
     );
 
     let config = { ...wordpressSites };
@@ -45,19 +46,34 @@ async function setupTrellisDevelopmentFiles() {
 
     delete config.wordpress_sites["lisa.test"];
 
-    fs.writeFile(`${path}/wordpress_sites.yml`, yaml.dump(config), () =>
-      console.log(chalk.greenBright(`🎉 ${path}/wordpress_sites.yml updated.`))
+    fs.writeFile(
+      `${developmentGroupVarsPath}/wordpress_sites.yml`,
+      yaml.dump(config),
+      () =>
+        console.log(
+          chalk.greenBright(
+            `🎉 ${developmentGroupVarsPath}/wordpress_sites.yml updated.`
+          )
+        )
     );
 
-    // let lisaVaultPassFile = `${path}/.lisa_vault_pass`;
+    let lisaVaultPassFile = `${trellisPath}/.lisa_vault_pass`;
 
-    // fs.writeFile(lisaVaultPassFile, lisaVaultPass, () => {});
+    fs.writeFile(lisaVaultPassFile, lisaVaultPass, () => {});
 
-    // await exec(
-    //   `ansible-vault decrypt ${path}/vault.yml --vault-password-file ${lisaVaultPassFile}`
-    // );
+    await exec(
+      `ansible-vault decrypt ${allGroupVarsPath}/vault.yml --vault-password-file ${lisaVaultPassFile}`
+    );
 
-    // let vault = yaml.load(fs.readFileSync(`${path}/vault.yml`, "utf8"));
+    await exec(
+      `ansible-vault encrypt ${allGroupVarsPath}/vault.yml --vault-password-file ${trellisPath}/.vault_pass`
+    );
+
+    console.log(
+      chalk.greenBright(
+        `🎉 ${allGroupVarsPath}/vault.yml encrypted with new vault pass.`
+      )
+    );
 
     let vaultConfig = {
       vault_wordpress_sites: {
@@ -103,15 +119,18 @@ async function setupTrellisDevelopmentFiles() {
       },
     };
 
-    fs.writeFile(`${path}/vault.yml`, yaml.dump(vaultConfig), () =>
-      console.log(chalk.greenBright(`🎉 ${path}/vault.yml updated.`))
+    fs.writeFile(
+      `${developmentGroupVarsPath}/vault.yml`,
+      yaml.dump(vaultConfig),
+      () =>
+        console.log(
+          chalk.greenBright(`🎉 ${developmentGroupVarsPath}/vault.yml updated.`)
+        )
     );
 
     await exec(
-      `ansible-vault encrypt ${path}/vault.yml --vault-password-file ${trellisPath}/.vault_pass`
+      `ansible-vault encrypt ${developmentGroupVarsPath}/vault.yml --vault-password-file ${trellisPath}/.vault_pass`
     );
-
-    // fs.unlink(lisaVaultPassFile, () => {});
 
     await exec(`trellis dotenv`, {
       cwd: trellisPath,
