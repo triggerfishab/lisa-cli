@@ -10,7 +10,7 @@ const exec = util.promisify(require("child_process").exec);
 const generator = require("generate-password");
 
 async function configureTrellisForKinsta({ configFile }) {
-  let projectName = await getProjectName();
+  await getProjectName();
 
   console.log();
   console.log(
@@ -20,8 +20,8 @@ async function configureTrellisForKinsta({ configFile }) {
   );
 
   let lisaVaultPass = await getLisaVaultPass();
-  let kinstaConfigFile = yaml.load(fs.readFileSync(configFile, "utf8"));
   let trellisPath = getTrellisPath();
+
   let ansibleCfgFile = fs.readFileSync(`${trellisPath}/ansible.cfg`, "utf8");
   ansibleCfgFile = ansibleCfgFile.replace(
     "[defaults]",
@@ -31,27 +31,36 @@ async function configureTrellisForKinsta({ configFile }) {
   fs.writeFileSync(`${trellisPath}/ansible.cfg`, ansibleCfgFile);
   console.log(chalk.greenBright(`🎉 ${trellisPath}/ansible.cfg updated.`));
 
-  let stagingHost = `kinsta_staging ansible_host=${kinstaConfigFile.staging.ansible_host} ansible_ssh_port=${kinstaConfigFile.staging.ansible_ssh_port} ansible_ssh_extra_args='-o StrictHostKeyChecking=no'
+  await updateConfigFilesForEnvironment("staging", configFile);
+  await updateConfigFilesForEnvironment("production", configFile);
+}
+
+async function updateConfigFilesForEnvironment(environment, configFile) {
+  let kinstaConfigFile = yaml.load(fs.readFileSync(configFile, "utf8"));
+  let trellisPath = getTrellisPath();
+  let host = `kinsta_${environment} ansible_host=${kinstaConfigFile[environment].ansible_host} ansible_ssh_port=${kinstaConfigFile[environment].ansible_ssh_port} ansible_ssh_extra_args='-o StrictHostKeyChecking=no'
 
 [web]
-kinsta_staging
+kinsta_${environment}
 
-[staging]
-kinsta_staging`;
+[${environment}]
+kinsta_${environment}`;
 
-  fs.writeFileSync(`${trellisPath}/hosts/staging`, stagingHost);
-  console.log(chalk.greenBright(`🎉 ${trellisPath}/hosts/staging updated.`));
+  fs.writeFileSync(`${trellisPath}/hosts/${environment}`, host);
+  console.log(
+    chalk.greenBright(`🎉 ${trellisPath}/hosts/${environment} updated.`)
+  );
 
-  let stagingGroupVarsPath = getGroupVarsPath("staging");
+  let groupVarsPath = getGroupVarsPath(environment);
 
-  let stagingWordpressSites = yaml.load(
-    fs.readFileSync(`${stagingGroupVarsPath}/wordpress_sites.yml`, "utf-8")
+  let wordpressSites = yaml.load(
+    fs.readFileSync(`${groupVarsPath}/wordpress_sites.yml`, "utf-8")
   );
 
   let { sitename } = kinstaConfigFile;
-  let apiDomain = kinstaConfigFile.staging.canonical;
+  let apiDomain = kinstaConfigFile[environment].canonical;
 
-  let config = { ...stagingWordpressSites };
+  let config = { ...wordpressSites };
   let repo = await exec(`git config --get remote.origin.url`, {
     cwd: trellisPath,
   });
@@ -69,37 +78,35 @@ kinsta_staging`;
     repo,
   };
 
+  if (kinstaConfigFile[environment].redirects) {
+    config.wordpress_sites[sitename].site_hosts[0].redirects =
+      kinstaConfigFile[environment].redirects;
+  }
+
   delete config.wordpress_sites["lisa.test"];
 
-  fs.writeFile(
-    `${stagingGroupVarsPath}/wordpress_sites.yml`,
-    yaml.dump(config),
-    () =>
-      console.log(
-        chalk.greenBright(
-          `🎉 ${stagingGroupVarsPath}/wordpress_sites.yml updated.`
-        )
-      )
+  fs.writeFile(`${groupVarsPath}/wordpress_sites.yml`, yaml.dump(config), () =>
+    console.log(
+      chalk.greenBright(`🎉 ${groupVarsPath}/wordpress_sites.yml updated.`)
+    )
   );
 
-  let main = `project_root: ${kinstaConfigFile.staging.project_root}
-www_root: ${kinstaConfigFile.staging.www_root}
-web_user: ${kinstaConfigFile.staging.web_user}
-web_group: ${kinstaConfigFile.staging.web_group}`;
+  let main = `project_root: ${kinstaConfigFile[environment].project_root}
+www_root: ${kinstaConfigFile[environment].www_root}
+web_user: ${kinstaConfigFile[environment].web_user}
+web_group: ${kinstaConfigFile[environment].web_group}`;
 
-  fs.writeFile(`${stagingGroupVarsPath}/main.yml`, main, () =>
-    console.log(
-      chalk.greenBright(`🎉 ${stagingGroupVarsPath}/main.yml updated.`)
-    )
+  fs.writeFile(`${groupVarsPath}/main.yml`, main, () =>
+    console.log(chalk.greenBright(`🎉 ${groupVarsPath}/main.yml updated.`))
   );
 
   let vaultConfig = {
     vault_wordpress_sites: {
       [sitename]: {
         env: {
-          db_name: kinstaConfigFile.staging.db_name,
-          db_password: kinstaConfigFile.staging.db_password,
-          db_user: kinstaConfigFile.staging.db_user,
+          db_name: kinstaConfigFile[environment].db_name,
+          db_password: kinstaConfigFile[environment].db_password,
+          db_user: kinstaConfigFile[environment].db_user,
           auth_key: generator.generate({
             length: 64,
             numbers: true,
@@ -137,15 +144,13 @@ web_group: ${kinstaConfigFile.staging.web_group}`;
     },
   };
 
-  fs.writeFileSync(`${stagingGroupVarsPath}/vault.yml`, yaml.dump(vaultConfig));
+  fs.writeFileSync(`${groupVarsPath}/vault.yml`, yaml.dump(vaultConfig));
 
   await exec(
-    `ansible-vault encrypt ${stagingGroupVarsPath}/vault.yml --vault-password-file ${trellisPath}/.vault_pass`
+    `ansible-vault encrypt ${groupVarsPath}/vault.yml --vault-password-file ${trellisPath}/.vault_pass`
   );
 
-  console.log(
-    chalk.greenBright(`🎉 ${stagingGroupVarsPath}/vault.yml updated.`)
-  );
+  console.log(chalk.greenBright(`🎉 ${groupVarsPath}/vault.yml updated.`));
 }
 
 module.exports = configureTrellisForKinsta;

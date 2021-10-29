@@ -1,5 +1,5 @@
 const chalk = require("chalk");
-const { getProjectName } = require("../lib/app-name");
+const { getProjectName, getApiName } = require("../lib/app-name");
 const yaml = require("js-yaml");
 const fs = require("fs");
 const { getValetTld } = require("../tasks/valet");
@@ -9,9 +9,11 @@ const exec = util.promisify(require("child_process").exec);
 
 const generator = require("generate-password");
 const { getTrellisPath, getGroupVarsPath } = require("../lib/trellis");
+const { changeVaultPasswords } = require("../tasks/trellis");
 
 async function setupTrellisDevelopmentFiles() {
   let projectName = await getProjectName();
+  let apiName = await getApiName();
   let tld = await getValetTld();
   let trellisPath = getTrellisPath();
 
@@ -19,7 +21,6 @@ async function setupTrellisDevelopmentFiles() {
   let allGroupVarsPath = getGroupVarsPath("all");
   let siteName = `${projectName}.${tld}`;
   let apiDomain = `${apiName}.${tld}`;
-  let lisaVaultPass = await getLisaVaultPass();
 
   console.log();
   console.log(
@@ -57,25 +58,7 @@ async function setupTrellisDevelopmentFiles() {
         )
     );
 
-    let lisaVaultPassFile = `${trellisPath}/.lisa_vault_pass`;
-
-    fs.writeFile(lisaVaultPassFile, lisaVaultPass, () => {});
-
-    await exec(
-      `ansible-vault decrypt ${allGroupVarsPath}/vault.yml --vault-password-file ${lisaVaultPassFile}`
-    );
-
-    await exec(
-      `ansible-vault encrypt ${allGroupVarsPath}/vault.yml --vault-password-file ${trellisPath}/.vault_pass`
-    );
-
-    fs.unlink(lisaVaultPassFile, () => {});
-
-    console.log(
-      chalk.greenBright(
-        `🎉 ${allGroupVarsPath}/vault.yml encrypted with new vault pass.`
-      )
-    );
+    await changeVaultPasswords();
 
     let vaultConfig = {
       vault_wordpress_sites: {

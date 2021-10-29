@@ -44,6 +44,7 @@ async function create() {
 
   await linkValetSite();
   await addVaultPassword();
+  await changeVaultPasswords();
 
   chalk.greenBright.bold("⚡️⚡️⚡️ All done! ⚡⚡️⚡️️");
 }
