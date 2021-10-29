@@ -8,7 +8,7 @@ async function linkValetSite() {
   console.log(chalk.cyanBright("🪚 Linking site to Valet."));
 
   let apiName = conf.get("apiName");
-  let tld = getValetTld();
+  let tld = await getValetTld();
   await exec(`valet link --secure ${apiName}`, { cwd: `${apiName}/site` });
 
   console.log(chalk.green(`🎉 Site linked as https://${apiName}.${tld}.`));

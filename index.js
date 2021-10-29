@@ -1,25 +1,26 @@
 #! /usr/bin/env node
 
 const { program } = require("commander");
-const create = require("./commands/create");
-const setupTrellisDevelopmentFiles = require("./commands/development");
+const init = require("./commands/init");
+const setupTrellisDevelopmentFiles = require("./commands/local");
 const configureTrellisForKinsta = require("./commands/kinsta");
 const setupSendgridAccount = require("./commands/sendgrid");
 const { getKinstaHelpMessage } = require("./help/kinsta");
 const resetConf = require("./lib/conf");
+const setupLocalSiteForDevelopment = require("./commands/local");
 
 resetConf();
 
 program
-  .command("create")
+  .command("init")
   .description("Create a Lisa project")
   .option("--skip-github", "Skip setup for Git repositories")
-  .action(create);
+  .action(init);
 
 program
-  .command("trellis development")
-  .description("Setup Trellis files for development")
-  .action(setupTrellisDevelopmentFiles);
+  .command("local")
+  .description("Setup Lisa site for local development")
+  .action(setupLocalSiteForDevelopment);
 
 program
   .command("sendgrid setup")

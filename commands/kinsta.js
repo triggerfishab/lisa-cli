@@ -1,15 +1,21 @@
 const chalk = require("chalk");
 const yaml = require("js-yaml");
 const fs = require("fs");
-const { getLisaVaultPass } = require("../lib/vault-pass");
 const { getTrellisPath, getGroupVarsPath } = require("../lib/trellis");
-const { getValetTld } = require("../tasks/valet");
 const { getProjectName } = require("../lib/app-name");
 const util = require("util");
 const exec = util.promisify(require("child_process").exec);
 const generator = require("generate-password");
+const { askForConfigFile } = require("../lib/kinsta");
+const { program } = require("commander");
 
-async function configureTrellisForKinsta({ configFile }) {
+async function configureTrellisForKinsta() {
+  let { configFile } = program.opts();
+
+  if (!configFile) {
+    configFile = await askForConfigFile();
+  }
+
   await getProjectName();
 
   console.log();
@@ -19,9 +25,7 @@ async function configureTrellisForKinsta({ configFile }) {
     )
   );
 
-  let lisaVaultPass = await getLisaVaultPass();
   let trellisPath = getTrellisPath();
-
   let ansibleCfgFile = fs.readFileSync(`${trellisPath}/ansible.cfg`, "utf8");
   ansibleCfgFile = ansibleCfgFile.replace(
     "[defaults]",

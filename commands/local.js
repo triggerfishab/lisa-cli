@@ -3,22 +3,44 @@ const { getProjectName, getApiName } = require("../lib/app-name");
 const yaml = require("js-yaml");
 const fs = require("fs");
 const { getValetTld } = require("../tasks/valet");
-const { getLisaVaultPass } = require("../lib/vault-pass");
 const util = require("util");
 const exec = util.promisify(require("child_process").exec);
 
 const generator = require("generate-password");
 const { getTrellisPath, getGroupVarsPath } = require("../lib/trellis");
-const { changeVaultPasswords } = require("../tasks/trellis");
+const { changeVaultPasswords, addVaultPassword } = require("../tasks/trellis");
+const {
+  installApiDependencies,
+  installAppDependencies,
+} = require("../tasks/dependencies");
+const linkValetSite = require("../tasks/valet");
 
-async function setupTrellisDevelopmentFiles() {
+async function setupLocalSiteForDevelopment() {
+  console.log();
+  console.log(
+    chalk.bold.greenBright(
+      "⚡️⚡️⚡️ Setup site for local development ⚡️⚡️⚡️"
+    )
+  );
+  console.log();
+  console.log(chalk.cyanBright("🪚 Install dependencies."));
+
+  let appPromise = installAppDependencies();
+  let apiPromise = installApiDependencies();
+
+  await Promise.all([appPromise, apiPromise]);
+  console.log(chalk.greenBright("🎉 All dependencies installed."));
+
+  await linkValetSite();
+  await addVaultPassword();
+  await changeVaultPasswords();
+
   let projectName = await getProjectName();
   let apiName = await getApiName();
   let tld = await getValetTld();
   let trellisPath = getTrellisPath();
 
   let developmentGroupVarsPath = getGroupVarsPath("development");
-  let allGroupVarsPath = getGroupVarsPath("all");
   let siteName = `${projectName}.${tld}`;
   let apiDomain = `${apiName}.${tld}`;
 
@@ -57,8 +79,6 @@ async function setupTrellisDevelopmentFiles() {
           )
         )
     );
-
-    await changeVaultPasswords();
 
     let vaultConfig = {
       vault_wordpress_sites: {
@@ -131,4 +151,4 @@ async function setupTrellisDevelopmentFiles() {
   }
 }
 
-module.exports = setupTrellisDevelopmentFiles;
+module.exports = setupLocalSiteForDevelopment;

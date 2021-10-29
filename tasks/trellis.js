@@ -9,7 +9,7 @@ const {
   getLisaVaultPassPath,
   getVaultPassPath,
   removeTempLisaVaultPass,
-} = require("../lib/vault-pass");
+} = require("../lib/vault");
 
 async function addVaultPassword() {
   let trellisPath = getTrellisPath();
@@ -25,10 +25,17 @@ async function addVaultPassword() {
     }
   });
 
-  console.log(chalk.greenBright(`🎉 Vault pass written to ${path}.`));
+  console.log(chalk.greenBright(`🎉 Vault pass written to ${vaultPassPath}.`));
 }
 
 async function changeVaultPasswords() {
+  console.log();
+  console.log(
+    chalk.bold.greenBright(
+      "⚡️⚡️⚡️ Update all vault files with new vault pass ⚡️⚡️⚡️"
+    )
+  );
+
   let lisaVaultPassPath = getLisaVaultPassPath();
   let vaultPassPath = getVaultPassPath();
 
