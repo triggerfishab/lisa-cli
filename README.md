@@ -22,6 +22,8 @@ You will need to install the following stuff to use lisa-cli:
 ```npm i -g lisa-cli```
 
 ## 🏃‍♂️ Usage
+
+### Create a new site
 From your generic sites folder (i.e. `~/Sites`) run the following command:
 
 ```lisa init```
@@ -29,6 +31,13 @@ From your generic sites folder (i.e. `~/Sites`) run the following command:
 You will also need to create a YAML file with all the config from Kinsta, run the following command to get a file template:
 
 ```lisa kinsta --help```
+
+### Setup an existing site
+If you want to setup an already existing Lisa site for local development, you can just run the following command:
+
+```lisa clone```
+
+This will ask for the project name and try to find the correct repos that you should use. If not the correct repos are found, the prompt will let you specify them manually.
 
 ## 🔨 TODO
 - Local Trellis development

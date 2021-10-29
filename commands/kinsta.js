@@ -7,14 +7,17 @@ const util = require("util");
 const exec = util.promisify(require("child_process").exec);
 const generator = require("generate-password");
 const { askForConfigFile } = require("../lib/kinsta");
-const { program } = require("commander");
 
-async function configureTrellisForKinsta() {
-  let { configFile } = program.opts();
+async function configureTrellisForKinsta(opts) {
+  let configFile;
 
-  if (!configFile) {
+  if (!opts) {
     configFile = await askForConfigFile();
+  } else {
+    configFile = opts.configFile;
   }
+
+  console.log(configFile);
 
   await getProjectName();
 

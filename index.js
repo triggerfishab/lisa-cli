@@ -2,12 +2,12 @@
 
 const { program } = require("commander");
 const init = require("./commands/init");
-const setupTrellisDevelopmentFiles = require("./commands/local");
 const configureTrellisForKinsta = require("./commands/kinsta");
 const setupSendgridAccount = require("./commands/sendgrid");
 const { getKinstaHelpMessage } = require("./help/kinsta");
 const resetConf = require("./lib/conf");
 const setupLocalSiteForDevelopment = require("./commands/local");
+const cloneLisaProject = require("./commands/clone");
 
 resetConf();
 
@@ -33,5 +33,10 @@ program
   .option("--config-file <file>", "File with configuration options from Kinsta")
   .addHelpText("after", getKinstaHelpMessage())
   .action(configureTrellisForKinsta);
+
+program
+  .command("clone")
+  .description("Clone an existing Lisa project for local development")
+  .action(cloneLisaProject);
 
 program.parse();

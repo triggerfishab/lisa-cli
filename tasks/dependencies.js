@@ -3,6 +3,16 @@ const chalk = require("chalk");
 const util = require("util");
 const exec = util.promisify(require("child_process").exec);
 
+async function installDependencies() {
+  console.log(chalk.cyanBright("🪚 Install dependencies."));
+
+  let appPromise = installAppDependencies();
+  let apiPromise = installApiDependencies();
+
+  await Promise.all([appPromise, apiPromise]);
+  console.log(chalk.greenBright("🎉 All dependencies installed."));
+}
+
 async function installAppDependencies() {
   let appName = conf.get("appName");
 
@@ -23,4 +33,4 @@ async function installApiDependencies() {
   return Promise.all([sitePromise, themePromise]);
 }
 
-module.exports = { installAppDependencies, installApiDependencies };
+module.exports = installDependencies;

@@ -14,6 +14,7 @@ const {
   installAppDependencies,
 } = require("../tasks/dependencies");
 const linkValetSite = require("../tasks/valet");
+const installDependencies = require("../tasks/dependencies");
 
 async function setupLocalSiteForDevelopment() {
   console.log();
@@ -23,14 +24,8 @@ async function setupLocalSiteForDevelopment() {
     )
   );
   console.log();
-  console.log(chalk.cyanBright("🪚 Install dependencies."));
 
-  let appPromise = installAppDependencies();
-  let apiPromise = installApiDependencies();
-
-  await Promise.all([appPromise, apiPromise]);
-  console.log(chalk.greenBright("🎉 All dependencies installed."));
-
+  await installDependencies();
   await linkValetSite();
   await addVaultPassword();
   await changeVaultPasswords();

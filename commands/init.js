@@ -22,11 +22,7 @@ async function init() {
     process.exit();
   }
 
-  let projectName = await askForProjectName();
-
-  console.log();
-  console.log(chalk.greenBright(`🎉 Project name set to ${projectName}`));
-
+  await askForProjectName();
   await createRepos();
   await setupLocalSiteForDevelopment();
   await configureTrellisForKinsta();
