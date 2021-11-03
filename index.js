@@ -8,6 +8,7 @@ const { getKinstaHelpMessage } = require("./help/kinsta");
 const resetConf = require("./lib/conf");
 const setupLocalSiteForDevelopment = require("./commands/local");
 const cloneLisaProject = require("./commands/clone");
+const dbImport = require("./commands/db");
 
 resetConf();
 
@@ -38,5 +39,10 @@ program
   .command("clone")
   .description("Clone an existing Lisa project for local development")
   .action(cloneLisaProject);
+
+program
+  .command("db import")
+  .description("Import a database from staging/production environment")
+  .action(dbImport);
 
 program.parse();
