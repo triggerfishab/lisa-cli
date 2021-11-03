@@ -11,8 +11,6 @@ async function dbImport() {
 
   let trellisPath = getTrellisPath();
 
-  console.log(trellisPath);
-
   let { environment } = await prompts({
     type: "select",
     name: "environment",
@@ -63,6 +61,8 @@ async function dbImport() {
   console.log(chalk.blue(`⏰ Importing database to local site...`));
 
   await exec(`wp db import db.sql --path="${getTrellisSitePath()}/web/wp"`);
+
+  console.log(chalk.greenBright(`🎉 Datebase successfully imported!`));
 }
 
 module.exports = dbImport;

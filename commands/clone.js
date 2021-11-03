@@ -9,6 +9,7 @@ const { getTrellisPath } = require("../lib/trellis");
 const prompts = require("prompts");
 const exec = util.promisify(require("child_process").exec);
 const fs = require("fs");
+const dbImport = require("./db");
 
 async function cloneLisaProject() {
   console.log(
@@ -73,6 +74,22 @@ async function cloneLisaProject() {
   await exec(`trellis dotenv`, {
     cwd: trellisPath,
   });
+
+  await exec(`wp db create`, {
+    cwd: `${apiName}/site`,
+  });
+
+  let { doDbImport } = await prompts([
+    {
+      type: "confirm",
+      name: "doDbImport",
+      message: "Do you want to import a database?",
+    },
+  ]);
+
+  if (doDbImport) {
+    await dbImport();
+  }
 }
 
 module.exports = cloneLisaProject;

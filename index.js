@@ -8,41 +8,78 @@ const { getKinstaHelpMessage } = require("./help/kinsta");
 const resetConf = require("./lib/conf");
 const setupLocalSiteForDevelopment = require("./commands/local");
 const cloneLisaProject = require("./commands/clone");
+const path = require("./commands/path");
 const dbImport = require("./commands/db");
+const { getSitesPath } = require("./lib/path");
+const util = require("util");
+const chalk = require("chalk");
+const exec = util.promisify(require("child_process").exec);
 
 resetConf();
 
-program
-  .command("init")
-  .description("Create a Lisa project")
-  .option("--skip-github", "Skip setup for Git repositories")
-  .action(init);
+let command = process.argv[2];
 
-program
-  .command("local")
-  .description("Setup Lisa site for local development")
-  .action(setupLocalSiteForDevelopment);
+async function initProgram() {
+  if (command !== "path") {
+    let sitesPath = await getSitesPath();
+    let pwd = await exec(`pwd`);
 
-program
-  .command("sendgrid setup")
-  .description("Setup Sendgrid account")
-  .action(setupSendgridAccount);
+    if (sitesPath !== pwd.stdout.trim()) {
+      console.log();
+      console.log(
+        chalk.bgRedBright.bold(
+          `🚔🚔🚔 You are in the wrong directory, please run ${chalk.underline(
+            `cd ${sitesPath}`
+          )} and try again! 🚔🚔🚔`
+        )
+      );
+      process.exit();
+    }
+  }
 
-program
-  .command("kinsta")
-  .description("Setup Kinsta configuration files in Trellis project")
-  .option("--config-file <file>", "File with configuration options from Kinsta")
-  .addHelpText("after", getKinstaHelpMessage())
-  .action(configureTrellisForKinsta);
+  program
+    .command("init")
+    .description("Create a Lisa project")
+    .option("--skip-github", "Skip setup for Git repositories")
+    .action(init);
 
-program
-  .command("clone")
-  .description("Clone an existing Lisa project for local development")
-  .action(cloneLisaProject);
+  program
+    .command("local")
+    .description("Setup Lisa site for local development")
+    .action(setupLocalSiteForDevelopment);
 
-program
-  .command("db import")
-  .description("Import a database from staging/production environment")
-  .action(dbImport);
+  program
+    .command("sendgrid setup")
+    .description("Setup Sendgrid account")
+    .action(setupSendgridAccount);
 
-program.parse();
+  program
+    .command("kinsta")
+    .description("Setup Kinsta configuration files in Trellis project")
+    .option(
+      "--config-file <file>",
+      "File with configuration options from Kinsta"
+    )
+    .addHelpText("after", getKinstaHelpMessage())
+    .action(configureTrellisForKinsta);
+
+  program
+    .command("clone")
+    .description("Clone an existing Lisa project for local development")
+    .action(cloneLisaProject);
+
+  program
+    .command("db import")
+    .description("Import a database from staging/production environment")
+    .action(dbImport);
+
+  program
+    .command("path")
+    .description("Run this command to set your global sites path")
+    .argument("<path>", "Your global sites path")
+    .action(path);
+
+  program.parse();
+}
+
+initProgram();

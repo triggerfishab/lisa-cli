@@ -3,8 +3,11 @@ const { createRepos } = require("./repo");
 const { askForProjectName } = require("../lib/app-name");
 const setupLocalSiteForDevelopment = require("./local");
 const configureTrellisForKinsta = require("./kinsta");
+const { getSitesPath } = require("../lib/path");
 
 async function init() {
+  let sitesPath = getSitesPath();
+
   console.log(
     chalk.greenBright.bold("⚡️⚡️⚡️ Creating new Lisa project ⚡⚡️⚡️️")
   );

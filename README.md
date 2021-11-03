@@ -23,6 +23,11 @@ You will need to install the following stuff to use lisa-cli:
 
 ## 🏃‍♂️ Usage
 
+### Set global sites path
+Use this command to set your global sites path to prevent you from running other commands from the wrong directory
+
+```lisa path```
+
 ### Create a new site
 From your generic sites folder (i.e. `~/Sites`) run the following command:
 
@@ -36,6 +41,11 @@ You will also need to create a YAML file with all the config from Kinsta, run th
 If you want to setup an already existing Lisa site for local development, you can just run the following command:
 
 ```lisa clone```
+
+### Import database from staging/production
+Use this command to import a database from the production/staging environment of the site that you're working on. A prompt will ask you whether you will import it from staging or production
+
+```lisa db import```
 
 This will ask for the project name and try to find the correct repos that you should use. If not the correct repos are found, the prompt will let you specify them manually.
 
