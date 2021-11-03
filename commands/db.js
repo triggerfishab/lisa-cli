@@ -43,7 +43,7 @@ async function dbImport() {
   );
 
   console.log(
-    chalk.greenBright(`🎉 Datebase dump on ${environment} successful created!`)
+    chalk.greenBright(`🎉 Database dump on ${environment} successful created!`)
   );
 
   console.log(
@@ -54,7 +54,7 @@ async function dbImport() {
 
   console.log(
     chalk.greenBright(
-      `🎉 Datebase dump from ${environment} successful downloaded!`
+      `🎉 Database dump from ${environment} successful downloaded!`
     )
   );
 
@@ -62,7 +62,7 @@ async function dbImport() {
 
   await exec(`wp db import db.sql --path="${getTrellisSitePath()}/web/wp"`);
 
-  console.log(chalk.greenBright(`🎉 Datebase successfully imported!`));
+  console.log(chalk.greenBright(`🎉 Database successfully imported!`));
 }
 
 module.exports = dbImport;

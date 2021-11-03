@@ -13,7 +13,9 @@ const dbImport = require("./commands/db");
 const { getSitesPath } = require("./lib/path");
 const util = require("util");
 const chalk = require("chalk");
+const { generateSecrets } = require("./lib/secrets");
 const exec = util.promisify(require("child_process").exec);
+const commandExists = require("command-exists");
 
 resetConf();
 
@@ -36,6 +38,8 @@ async function initProgram() {
       process.exit();
     }
   }
+
+  await checkDependencies();
 
   program
     .command("init")
@@ -79,7 +83,67 @@ async function initProgram() {
     .argument("<path>", "Your global sites path")
     .action(path);
 
+  program
+    .command("secrets")
+    .description("Generate secrets")
+    .action(generateSecrets);
+
   program.parse();
+}
+
+async function checkDependencies() {
+  let missingDependencies = [];
+
+  try {
+    await commandExists("trellis");
+  } catch {
+    missingDependencies.push("trellis-cli");
+  }
+
+  try {
+    await commandExists("gh");
+  } catch {
+    missingDependencies.push("gh");
+  }
+
+  try {
+    await commandExists("ansible");
+  } catch {
+    missingDependencies.push("ansible-vault");
+  }
+
+  try {
+    await commandExists("wp");
+  } catch {
+    missingDependencies.push("wp-cli");
+  }
+
+  try {
+    await commandExists("valet");
+  } catch {
+    missingDependencies.push("valet");
+  }
+
+  if (missingDependencies.length) {
+    console.log();
+    console.log(
+      chalk.redBright.bold(
+        `Missing dependencies: ${missingDependencies.join(", ")}`
+      )
+    );
+    console.log(
+      chalk.redBright.bold(
+        "🚨 Please install the dependencies above and try again."
+      )
+    );
+    console.log(
+      chalk.redBright.bold(
+        "🚨 Look at https://github.com/triggerfishab/lisa-cli/blob/master/README.md for more info on the dependencies."
+      )
+    );
+
+    process.exit();
+  }
 }
 
 initProgram();

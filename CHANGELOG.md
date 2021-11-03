@@ -1,3 +1,13 @@
+## 1.5.0 (2021-11-03)
+### Features
+📦 Create environment variables for `FORGOT_PASSWORD_JWT_SECRET`, `API_SECRET` and `NEXT_PUBLIC_API_URL` and upload them to Vercel
+
+📦 Add summary when new site is cloned and ready for development.
+
+📦 Check for dependencies before running any commands.
+
+📦 Connect frontend repo to Vercel when cloning a site and generate `.env.local` file.
+
 ## 1.4.0 (2021-11-03)
 ### Features
 📦 Add `lisa path` command

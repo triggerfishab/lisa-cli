@@ -4,9 +4,10 @@ const { askForProjectName } = require("../lib/app-name");
 const setupLocalSiteForDevelopment = require("./local");
 const configureTrellisForKinsta = require("./kinsta");
 const { getSitesPath } = require("../lib/path");
+const { generateSecrets } = require("../lib/secrets");
 
 async function init() {
-  let sitesPath = getSitesPath();
+  let sitesPath = await getSitesPath();
 
   console.log(
     chalk.greenBright.bold("⚡️⚡️⚡️ Creating new Lisa project ⚡⚡️⚡️️")
@@ -29,6 +30,8 @@ async function init() {
   await createRepos();
   await setupLocalSiteForDevelopment();
   await configureTrellisForKinsta();
+  await addSiteToVercel();
+  await generateSecrets();
 
   console.log();
   console.log(chalk.greenBright.bold("⚡️⚡️⚡️ All done! ⚡⚡️⚡️️"));
