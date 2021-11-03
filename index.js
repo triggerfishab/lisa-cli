@@ -95,9 +95,9 @@ async function checkDependencies() {
   let missingDependencies = [];
 
   try {
-    await commandExists("trellis");
+    await commandExists("ansible");
   } catch {
-    missingDependencies.push("trellis-cli");
+    missingDependencies.push("ansible-vault");
   }
 
   try {
@@ -107,21 +107,27 @@ async function checkDependencies() {
   }
 
   try {
-    await commandExists("ansible");
+    await commandExists("trellis");
   } catch {
-    missingDependencies.push("ansible-vault");
-  }
-
-  try {
-    await commandExists("wp");
-  } catch {
-    missingDependencies.push("wp-cli");
+    missingDependencies.push("trellis-cli");
   }
 
   try {
     await commandExists("valet");
   } catch {
     missingDependencies.push("valet");
+  }
+
+  try {
+    await commandExists("vercel");
+  } catch {
+    missingDependencies.push("vercel");
+  }
+
+  try {
+    await commandExists("wp");
+  } catch {
+    missingDependencies.push("wp-cli");
   }
 
   if (missingDependencies.length) {

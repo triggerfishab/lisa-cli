@@ -1,3 +1,7 @@
+## 1.5.1 (2021-11-03)
+### Bux fixes
+🐛 Add missing `vercel` dependency to run Lisa commands.
+
 ## 1.5.0 (2021-11-03)
 ### Features
 📦 Create environment variables for `FORGOT_PASSWORD_JWT_SECRET`, `API_SECRET` and `NEXT_PUBLIC_API_URL` and upload them to Vercel

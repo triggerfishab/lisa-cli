@@ -18,6 +18,8 @@ You will need to install the following stuff to use lisa-cli:
 * [WP-CLI](https://wp-cli.org/)
 * [Trellis CLI](https://github.com/roots/trellis-cli)
 * [Valet](https://laravel.com/docs/8.x/valet)
+* [Vercel CLI](https://vercel.com/cli)
+
 ## 🪚 Installation
 ```npm i -g lisa-cli```
 
