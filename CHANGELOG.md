@@ -1,3 +1,6 @@
+## v1.3.1 (2021-11-03)
+### Bug fixes
+🐛 Add missing `prompts` dependency
 ## v1.3.0 (2021-11-03)
 ### Features
 📦 Add `lisa db import` command
