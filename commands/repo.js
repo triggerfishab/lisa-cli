@@ -2,6 +2,7 @@ const conf = new (require("conf"))();
 const chalk = require("chalk");
 const { program } = require("commander");
 const util = require("util");
+const { getApiName } = require("../lib/app-name");
 const exec = util.promisify(require("child_process").exec);
 
 async function createRepos() {
@@ -45,4 +46,12 @@ async function createRepos() {
   console.log(chalk.green(`🎉 Repo created: ${apiGithubURL}.`));
 }
 
-module.exports = createRepos;
+async function addGithubRepoSecrets() {
+  let vaultPass = conf.get("vaultPass");
+  let apiRepo = await getApiName();
+
+  await exec(`gh secret set VAULT_PASS -b"${vaultPass}"`, { cwd: apiRepo });
+  console.log(chalk.green(`🎉 Vault pass saved as secret for api repo.`));
+}
+
+module.exports = { createRepos, addGithubRepoSecrets };

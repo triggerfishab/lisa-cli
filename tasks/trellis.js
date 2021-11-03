@@ -10,6 +10,7 @@ const {
   getVaultPassPath,
   removeTempLisaVaultPass,
 } = require("../lib/vault");
+const conf = new (require("conf"))();
 
 async function addVaultPassword() {
   let trellisPath = getTrellisPath();
@@ -24,6 +25,8 @@ async function addVaultPassword() {
       console.log(err);
     }
   });
+
+  conf.set("vaultPass", password);
 
   console.log(chalk.greenBright(`🎉 Vault pass written to ${vaultPassPath}.`));
 }

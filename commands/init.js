@@ -1,5 +1,5 @@
 const chalk = require("chalk");
-const createRepos = require("./repo");
+const { createRepos } = require("./repo");
 const { askForProjectName } = require("../lib/app-name");
 const setupLocalSiteForDevelopment = require("./local");
 const configureTrellisForKinsta = require("./kinsta");

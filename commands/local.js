@@ -5,16 +5,12 @@ const fs = require("fs");
 const { getValetTld } = require("../tasks/valet");
 const util = require("util");
 const exec = util.promisify(require("child_process").exec);
-
 const generator = require("generate-password");
 const { getTrellisPath, getGroupVarsPath } = require("../lib/trellis");
 const { changeVaultPasswords, addVaultPassword } = require("../tasks/trellis");
-const {
-  installApiDependencies,
-  installAppDependencies,
-} = require("../tasks/dependencies");
 const linkValetSite = require("../tasks/valet");
 const installDependencies = require("../tasks/dependencies");
+const { addGithubRepoSecrets } = require("./repo");
 
 async function setupLocalSiteForDevelopment() {
   console.log();
@@ -29,6 +25,7 @@ async function setupLocalSiteForDevelopment() {
   await linkValetSite();
   await addVaultPassword();
   await changeVaultPasswords();
+  await addGithubRepoSecrets();
 
   let projectName = await getProjectName();
   let apiName = await getApiName();
