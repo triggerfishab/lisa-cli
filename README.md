@@ -49,7 +49,11 @@ Use this command to import a database from the production/staging environment of
 
 ```lisa db import```
 
-This will ask for the project name and try to find the correct repos that you should use. If not the correct repos are found, the prompt will let you specify them manually.
+This command will ask for the project name and try to find the correct repos that you should use. If not the correct repos are found, the prompt will let you specify them manually.
+
+```lisa destroy```
+
+This command will ask for the project name, find the directories for both API and app, find the database and the site linked to valet and remove them.
 
 ## 🔨 TODO
 - Local Trellis development
