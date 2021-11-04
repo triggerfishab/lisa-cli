@@ -10,6 +10,7 @@ const setupLocalSiteForDevelopment = require("./commands/local");
 const cloneLisaProject = require("./commands/clone");
 const path = require("./commands/path");
 const dbImport = require("./commands/db");
+const destroy = require("./commands/destroy");
 const { getSitesPath } = require("./lib/path");
 const util = require("util");
 const chalk = require("chalk");
@@ -87,6 +88,11 @@ async function initProgram() {
     .command("secrets")
     .description("Generate secrets")
     .action(generateSecrets);
+
+  program
+    .command("destroy")
+    .description("Destroy a local Lisa site")
+    .action(destroy)
 
   program.parse();
 }
