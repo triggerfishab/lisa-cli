@@ -14,7 +14,7 @@ async function destroy() {
 
   console.log(`
 ${chalk.bold("The following will be removed:")}
-${appName} local site
+${apiName} local site
 ${appName} directory
 ${apiName} directory
 ${databaseName.stdout.trim()} database`)
