@@ -5,6 +5,7 @@ const setupLocalSiteForDevelopment = require("./local");
 const configureTrellisForKinsta = require("./kinsta");
 const { getSitesPath } = require("../lib/path");
 const { generateSecrets } = require("../lib/secrets");
+const addSiteToVercel = require("../lib/vercel");
 
 async function init() {
   let sitesPath = await getSitesPath();
