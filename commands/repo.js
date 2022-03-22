@@ -54,4 +54,15 @@ async function addGithubRepoSecrets() {
   console.log(chalk.green(`🎉 Vault pass saved as secret for api repo.`));
 }
 
-module.exports = { createRepos, addGithubRepoSecrets };
+async function cloneRepos() {
+  let appName = conf.get("appName");
+  let apiName = conf.get("apiName");
+
+  await exec(`gh repo clone triggerfishab/${apiName}`);
+  console.log(chalk.green(`🎉 Repo cloned: triggerfishab/${apiName}.`));
+
+  await exec(`gh repo clone triggerfishab/${appName}`);
+  console.log(chalk.green(`🎉 Repo cloned: triggerfishab/${appName}.`));
+}
+
+module.exports = { createRepos, addGithubRepoSecrets, cloneRepos };

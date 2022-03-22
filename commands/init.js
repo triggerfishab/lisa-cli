@@ -1,5 +1,5 @@
 const chalk = require("chalk");
-const { createRepos } = require("./repo");
+const { createRepos, cloneRepos } = require("./repo");
 const { askForProjectName } = require("../lib/app-name");
 const setupLocalSiteForDevelopment = require("./local");
 const configureTrellisForKinsta = require("./kinsta");
@@ -29,6 +29,7 @@ async function init() {
 
   await askForProjectName();
   await createRepos();
+  await cloneRepos();
   await setupLocalSiteForDevelopment();
   await configureTrellisForKinsta();
   await addSiteToVercel();
