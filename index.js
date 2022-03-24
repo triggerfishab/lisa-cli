@@ -1,7 +1,6 @@
 #! /usr/bin/env node
 
 const { program } = require("commander");
-const util = require("util");
 
 const { getKinstaHelpMessage } = require("./help/kinsta");
 const resetConf = require("./lib/conf");
