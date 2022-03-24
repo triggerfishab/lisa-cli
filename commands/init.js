@@ -8,7 +8,7 @@ const { generateSecrets } = require("../lib/secrets");
 const addSiteToVercel = require("../lib/vercel");
 
 async function init() {
-  let sitesPath = await getSitesPath();
+  await getSitesPath();
 
   console.log(
     chalk.greenBright.bold("⚡️⚡️⚡️ Creating new Lisa project ⚡⚡️⚡️️")
