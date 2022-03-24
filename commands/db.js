@@ -2,9 +2,8 @@ const fs = require("fs");
 const prompts = require("prompts");
 const { getProjectName } = require("../lib/app-name");
 const { getTrellisPath, getTrellisSitePath } = require("../lib/trellis");
-const util = require("util");
 const chalk = require("chalk");
-const exec = util.promisify(require("child_process").exec);
+const exec = require("../lib/exec");
 
 async function dbImport() {
   await getProjectName();

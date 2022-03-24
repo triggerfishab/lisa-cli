@@ -1,7 +1,6 @@
 const chalk = require("chalk");
 const fs = require("fs");
-const util = require("util");
-const exec = util.promisify(require("child_process").exec);
+const exec = require("../lib/exec");
 const generator = require("generate-password");
 const { getTrellisPath, getGroupVarsPath } = require("../lib/trellis");
 const {

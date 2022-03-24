@@ -1,9 +1,8 @@
 const conf = new (require("conf"))();
 const chalk = require("chalk");
 const { program } = require("commander");
-const util = require("util");
 const { getApiName } = require("../lib/app-name");
-const exec = util.promisify(require("child_process").exec);
+const exec = require("../lib/exec");
 
 async function createRepos() {
   let { skipGithub } = program.opts();

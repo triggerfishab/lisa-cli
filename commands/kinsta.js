@@ -3,8 +3,7 @@ const yaml = require("js-yaml");
 const fs = require("fs");
 const { getTrellisPath, getGroupVarsPath } = require("../lib/trellis");
 const { getProjectName } = require("../lib/app-name");
-const util = require("util");
-const exec = util.promisify(require("child_process").exec);
+const exec = require("../lib/exec");
 const generator = require("generate-password");
 const { askForConfigFile } = require("../lib/kinsta");
 

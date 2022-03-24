@@ -1,8 +1,7 @@
 const { getProjectName } = require("../lib/app-name");
 const setup = require("./setup");
 const conf = new (require("conf"))();
-const util = require("util");
-const exec = util.promisify(require("child_process").exec);
+const exec = require("../lib/exec");
 
 async function setupS3Bucket() {
   let projectName = await getProjectName();

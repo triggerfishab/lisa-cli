@@ -1,6 +1,5 @@
 const chalk = require("chalk");
-const util = require("util");
-const exec = util.promisify(require("child_process").exec);
+const exec = require("../lib/exec");
 const conf = new (require("conf"))();
 
 async function linkValetSite() {
