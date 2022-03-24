@@ -11,13 +11,14 @@ const cloneLisaProject = require("./commands/clone");
 const path = require("./commands/path");
 const dbImport = require("./commands/db");
 const destroy = require("./commands/destroy");
+const setup = require("./commands/setup");
 const { getSitesPath } = require("./lib/path");
 const util = require("util");
 const chalk = require("chalk");
 const { generateSecrets } = require("./lib/secrets");
 const exec = util.promisify(require("child_process").exec);
 const commandExists = require("command-exists");
-const { askForLisaVaultPass } = require("./lib/vault");
+const setupS3Bucket = require("./commands/s3");
 
 resetConf();
 
@@ -48,6 +49,15 @@ async function initProgram() {
     .description("Create a Lisa project")
     .option("--skip-github", "Skip setup for Git repositories")
     .action(init);
+
+  program
+    .command("setup")
+    .description("Setup all credentials for third party services")
+    .argument(
+      "[service]",
+      "Pass an argument for which service to setup, available services: s3"
+    )
+    .action(setup);
 
   program
     .command("local")
@@ -94,6 +104,8 @@ async function initProgram() {
     .command("destroy")
     .description("Destroy a local Lisa site")
     .action(destroy);
+
+  program.command("s3").description("Setup S3 bucket").action(setupS3Bucket);
 
   program.parse();
 }

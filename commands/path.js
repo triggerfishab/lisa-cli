@@ -3,7 +3,7 @@ const { constants } = require("fs");
 const { access } = require("fs/promises");
 const conf = new (require("conf"))();
 
-async function setup(path) {
+async function path(path) {
   try {
     await access(path, constants.R_OK | constants.W_OK);
 
@@ -22,4 +22,4 @@ async function setup(path) {
   }
 }
 
-module.exports = setup;
+module.exports = path;
