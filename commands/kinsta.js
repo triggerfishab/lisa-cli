@@ -16,8 +16,6 @@ async function configureTrellisForKinsta(opts) {
     configFile = opts.configFile;
   }
 
-  console.log(configFile);
-
   await getProjectName();
 
   console.log();
