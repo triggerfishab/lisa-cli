@@ -17,6 +17,7 @@ const chalk = require("chalk");
 const { generateSecrets } = require("./lib/secrets");
 const exec = util.promisify(require("child_process").exec);
 const commandExists = require("command-exists");
+const { askForLisaVaultPass } = require("./lib/vault");
 
 resetConf();
 
@@ -92,7 +93,7 @@ async function initProgram() {
   program
     .command("destroy")
     .description("Destroy a local Lisa site")
-    .action(destroy)
+    .action(destroy);
 
   program.parse();
 }

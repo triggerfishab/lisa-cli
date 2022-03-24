@@ -24,7 +24,7 @@ async function createRepos() {
   let apiGithubURL = `https://github.com/triggerfishab/${apiName}`;
 
   let appResponse = await exec(
-    `gh repo create -p triggerfishab/lisa-app ${appGithubURL} -y --private`
+    `gh repo create -p triggerfishab/lisa-app ${appGithubURL} -y --private -c`
   );
 
   if (appResponse.error) {
@@ -35,7 +35,7 @@ async function createRepos() {
   console.log(chalk.green(`🎉 Repo created: ${appGithubURL}.`));
 
   let apiResponse = await exec(
-    `gh repo create -p triggerfishab/lisa-api ${apiGithubURL} -y --private`
+    `gh repo create -p triggerfishab/lisa-api ${apiGithubURL} -y --private -c`
   );
 
   if (apiResponse.error) {
