@@ -11,6 +11,12 @@ const linkValetSite = require("../tasks/valet");
 const installDependencies = require("../tasks/dependencies");
 const { addGithubRepoSecrets } = require("./repo");
 const { writeEmptyLine, writeStep } = require("../lib/write");
+const { program } = require('commander');
+
+program
+    .command("local")
+    .description("Setup Lisa site for local development")
+    .action(setupLocalSiteForDevelopment);
 
 async function setupLocalSiteForDevelopment() {
   writeStep("Setup site for local development");

@@ -6,6 +6,12 @@ const {
 const exec = require("../lib/exec");
 const chalk = require("chalk");
 const prompts = require("prompts");
+const { program } = require('commander');
+
+program
+    .command("destroy")
+    .description("Destroy a local Lisa site")
+    .action(destroy);
 
 async function destroy() {
   await askForProjectName();

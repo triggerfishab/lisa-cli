@@ -1,3 +1,4 @@
+const {program} = require('commander')
 const { createRepos } = require("./repo");
 const { askForProjectName } = require("../lib/app-name");
 const setupLocalSiteForDevelopment = require("./local");
@@ -6,6 +7,12 @@ const { getSitesPath } = require("../lib/path");
 const { generateSecrets } = require("../lib/secrets");
 const addSiteToVercel = require("../lib/vercel");
 const { writeError, writeStep } = require("../lib/write");
+
+program
+    .command("init")
+    .description("Create a Lisa project")
+    .option("--skip-github", "Skip setup for Git repositories")
+    .action(init);
 
 async function init() {
   await getSitesPath();

@@ -11,6 +11,12 @@ const { spawnSync } = require("child_process");
 const fs = require("fs");
 const dbImport = require("./db");
 const { getAdminUrl } = require("../lib/wordpress");
+const { program } = require('commander');
+
+program
+    .command("clone")
+    .description("Clone an existing Lisa project for local development")
+    .action(cloneLisaProject);
 
 async function cloneLisaProject() {
   console.log(

@@ -4,6 +4,12 @@ const { getProjectName } = require("../lib/app-name");
 const { getTrellisPath, getTrellisSitePath } = require("../lib/trellis");
 const chalk = require("chalk");
 const exec = require("../lib/exec");
+const { program } = require('commander');
+
+program
+    .command("db import")
+    .description("Import a database from staging/production environment")
+    .action(dbImport);
 
 async function dbImport() {
   await getProjectName();

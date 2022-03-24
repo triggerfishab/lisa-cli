@@ -1,6 +1,16 @@
 const chalk = require("chalk");
 const conf = new (require("conf"))();
 const prompts = require("prompts");
+const { program } = require('commander')
+
+program
+    .command("setup")
+    .description("Setup all credentials for third party services")
+    .argument(
+      "[service]",
+      "Pass an argument for which service to setup, available services: s3"
+    )
+    .action(setup);
 
 async function setup(service) {
   let services = ["s3", "stackpath"];

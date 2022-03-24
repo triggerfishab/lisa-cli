@@ -2,6 +2,13 @@ const chalk = require("chalk");
 const { constants } = require("fs");
 const { access } = require("fs/promises");
 const conf = new (require("conf"))();
+const { program } = require('commander');
+
+program
+    .command("path")
+    .description("Run this command to set your global sites path")
+    .argument("<path>", "Your global sites path")
+    .action(path);
 
 async function path(path) {
   try {

@@ -6,6 +6,18 @@ const { getProjectName } = require("../lib/app-name");
 const exec = require("../lib/exec");
 const generator = require("generate-password");
 const { askForConfigFile } = require("../lib/kinsta");
+const { program } = require('commander');
+const { getKinstaHelpMessage } = require("../help/kinsta");
+
+program
+    .command("kinsta")
+    .description("Setup Kinsta configuration files in Trellis project")
+    .option(
+      "--config-file <file>",
+      "File with configuration options from Kinsta"
+    )
+    .addHelpText("after", getKinstaHelpMessage())
+    .action(configureTrellisForKinsta);
 
 async function configureTrellisForKinsta(opts) {
   let configFile;

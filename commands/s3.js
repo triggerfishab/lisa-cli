@@ -2,6 +2,9 @@ const { getProjectName } = require("../lib/app-name");
 const setup = require("./setup");
 const conf = new (require("conf"))();
 const exec = require("../lib/exec");
+const { program } = require('commander');
+
+program.command("s3").description("Setup S3 bucket").action(setupS3Bucket);
 
 async function setupS3Bucket() {
   let projectName = await getProjectName();
