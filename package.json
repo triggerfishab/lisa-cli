@@ -1,6 +1,6 @@
 {
   "name": "lisa-cli",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "description": "CLI commands to generate a new project based on Lisa",
   "main": "index.js",
   "bin": {
