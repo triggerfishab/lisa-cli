@@ -1,8 +1,13 @@
 const conf = new (require("conf"))();
-const chalk = require("chalk");
 const { program } = require("commander");
 const { getApiName } = require("../lib/app-name");
 const exec = require("../lib/exec");
+const {
+  writeInfo,
+  writeEmptyLine,
+  writeError,
+  writeSuccess,
+} = require("../lib/write");
 
 async function createRepos() {
   let { skipGithub } = program.opts();
@@ -11,10 +16,8 @@ async function createRepos() {
     return;
   }
 
-  console.log();
-  console.log(
-    chalk.cyanBright("🪚 Setting up repos at GitHub for app and api.")
-  );
+  writeEmptyLine();
+  writeInfo("Setting up repos at GitHub for app and api.");
 
   let appName = conf.get("appName");
   let apiName = conf.get("apiName");
@@ -27,22 +30,22 @@ async function createRepos() {
   );
 
   if (appResponse.error) {
-    console.log(error);
+    writeError(error);
     process.exit();
   }
 
-  console.log(chalk.green(`🎉 Repo created: ${appGithubURL}.`));
+  writeSuccess(`Repo created: ${appGithubURL}.`);
 
   let apiResponse = await exec(
     `gh repo create -p triggerfishab/lisa-api ${apiGithubURL} -y --private -c`
   );
 
   if (apiResponse.error) {
-    console.log(error);
+    writeError(error);
     process.exit();
   }
 
-  console.log(chalk.green(`🎉 Repo created: ${apiGithubURL}.`));
+  writeSuccess(`Repo created: ${apiGithubURL}.`);
 }
 
 async function addGithubRepoSecrets() {
@@ -50,7 +53,7 @@ async function addGithubRepoSecrets() {
   let apiRepo = await getApiName();
 
   await exec(`gh secret set VAULT_PASS -b"${vaultPass}"`, { cwd: apiRepo });
-  console.log(chalk.green(`🎉 Vault pass saved as secret for api repo.`));
+  writeSuccess("Vault pass saved as secret for api repo.");
 }
 
 module.exports = { createRepos, addGithubRepoSecrets };

@@ -10,15 +10,10 @@ const { changeVaultPasswords, addVaultPassword } = require("../tasks/trellis");
 const linkValetSite = require("../tasks/valet");
 const installDependencies = require("../tasks/dependencies");
 const { addGithubRepoSecrets } = require("./repo");
+const { writeEmptyLine, writeStep } = require("../lib/write");
 
 async function setupLocalSiteForDevelopment() {
-  console.log();
-  console.log(
-    chalk.bold.greenBright(
-      "⚡️⚡️⚡️ Setup site for local development ⚡️⚡️⚡️"
-    )
-  );
-  console.log();
+  writeStep("Setup site for local development");
 
   await installDependencies();
   await linkValetSite();
