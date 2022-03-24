@@ -1,3 +1,7 @@
+## 1.6.1 (2022-03-24)
+### Bug fixes
+🐛 Fix some bugs with running the `init` command.
+
 ## 1.6.0 (2021-11-06)
 ### Features
 📦 Add `destroy` command
@@ -6,7 +10,7 @@
 📝 Add documentation on how to use `lisa path`
 
 ## 1.5.1 (2021-11-03)
-### Bux fixes
+### Bug fixes
 🐛 Add missing `vercel` dependency to run Lisa commands.
 
 ## 1.5.0 (2021-11-03)

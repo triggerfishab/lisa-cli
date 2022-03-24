@@ -1,7 +1,7 @@
 # lisa-cli ⚡️
 <img align="right" src="./docs/assets/lisa-init.gif"  height="250" />
 
-💁‍♀️ Lisa CLI is a commanded line tool that will help you to automate the process of creating a new site based on the [lisa-app](https://github.com/triggerfishab/lisa-app) and the [lisa-api](https://github.com/triggerfishab/lisa-api)
+💁‍♀️ Lisa CLI is a command line tool that will help you to automate the process of creating a new site based on the [lisa-app](https://github.com/triggerfishab/lisa-app) and the [lisa-api](https://github.com/triggerfishab/lisa-api)
 
 The features that is included now is the following:
 * Setup repos on GitHub based on the [lisa-app](https://github.com/triggerfishab/lisa-app) and the [lisa-api](https://github.com/triggerfishab/lisa-api) repos.
