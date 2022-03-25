@@ -1,4 +1,3 @@
-const chalk = require("chalk");
 const fs = require("fs");
 const exec = require("../lib/exec");
 const generator = require("generate-password");
@@ -9,6 +8,7 @@ const {
   getVaultPassPath,
   removeTempLisaVaultPass,
 } = require("../lib/vault");
+const { writeSuccess, writeStep } = require("../lib/write");
 const conf = new (require("conf"))();
 
 async function addVaultPassword() {
@@ -27,16 +27,11 @@ async function addVaultPassword() {
 
   conf.set("vaultPass", password);
 
-  console.log(chalk.greenBright(`🎉 Vault pass written to ${vaultPassPath}.`));
+  writeSuccess(`Vault pass written to ${vaultPassPath}`);
 }
 
 async function changeVaultPasswords() {
-  console.log();
-  console.log(
-    chalk.bold.greenBright(
-      "⚡️⚡️⚡️ Update all vault files with new vault pass ⚡️⚡️⚡️"
-    )
-  );
+  writeStep("Update all vault files with new vault pass");
 
   let lisaVaultPassPath = getLisaVaultPassPath();
   let vaultPassPath = getVaultPassPath();
@@ -54,9 +49,8 @@ async function changeVaultPasswords() {
   await exec(
     `ansible-vault encrypt ${allGroupVarsPath}/vault.yml --vault-password-file ${vaultPassPath}`
   );
-  console.log(
-    chalk.greenBright(`🎉 Vault pass updated on ${allGroupVarsPath}/vault.yml.`)
-  );
+
+  writeSuccess(`Vault pass updated on ${allGroupVarsPath}/vault.yml.`);
 
   await exec(
     `ansible-vault decrypt ${developmentGroupVarsPath}/vault.yml --vault-password-file ${lisaVaultPassPath}`
@@ -64,11 +58,8 @@ async function changeVaultPasswords() {
   await exec(
     `ansible-vault encrypt ${developmentGroupVarsPath}/vault.yml --vault-password-file ${vaultPassPath}`
   );
-  console.log(
-    chalk.greenBright(
-      `🎉 Vault pass updated on ${developmentGroupVarsPath}/vault.yml.`
-    )
-  );
+
+  writeSuccess(`Vault pass updated on ${developmentGroupVarsPath}/vault.yml.`);
 
   await exec(
     `ansible-vault decrypt ${stagingGroupVarsPath}/vault.yml --vault-password-file ${lisaVaultPassPath}`
@@ -76,11 +67,8 @@ async function changeVaultPasswords() {
   await exec(
     `ansible-vault encrypt ${stagingGroupVarsPath}/vault.yml --vault-password-file ${vaultPassPath}`
   );
-  console.log(
-    chalk.greenBright(
-      `🎉 Vault pass updated on ${stagingGroupVarsPath}/vault.yml.`
-    )
-  );
+
+  writeSuccess(`Vault pass updated on ${stagingGroupVarsPath}/vault.yml.`);
 
   await exec(
     `ansible-vault decrypt ${productionGroupVarsPath}/vault.yml --vault-password-file ${lisaVaultPassPath}`
@@ -88,11 +76,8 @@ async function changeVaultPasswords() {
   await exec(
     `ansible-vault encrypt ${productionGroupVarsPath}/vault.yml --vault-password-file ${vaultPassPath}`
   );
-  console.log(
-    chalk.greenBright(
-      `🎉 Vault pass updated on ${productionGroupVarsPath}/vault.yml.`
-    )
-  );
+
+  writeSuccess(`Vault pass updated on ${productionGroupVarsPath}/vault.yml.`);
 
   await removeTempLisaVaultPass();
 }

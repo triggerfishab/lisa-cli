@@ -2,14 +2,14 @@ const fs = require("fs");
 const prompts = require("prompts");
 const { getProjectName } = require("../lib/app-name");
 const { getTrellisPath, getTrellisSitePath } = require("../lib/trellis");
-const chalk = require("chalk");
 const exec = require("../lib/exec");
-const { program } = require('commander');
+const { program } = require("commander");
+const { writeInfo, writeSuccess } = require("../lib/write");
 
 program
-    .command("db import")
-    .description("Import a database from staging/production environment")
-    .action(dbImport);
+  .command("db import")
+  .description("Import a database from staging/production environment")
+  .action(dbImport);
 
 async function dbImport() {
   await getProjectName();
@@ -41,33 +41,25 @@ async function dbImport() {
   let user = mainFile.match(/web_user: ([^\s]+)/)[1];
   let docroot = mainFile.match(/www_root: ([^\s]+)/)[1];
 
-  console.log(chalk.blue(`⏰ Making database dump on ${environment}...`));
+  writeInfo(`Making database dump on ${environment}...`);
 
   await exec(
     `ssh ${user}@${host} -p ${port} 'wp db export --path="${docroot}/current/web/wp" ~/db.sql'`
   );
 
-  console.log(
-    chalk.greenBright(`🎉 Database dump on ${environment} successful created!`)
-  );
+  writeSuccess(`Database dump on ${environment} successful created!`);
 
-  console.log(
-    chalk.blue(`⏰ Downloading database dump from ${environment}...`)
-  );
+  writeInfo(`Downloading database dump from ${environment}...`);
 
   await exec(`scp -P ${port} ${user}@${host}:~/db.sql .`);
 
-  console.log(
-    chalk.greenBright(
-      `🎉 Database dump from ${environment} successful downloaded!`
-    )
-  );
+  writeSuccess(`Database dump from ${environment} successful downloaded!`);
 
-  console.log(chalk.blue(`⏰ Importing database to local site...`));
+  writeInfo("Importing database to local site...");
 
   await exec(`wp db import db.sql --path="${getTrellisSitePath()}/web/wp"`);
 
-  console.log(chalk.greenBright(`🎉 Database successfully imported!`));
+  writeSuccess("Database successfully imported!");
 }
 
 module.exports = dbImport;

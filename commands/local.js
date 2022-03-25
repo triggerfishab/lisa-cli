@@ -1,4 +1,3 @@
-const chalk = require("chalk");
 const { getProjectName, getApiName } = require("../lib/app-name");
 const yaml = require("js-yaml");
 const fs = require("fs");
@@ -10,13 +9,13 @@ const { changeVaultPasswords, addVaultPassword } = require("../tasks/trellis");
 const linkValetSite = require("../tasks/valet");
 const installDependencies = require("../tasks/dependencies");
 const { addGithubRepoSecrets } = require("./repo");
-const { writeEmptyLine, writeStep } = require("../lib/write");
-const { program } = require('commander');
+const { writeStep, writeSuccess } = require("../lib/write");
+const { program } = require("commander");
 
 program
-    .command("local")
-    .description("Setup Lisa site for local development")
-    .action(setupLocalSiteForDevelopment);
+  .command("local")
+  .description("Setup Lisa site for local development")
+  .action(setupLocalSiteForDevelopment);
 
 async function setupLocalSiteForDevelopment() {
   writeStep("Setup site for local development");
@@ -36,10 +35,7 @@ async function setupLocalSiteForDevelopment() {
   let siteName = `${projectName}.${tld}`;
   let apiDomain = `${apiName}.${tld}`;
 
-  console.log();
-  console.log(
-    chalk.bold.greenBright("⚡️⚡️⚡️ Setup development files ⚡️⚡️⚡️")
-  );
+  writeStep("Setup development files");
 
   try {
     let wordpressSites = yaml.load(
@@ -65,11 +61,7 @@ async function setupLocalSiteForDevelopment() {
       `${developmentGroupVarsPath}/wordpress_sites.yml`,
       yaml.dump(config),
       () =>
-        console.log(
-          chalk.greenBright(
-            `🎉 ${developmentGroupVarsPath}/wordpress_sites.yml updated.`
-          )
-        )
+        writeSuccess(`${developmentGroupVarsPath}/wordpress_sites.yml updated.`)
     );
 
     let vaultConfig = {
@@ -119,10 +111,7 @@ async function setupLocalSiteForDevelopment() {
     fs.writeFile(
       `${developmentGroupVarsPath}/vault.yml`,
       yaml.dump(vaultConfig),
-      () =>
-        console.log(
-          chalk.greenBright(`🎉 ${developmentGroupVarsPath}/vault.yml updated.`)
-        )
+      () => writeSuccess(`${developmentGroupVarsPath}/vault.yml updated.`)
     );
 
     await exec(
@@ -135,9 +124,7 @@ async function setupLocalSiteForDevelopment() {
 
     await exec(`wp db create`, { cwd: `${apiName}/site` });
 
-    console.log(
-      chalk.greenBright(`🎉 Local database called "${apiName}" created.`)
-    );
+    writeSuccess(`Local database called "${apiName}" created.`);
   } catch (e) {
     console.log(e);
   }

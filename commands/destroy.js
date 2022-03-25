@@ -6,12 +6,13 @@ const {
 const exec = require("../lib/exec");
 const chalk = require("chalk");
 const prompts = require("prompts");
-const { program } = require('commander');
+const { program } = require("commander");
+const { writeSuccess, writeError, writeInfo } = require("../lib/write");
 
 program
-    .command("destroy")
-    .description("Destroy a local Lisa site")
-    .action(destroy);
+  .command("destroy")
+  .description("Destroy a local Lisa site")
+  .action(destroy);
 
 async function destroy() {
   await askForProjectName();
@@ -23,12 +24,12 @@ async function destroy() {
     cwd: `${apiName}/site`,
   });
 
-  console.log(`
-${chalk.bold("The following will be removed:")}
-${apiName} local site
-${appName} directory
-${apiName} directory
-${databaseName.stdout.trim()} database`);
+  writeInfo(`
+  ${chalk.bold("The following will be removed:")}
+  ${apiName} local site
+  ${appName} directory
+  ${apiName} directory
+  ${databaseName.stdout.trim()} database`);
 
   let { confirm } = await prompts({
     type: "confirm",
@@ -37,21 +38,21 @@ ${databaseName.stdout.trim()} database`);
   });
 
   if (!confirm) {
-    console.log(chalk.redBright("🚨 No changes made, kthxbye!"));
+    writeError("No changes made, kthxbye!");
     process.exit();
   }
 
   await exec("wp db drop --yes", { cwd: `${apiName}/site` });
-  console.log(chalk.green(`🎉 Local database ${apiName} removed.`));
+  writeSuccess(" Local database ${apiName} removed.");
 
   await exec(`valet unlink ${apiName}`);
-  console.log(chalk.green(`🎉 Valet site unlinked: ${apiName}.`));
+  writeSuccess(" Valet site unlinked: ${apiName}.");
 
   await exec(`rm -rf ${apiName}`);
-  console.log(chalk.green(`🎉 Directory removed: ${apiName}.`));
+  writeSuccess(" Directory removed: ${apiName}.");
 
   await exec(`rm -rf ${appName}`);
-  console.log(chalk.green(`🎉 Directory removed: ${appName}.`));
+  writeSuccess(" Directory removed: ${appName}.");
 }
 
 module.exports = destroy;

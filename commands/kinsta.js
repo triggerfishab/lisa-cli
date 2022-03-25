@@ -1,4 +1,3 @@
-const chalk = require("chalk");
 const yaml = require("js-yaml");
 const fs = require("fs");
 const { getTrellisPath, getGroupVarsPath } = require("../lib/trellis");
@@ -6,18 +5,16 @@ const { getProjectName } = require("../lib/app-name");
 const exec = require("../lib/exec");
 const generator = require("generate-password");
 const { askForConfigFile } = require("../lib/kinsta");
-const { program } = require('commander');
+const { program } = require("commander");
 const { getKinstaHelpMessage } = require("../help/kinsta");
+const { writeStep, writeSuccess } = require("../lib/write");
 
 program
-    .command("kinsta")
-    .description("Setup Kinsta configuration files in Trellis project")
-    .option(
-      "--config-file <file>",
-      "File with configuration options from Kinsta"
-    )
-    .addHelpText("after", getKinstaHelpMessage())
-    .action(configureTrellisForKinsta);
+  .command("kinsta")
+  .description("Setup Kinsta configuration files in Trellis project")
+  .option("--config-file <file>", "File with configuration options from Kinsta")
+  .addHelpText("after", getKinstaHelpMessage())
+  .action(configureTrellisForKinsta);
 
 async function configureTrellisForKinsta(opts) {
   let configFile;
@@ -30,12 +27,7 @@ async function configureTrellisForKinsta(opts) {
 
   await getProjectName();
 
-  console.log();
-  console.log(
-    chalk.bold.greenBright(
-      "⚡️⚡️⚡️ Setup Kinsta configuration files ⚡️⚡️⚡️"
-    )
-  );
+  writeStep("Setup Kinsta configuration files");
 
   let trellisPath = getTrellisPath();
   let ansibleCfgFile = fs.readFileSync(`${trellisPath}/ansible.cfg`, "utf8");
@@ -45,7 +37,7 @@ async function configureTrellisForKinsta(opts) {
   );
 
   fs.writeFileSync(`${trellisPath}/ansible.cfg`, ansibleCfgFile);
-  console.log(chalk.greenBright(`🎉 ${trellisPath}/ansible.cfg updated.`));
+  writeSuccess(`${trellisPath}/ansible.cfg updated.`);
 
   await updateConfigFilesForEnvironment("staging", configFile);
   await updateConfigFilesForEnvironment("production", configFile);
@@ -63,9 +55,7 @@ kinsta_${environment}
 kinsta_${environment}`;
 
   fs.writeFileSync(`${trellisPath}/hosts/${environment}`, host);
-  console.log(
-    chalk.greenBright(`🎉 ${trellisPath}/hosts/${environment} updated.`)
-  );
+  writeSuccess(`${trellisPath}/hosts/${environment} updated.`);
 
   let groupVarsPath = getGroupVarsPath(environment);
 
@@ -102,9 +92,7 @@ kinsta_${environment}`;
   delete config.wordpress_sites["lisa.test"];
 
   fs.writeFile(`${groupVarsPath}/wordpress_sites.yml`, yaml.dump(config), () =>
-    console.log(
-      chalk.greenBright(`🎉 ${groupVarsPath}/wordpress_sites.yml updated.`)
-    )
+    writeSuccess(`${groupVarsPath}/wordpress_sites.yml updated.`)
   );
 
   let main = `project_root: ${kinstaConfigFile[environment].project_root}
@@ -113,7 +101,7 @@ web_user: ${kinstaConfigFile[environment].web_user}
 web_group: ${kinstaConfigFile[environment].web_group}`;
 
   fs.writeFile(`${groupVarsPath}/main.yml`, main, () =>
-    console.log(chalk.greenBright(`🎉 ${groupVarsPath}/main.yml updated.`))
+    writeSuccess(`${groupVarsPath}/main.yml updated.`)
   );
 
   let vaultConfig = {
@@ -166,7 +154,7 @@ web_group: ${kinstaConfigFile[environment].web_group}`;
     `ansible-vault encrypt ${groupVarsPath}/vault.yml --vault-password-file ${trellisPath}/.vault_pass`
   );
 
-  console.log(chalk.greenBright(`🎉 ${groupVarsPath}/vault.yml updated.`));
+  writeSuccess(`${groupVarsPath}/vault.yml updated.`);
 }
 
 module.exports = configureTrellisForKinsta;

@@ -1,20 +1,18 @@
-const chalk = require("chalk");
 const { getProjectName } = require("../lib/app-name");
-const { program } = require('commander');
+const { program } = require("commander");
+const { writeStep, writeInfo } = require("../lib/write");
 
 program
-    .command("sendgrid setup")
-    .description("Setup Sendgrid account")
-    .action(setupSendgridAccount);
+  .command("sendgrid setup")
+  .description("Setup Sendgrid account")
+  .action(setupSendgridAccount);
 
 async function setupSendgridAccount() {
   let projectName = await getProjectName();
 
-  console.log(
-    chalk.bold.greenBright("⚡️⚡️⚡️ Setup Sendgrid account ⚡️⚡️⚡️")
-  );
+  writeStep("Setup Sendgrid account ⚡️⚡️⚡️");
 
-  console.log(projectName);
+  writeInfo(projectName);
 }
 
 module.exports = setupSendgridAccount;

@@ -2,7 +2,6 @@
 
 const { program } = require("commander");
 
-const { getKinstaHelpMessage } = require("./help/kinsta");
 const resetConf = require("./lib/conf");
 const { validateCurrentPath } = require("./lib/path");
 const { generateSecrets } = require("./lib/secrets");
@@ -18,9 +17,11 @@ async function initProgram() {
 
   var normalizedPath = require("path").join(__dirname, "commands");
 
-  require("fs").readdirSync(normalizedPath).forEach(function(file) {
-    require("./commands/" + file);
-  });
+  require("fs")
+    .readdirSync(normalizedPath)
+    .forEach(function (file) {
+      require("./commands/" + file);
+    });
 
   program
     .command("secrets")

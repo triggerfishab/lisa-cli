@@ -1,28 +1,28 @@
 const conf = new (require("conf"))();
-const chalk = require("chalk");
 const exec = require("../lib/exec");
+const { writeSuccess, writeInfo } = require("../lib/write");
 
 async function installDependencies() {
-  console.log(chalk.cyanBright("🪚 Install dependencies."));
+  writeInfo("Installing dependencies.");
 
   let appPromise = installAppDependencies();
   let apiPromise = installApiDependencies();
 
   await Promise.all([appPromise, apiPromise]);
-  console.log(chalk.greenBright("🎉 All dependencies installed."));
+  writeSuccess("All dependencies installed.");
 }
 
 async function installAppDependencies() {
   let appName = conf.get("appName");
 
-  console.log(chalk.blue("⏰ Installing app dependencies..."));
+  writeInfo("Installing app dependencies...");
   exec(`yarn --cwd=${appName}`);
 }
 
 async function installApiDependencies() {
   let apiName = conf.get("apiName");
 
-  console.log(chalk.blue("⏰ Installing composer dependencies..."));
+  writeInfo("Installing composer dependencies...");
 
   let sitePromise = exec(`composer install --working-dir=${apiName}/site`);
   let themePromise = exec(

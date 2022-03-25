@@ -1,5 +1,5 @@
 const chalk = require("chalk");
-const { askForProjectName, getAppName } = require("../lib/app-name");
+const { askForProjectName } = require("../lib/app-name");
 const { askForCorrectRepoNames } = require("../lib/clone");
 const linkValetSite = require("../tasks/valet");
 const installDependencies = require("../tasks/dependencies");
@@ -11,27 +11,22 @@ const { spawnSync } = require("child_process");
 const fs = require("fs");
 const dbImport = require("./db");
 const { getAdminUrl } = require("../lib/wordpress");
-const { program } = require('commander');
+const { program } = require("commander");
+const { writeStep, writeError, writeSuccess } = require("../lib/write");
 
 program
-    .command("clone")
-    .description("Clone an existing Lisa project for local development")
-    .action(cloneLisaProject);
+  .command("clone")
+  .description("Clone an existing Lisa project for local development")
+  .action(cloneLisaProject);
 
 async function cloneLisaProject() {
-  console.log(
-    chalk.greenBright.bold("⚡️⚡️⚡️ Cloning Lisa project ⚡⚡️⚡️️")
-  );
-  console.log();
+  writeStep("Cloning Lisa project");
 
   let nodeVersion = process.version.match(/^v(\d+)/)[1];
 
   if (nodeVersion < 12) {
-    console.log();
-    console.log(
-      chalk.bgRedBright.bold(
-        `🚔🚔🚔 You are running node version ${nodeVersion}. Please update to latest Node version. 🚔🚔🚔`
-      )
+    writeError(
+      `You are running node version ${nodeVersion}. Please update to latest Node version.`
     );
     process.exit();
   }
@@ -82,13 +77,13 @@ async function cloneLisaProject() {
     cwd: trellisPath,
   });
 
-  console.log(chalk.green(`🎉 Generated .env file with trellis-cli!.`));
+  writeSuccess("Generated .env file with trellis-cli.");
 
   await exec(`wp db create`, {
     cwd: `${apiName}/site`,
   });
 
-  console.log(chalk.green(`🎉 Created empty local database!.`));
+  writeSuccess("Created empty local database.");
 
   let { doDbImport } = await prompts([
     {
@@ -114,25 +109,18 @@ async function cloneLisaProject() {
     shell: true,
   });
 
-  console.log(
-    chalk.greenBright(
-      `🎉 Generated .env.local file with enviroments variables from Vercel.`
-    )
+  writeSuccess(
+    "Generated .env.local file with environment variables from Vercel."
   );
 
   let adminUrl = await getAdminUrl();
 
-  console.log();
-  console.log(chalk.bold.greenBright(`🎉🎉🎉 All done! 🎉🎉🎉`));
-  console.log(
-    chalk.green(`Admin URL: ${chalk.underline(adminUrl)}/wp/wp-admin`)
-  );
-  console.log(
-    chalk.green(
-      `Run this command for local development: ${chalk.underline(
-        `cd ${appName} && yarn dev`
-      )}`
-    )
+  writeSuccess(chalk.bold("All done!"));
+  writeSuccess(`Admin URL: ${chalk.underline(adminUrl)}/wp/wp-admin`);
+  writeSuccess(
+    `Run this command for local development: ${chalk.underline(
+      `cd ${appName} && yarn dev`
+    )}`
   );
 }
 
