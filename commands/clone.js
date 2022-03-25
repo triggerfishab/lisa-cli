@@ -94,7 +94,7 @@ async function cloneLisaProject() {
     shell: true,
   })
 
-  spawnSync(`vercel env pull .env.local`, [], {
+  spawnSync(`vercel pull`, [], {
     cwd: appName,
     stdio: "inherit",
     shell: true,

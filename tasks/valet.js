@@ -7,9 +7,12 @@ async function linkValetSite() {
 
   let apiName = conf.get("apiName")
   let tld = await getValetTld()
-  await exec(`valet link --secure ${apiName}`, { cwd: `${apiName}/site` })
+  let apiUrl = `https://${apiName}.${tld}`
 
-  writeSuccess(`Site linked as https://${apiName}.${tld}`)
+  await exec(`valet link --secure ${apiName}`, { cwd: `${apiName}/site/web` })
+
+  conf.set("apiUrl", apiUrl)
+  writeSuccess(`Site linked as ${apiUrl}`)
 }
 
 async function getValetTld() {
