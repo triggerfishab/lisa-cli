@@ -1,22 +1,22 @@
-const exec = require("../lib/exec");
-const { writeInfo, writeSuccess } = require("../lib/write");
-const conf = require("../lib/conf");
+const exec = require("../lib/exec")
+const { writeInfo, writeSuccess } = require("../lib/write")
+const conf = require("../lib/conf")
 
 async function linkValetSite() {
-  writeInfo("Linking site to Valet.");
+  writeInfo("Linking site to Valet.")
 
-  let apiName = conf.get("apiName");
-  let tld = await getValetTld();
-  await exec(`valet link --secure ${apiName}`, { cwd: `${apiName}/site` });
+  let apiName = conf.get("apiName")
+  let tld = await getValetTld()
+  await exec(`valet link --secure ${apiName}`, { cwd: `${apiName}/site` })
 
-  writeSuccess(`Site linked as https://${apiName}.${tld}`);
+  writeSuccess(`Site linked as https://${apiName}.${tld}`)
 }
 
 async function getValetTld() {
-  let tld = await exec("valet tld");
+  let tld = await exec("valet tld")
 
-  return tld.stdout.trim();
+  return tld.stdout.trim()
 }
 
-const valetModule = (module.exports = linkValetSite);
-valetModule.getValetTld = getValetTld;
+const valetModule = (module.exports = linkValetSite)
+valetModule.getValetTld = getValetTld

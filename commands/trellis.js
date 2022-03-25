@@ -1,3 +1,3 @@
 function setupTrellis() {}
 
-module.exports = { setupTrellis };
+module.exports = { setupTrellis }

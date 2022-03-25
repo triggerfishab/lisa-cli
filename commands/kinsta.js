@@ -1,76 +1,76 @@
-const yaml = require("js-yaml");
-const fs = require("fs");
-const { getTrellisPath, getGroupVarsPath } = require("../lib/trellis");
-const { getProjectName } = require("../lib/app-name");
-const exec = require("../lib/exec");
-const generator = require("generate-password");
-const { askForConfigFile } = require("../lib/kinsta");
-const { program } = require("commander");
-const { getKinstaHelpMessage } = require("../help/kinsta");
-const { writeStep, writeSuccess } = require("../lib/write");
+const yaml = require("js-yaml")
+const fs = require("fs")
+const { getTrellisPath, getGroupVarsPath } = require("../lib/trellis")
+const { getProjectName } = require("../lib/app-name")
+const exec = require("../lib/exec")
+const generator = require("generate-password")
+const { askForConfigFile } = require("../lib/kinsta")
+const { program } = require("commander")
+const { getKinstaHelpMessage } = require("../help/kinsta")
+const { writeStep, writeSuccess } = require("../lib/write")
 
 program
   .command("kinsta")
   .description("Setup Kinsta configuration files in Trellis project")
   .option("--config-file <file>", "File with configuration options from Kinsta")
   .addHelpText("after", getKinstaHelpMessage())
-  .action(configureTrellisForKinsta);
+  .action(configureTrellisForKinsta)
 
 async function configureTrellisForKinsta(opts) {
-  let configFile;
+  let configFile
 
   if (!opts) {
-    configFile = await askForConfigFile();
+    configFile = await askForConfigFile()
   } else {
-    configFile = opts.configFile;
+    configFile = opts.configFile
   }
 
-  await getProjectName();
+  await getProjectName()
 
-  writeStep("Setup Kinsta configuration files");
+  writeStep("Setup Kinsta configuration files")
 
-  let trellisPath = getTrellisPath();
-  let ansibleCfgFile = fs.readFileSync(`${trellisPath}/ansible.cfg`, "utf8");
+  let trellisPath = getTrellisPath()
+  let ansibleCfgFile = fs.readFileSync(`${trellisPath}/ansible.cfg`, "utf8")
   ansibleCfgFile = ansibleCfgFile.replace(
     "[defaults]",
     "[defaults]\nforks = 3\nhost_key_checking = False"
-  );
+  )
 
-  fs.writeFileSync(`${trellisPath}/ansible.cfg`, ansibleCfgFile);
-  writeSuccess(`${trellisPath}/ansible.cfg updated.`);
+  fs.writeFileSync(`${trellisPath}/ansible.cfg`, ansibleCfgFile)
+  writeSuccess(`${trellisPath}/ansible.cfg updated.`)
 
-  await updateConfigFilesForEnvironment("staging", configFile);
-  await updateConfigFilesForEnvironment("production", configFile);
+  await updateConfigFilesForEnvironment("staging", configFile)
+  await updateConfigFilesForEnvironment("production", configFile)
 }
 
 async function updateConfigFilesForEnvironment(environment, configFile) {
-  let kinstaConfigFile = yaml.load(fs.readFileSync(configFile, "utf8"));
-  let trellisPath = getTrellisPath();
+  let kinstaConfigFile = yaml.load(fs.readFileSync(configFile, "utf8"))
+  let trellisPath = getTrellisPath()
   let host = `kinsta_${environment} ansible_host=${kinstaConfigFile[environment].ansible_host} ansible_ssh_port=${kinstaConfigFile[environment].ansible_ssh_port} ansible_ssh_extra_args='-o StrictHostKeyChecking=no'
 
 [web]
 kinsta_${environment}
 
 [${environment}]
-kinsta_${environment}`;
+kinsta_${environment}`
 
-  fs.writeFileSync(`${trellisPath}/hosts/${environment}`, host);
-  writeSuccess(`${trellisPath}/hosts/${environment} updated.`);
+  fs.writeFileSync(`${trellisPath}/hosts/${environment}`, host)
+  writeSuccess(`${trellisPath}/hosts/${environment} updated.`)
 
-  let groupVarsPath = getGroupVarsPath(environment);
+  let groupVarsPath = getGroupVarsPath(environment)
 
   let wordpressSites = yaml.load(
     fs.readFileSync(`${groupVarsPath}/wordpress_sites.yml`, "utf-8")
-  );
+  )
 
-  let { sitename } = kinstaConfigFile;
-  let apiDomain = kinstaConfigFile[environment].canonical;
+  let { sitename } = kinstaConfigFile
+  let apiDomain = kinstaConfigFile[environment].canonical
 
-  let config = { ...wordpressSites };
+  let config = { ...wordpressSites }
   let repo = await exec(`git config --get remote.origin.url`, {
     cwd: trellisPath,
-  });
-  repo = repo.stdout.trim();
+  })
+  repo = repo.stdout.trim()
 
   config.wordpress_sites[sitename] = {
     ...config.wordpress_sites["lisa.test"],
@@ -82,27 +82,27 @@ kinsta_${environment}`;
     branch: "develop",
     admin_email: `admin@${apiDomain}`,
     repo,
-  };
+  }
 
   if (kinstaConfigFile[environment].redirects) {
     config.wordpress_sites[sitename].site_hosts[0].redirects =
-      kinstaConfigFile[environment].redirects;
+      kinstaConfigFile[environment].redirects
   }
 
-  delete config.wordpress_sites["lisa.test"];
+  delete config.wordpress_sites["lisa.test"]
 
   fs.writeFile(`${groupVarsPath}/wordpress_sites.yml`, yaml.dump(config), () =>
     writeSuccess(`${groupVarsPath}/wordpress_sites.yml updated.`)
-  );
+  )
 
   let main = `project_root: ${kinstaConfigFile[environment].project_root}
 www_root: ${kinstaConfigFile[environment].www_root}
 web_user: ${kinstaConfigFile[environment].web_user}
-web_group: ${kinstaConfigFile[environment].web_group}`;
+web_group: ${kinstaConfigFile[environment].web_group}`
 
   fs.writeFile(`${groupVarsPath}/main.yml`, main, () =>
     writeSuccess(`${groupVarsPath}/main.yml updated.`)
-  );
+  )
 
   let vaultConfig = {
     vault_wordpress_sites: {
@@ -146,15 +146,15 @@ web_group: ${kinstaConfigFile[environment].web_group}`;
         },
       },
     },
-  };
+  }
 
-  fs.writeFileSync(`${groupVarsPath}/vault.yml`, yaml.dump(vaultConfig));
+  fs.writeFileSync(`${groupVarsPath}/vault.yml`, yaml.dump(vaultConfig))
 
   await exec(
     `ansible-vault encrypt ${groupVarsPath}/vault.yml --vault-password-file ${trellisPath}/.vault_pass`
-  );
+  )
 
-  writeSuccess(`${groupVarsPath}/vault.yml updated.`);
+  writeSuccess(`${groupVarsPath}/vault.yml updated.`)
 }
 
-module.exports = configureTrellisForKinsta;
+module.exports = configureTrellisForKinsta

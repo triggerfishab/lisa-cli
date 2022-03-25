@@ -1,35 +1,35 @@
 #! /usr/bin/env node
 
-const { program } = require("commander");
+const { program } = require("commander")
 
-const { resetConf } = require("./lib/conf");
-const { validateCurrentPath } = require("./lib/path");
-const { generateSecrets } = require("./lib/secrets");
-const { checkNodeVersion, checkDependencies } = require("./lib/dependencies");
+const { resetConf } = require("./lib/conf")
+const { validateCurrentPath } = require("./lib/path")
+const { generateSecrets } = require("./lib/secrets")
+const { checkNodeVersion, checkDependencies } = require("./lib/dependencies")
 
-resetConf();
-checkNodeVersion();
+resetConf()
+checkNodeVersion()
 
-let command = process.argv[2];
+let command = process.argv[2]
 
 async function initProgram() {
-  await validateCurrentPath(command);
-  await checkDependencies();
+  await validateCurrentPath(command)
+  await checkDependencies()
 
-  var normalizedPath = require("path").join(__dirname, "commands");
+  var normalizedPath = require("path").join(__dirname, "commands")
 
   require("fs")
     .readdirSync(normalizedPath)
     .forEach(function (file) {
-      require("./commands/" + file);
-    });
+      require("./commands/" + file)
+    })
 
   program
     .command("secrets")
     .description("Generate secrets")
-    .action(generateSecrets);
+    .action(generateSecrets)
 
-  program.parse();
+  program.parse()
 }
 
-initProgram();
+initProgram()

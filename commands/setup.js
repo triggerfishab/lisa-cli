@@ -1,7 +1,7 @@
-const conf = require("../lib/conf");
-const prompts = require("prompts");
-const { program } = require("commander");
-const { writeError, writeSuccess } = require("../lib/write");
+const conf = require("../lib/conf")
+const prompts = require("prompts")
+const { program } = require("commander")
+const { writeError, writeSuccess } = require("../lib/write")
 
 program
   .command("setup")
@@ -10,11 +10,11 @@ program
     "[service]",
     "Pass an argument for which service to setup, available services: s3"
   )
-  .action(setup);
+  .action(setup)
 
 async function setup(service) {
-  let services = ["s3", "stackpath"];
-  let results = {};
+  let services = ["s3", "stackpath"]
+  let results = {}
 
   if (service) {
     if (!services.includes(service)) {
@@ -22,22 +22,22 @@ async function setup(service) {
         `🚔🚔🚔 The service named ${service} is not available. The available services are: ${services.join(
           ", "
         )}`
-      );
-      process.exit();
+      )
+      process.exit()
     }
 
-    services = [service];
+    services = [service]
   }
 
   services.map((service) => {
     switch (service) {
       case "s3": {
-        results["s3"] = s3();
+        results["s3"] = s3()
       }
     }
-  });
+  })
 
-  return results;
+  return results
 }
 
 async function s3() {
@@ -52,12 +52,12 @@ async function s3() {
       message: "Enter the S3 secret access key (hidden input)",
       name: "secretAccessKey",
     },
-  ]);
+  ])
 
-  conf.set("s3", s3Credentials);
-  writeSuccess("Your S3 credentials was saved.");
+  conf.set("s3", s3Credentials)
+  writeSuccess("Your S3 credentials was saved.")
 
-  return s3Credentials;
+  return s3Credentials
 }
 
-module.exports = setup;
+module.exports = setup

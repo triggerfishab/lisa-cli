@@ -1,18 +1,18 @@
-const { getProjectName } = require("../lib/app-name");
-const { program } = require("commander");
-const { writeStep, writeInfo } = require("../lib/write");
+const { getProjectName } = require("../lib/app-name")
+const { program } = require("commander")
+const { writeStep, writeInfo } = require("../lib/write")
 
 program
   .command("sendgrid setup")
   .description("Setup Sendgrid account")
-  .action(setupSendgridAccount);
+  .action(setupSendgridAccount)
 
 async function setupSendgridAccount() {
-  let projectName = await getProjectName();
+  let projectName = await getProjectName()
 
-  writeStep("Setup Sendgrid account ⚡️⚡️⚡️");
+  writeStep("Setup Sendgrid account ⚡️⚡️⚡️")
 
-  writeInfo(projectName);
+  writeInfo(projectName)
 }
 
-module.exports = setupSendgridAccount;
+module.exports = setupSendgridAccount

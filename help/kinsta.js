@@ -35,7 +35,7 @@ function getKinstaHelpMessage() {
 
     ansible_host: 192.168.0.1
     ansible_ssh_port: 12345
-`;
+`
 }
 
-module.exports = { getKinstaHelpMessage };
+module.exports = { getKinstaHelpMessage }
