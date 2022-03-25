@@ -1,4 +1,4 @@
-const conf = new (require("conf"))();
+const conf = require("../lib/conf");
 const { program } = require("commander");
 const { getApiName } = require("../lib/app-name");
 const exec = require("../lib/exec");

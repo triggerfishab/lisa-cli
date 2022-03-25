@@ -3,7 +3,7 @@ const { askForProjectName } = require("../lib/app-name");
 const { askForCorrectRepoNames } = require("../lib/clone");
 const linkValetSite = require("../tasks/valet");
 const installDependencies = require("../tasks/dependencies");
-const conf = new (require("conf"))();
+const conf = require("../lib/conf");
 const { getTrellisPath } = require("../lib/trellis");
 const prompts = require("prompts");
 const exec = require("../lib/exec");
@@ -21,15 +21,6 @@ program
 
 async function cloneLisaProject() {
   writeStep("Cloning Lisa project");
-
-  let nodeVersion = process.version.match(/^v(\d+)/)[1];
-
-  if (nodeVersion < 12) {
-    writeError(
-      `You are running node version ${nodeVersion}. Please update to latest Node version.`
-    );
-    process.exit();
-  }
 
   let projectName = await askForProjectName();
 

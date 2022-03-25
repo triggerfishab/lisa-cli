@@ -2,12 +2,13 @@
 
 const { program } = require("commander");
 
-const resetConf = require("./lib/conf");
+const { resetConf } = require("./lib/conf");
 const { validateCurrentPath } = require("./lib/path");
 const { generateSecrets } = require("./lib/secrets");
-const checkDependencies = require("./lib/dependencies");
+const { checkNodeVersion, checkDependencies } = require("./lib/dependencies");
 
 resetConf();
+checkNodeVersion();
 
 let command = process.argv[2];
 

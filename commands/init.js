@@ -1,4 +1,4 @@
-const {program} = require('commander')
+const { program } = require("commander");
 const { createRepos } = require("./repo");
 const { askForProjectName } = require("../lib/app-name");
 const setupLocalSiteForDevelopment = require("./local");
@@ -6,27 +6,18 @@ const configureTrellisForKinsta = require("./kinsta");
 const { getSitesPath } = require("../lib/path");
 const { generateSecrets } = require("../lib/secrets");
 const addSiteToVercel = require("../lib/vercel");
-const { writeError, writeStep } = require("../lib/write");
+const { writeStep } = require("../lib/write");
 
 program
-    .command("init")
-    .description("Create a Lisa project")
-    .option("--skip-github", "Skip setup for Git repositories")
-    .action(init);
+  .command("init")
+  .description("Create a Lisa project")
+  .option("--skip-github", "Skip setup for Git repositories")
+  .action(init);
 
 async function init() {
   await getSitesPath();
 
   writeStep("Creating new Lisa project!");
-
-  let nodeVersion = process.version.match(/^v(\d+)/)[1];
-
-  if (nodeVersion < 12) {
-    writeError(
-      `You are running node version ${nodeVersion}. Please update to latest Node version.`
-    );
-    process.exit();
-  }
 
   await askForProjectName();
   await createRepos();

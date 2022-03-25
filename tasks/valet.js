@@ -1,6 +1,6 @@
 const exec = require("../lib/exec");
 const { writeInfo, writeSuccess } = require("../lib/write");
-const conf = new (require("conf"))();
+const conf = require("../lib/conf");
 
 async function linkValetSite() {
   writeInfo("Linking site to Valet.");

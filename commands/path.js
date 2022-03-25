@@ -1,7 +1,7 @@
 const chalk = require("chalk");
 const { constants } = require("fs");
 const { access } = require("fs/promises");
-const conf = new (require("conf"))();
+const conf = require("../lib/conf");
 const { program } = require("commander");
 const { writeSuccess, writeError } = require("../lib/write");
 

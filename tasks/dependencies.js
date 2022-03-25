@@ -1,4 +1,4 @@
-const conf = new (require("conf"))();
+const conf = require("../lib/conf");
 const exec = require("../lib/exec");
 const { writeSuccess, writeInfo } = require("../lib/write");
 

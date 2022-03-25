@@ -9,7 +9,7 @@ const {
   removeTempLisaVaultPass,
 } = require("../lib/vault");
 const { writeSuccess, writeStep } = require("../lib/write");
-const conf = new (require("conf"))();
+const conf = require("../lib/conf");
 
 async function addVaultPassword() {
   let trellisPath = getTrellisPath();

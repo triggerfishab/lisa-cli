@@ -1,4 +1,4 @@
-const conf = new (require("conf"))();
+const conf = require("../lib/conf");
 const prompts = require("prompts");
 const { program } = require("commander");
 const { writeError, writeSuccess } = require("../lib/write");
