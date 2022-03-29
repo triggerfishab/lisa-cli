@@ -108,7 +108,7 @@ web_group: ${kinstaConfigFile[environment].web_group}`
     vault_wordpress_sites: {
       [sitename]: {
         env: {
-          db_name: kinstaConfigFile[environment].db_ame,
+          db_name: kinstaConfigFile[environment].db_name,
           db_password: kinstaConfigFile[environment].db_password,
           db_user: kinstaConfigFile[environment].db_user,
           auth_key: generator.generate({
