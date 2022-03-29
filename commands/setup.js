@@ -29,10 +29,14 @@ async function setup(service) {
     services = [service]
   }
 
-  services.map((service) => {
+  services.map(async (service) => {
     switch (service) {
       case "s3": {
-        results["s3"] = s3()
+        results["s3"] = await s3()
+      }
+
+      case "stackpath": {
+        results["stackpath"] = await stackpath()
       }
     }
   })
@@ -58,6 +62,29 @@ async function s3() {
   writeSuccess("Your S3 credentials was saved.")
 
   return s3Credentials
+}
+
+async function stackpath() {
+  let stackpathCredentials = await prompts([
+    {
+      type: "text",
+      message: "Enter the Stackpath alias",
+      name: "alias",
+    },
+    {
+      type: "text",
+      message: "Enter the Stackpath consumer key",
+      name: "consumerKey",
+    },
+    {
+      type: "invisible",
+      message: "Enter the Stackpath consumer secret (hidden input)",
+      name: "consumerSecret",
+    },
+  ])
+
+  conf.set("stackpath", stackpathCredentials)
+  writeSuccess("Your Stackpath credentials was saved.")
 }
 
 module.exports = setup
