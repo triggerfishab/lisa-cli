@@ -20,7 +20,9 @@ program
   .action(setupStackpath)
 
 async function setupStackpath() {
-  await getProjectName()
+  let projectName = await getProjectName()
+  let s3Bucket = conf.get("s3Bucket")
+  let s3BucketUrl = conf.get("s3BucketUrl")
 
   let stackpath = conf.get("stackpath") || (await setup("stackpath")).stackpath
 
@@ -36,8 +38,8 @@ async function setupStackpath() {
     url: `https://api.stackpath.com/v1/${stackpath.alias}/sites`,
     method: "POST",
     data: {
-      name: "apilisaclise5",
-      url: "http://apilisaclise.cdn.triggerfish.cloud.s3.eu-central-1.amazonaws.com",
+      name: projectName,
+      url: s3BucketUrl,
     },
   }
 
@@ -56,7 +58,7 @@ async function setupStackpath() {
         url: `https://api.stackpath.com/v1/${stackpath.alias}/sites/${id}/customdomains`,
         method: "POST",
         data: {
-          custom_domain: "apilisaclise.cdn.triggerfish.cloud",
+          custom_domain: s3Bucket,
         },
       }
 

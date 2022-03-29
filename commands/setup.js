@@ -8,18 +8,18 @@ program
   .description("Setup all credentials for third party services")
   .argument(
     "[service]",
-    "Pass an argument for which service to setup, available services: s3"
+    "Pass an argument for which service to setup, available services: s3, stackpath, godaddy"
   )
   .action(setup)
 
 async function setup(service) {
-  let services = ["s3", "stackpath"]
+  let services = ["s3", "stackpath", "godaddy"]
   let results = {}
 
   if (service) {
     if (!services.includes(service)) {
       writeError(
-        `🚔🚔🚔 The service named ${service} is not available. The available services are: ${services.join(
+        `The service named ${service} is not available. The available services are: ${services.join(
           ", "
         )}`
       )
@@ -37,6 +37,10 @@ async function setup(service) {
 
       case "stackpath": {
         results["stackpath"] = await stackpath()
+      }
+
+      case "godaddy": {
+        results["godaddy"] = await godaddy()
       }
     }
   })
@@ -85,6 +89,24 @@ async function stackpath() {
 
   conf.set("stackpath", stackpathCredentials)
   writeSuccess("Your Stackpath credentials was saved.")
+}
+
+async function godaddy() {
+  let goDaddyCredentials = await prompts([
+    {
+      type: "text",
+      message: "Enter the GoDaddy API key",
+      name: "key",
+    },
+    {
+      type: "invisible",
+      message: "Enter the GoDaddy API secret",
+      name: "secret",
+    },
+  ])
+
+  conf.set("goDaddy", goDaddyCredentials)
+  writeSuccess("Your GoDaddy credentials was saved.")
 }
 
 module.exports = setup
