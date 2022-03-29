@@ -1,3 +1,9 @@
+## 1.7.0 (2022-03-29)
+### Features
+📦 Rewrite all console messages with new functions
+📦 Add task for `s3`
+📦 Code cleanup
+
 ## 1.6.1 (2022-03-24)
 ### Bug fixes
 🐛 Fix some bugs with running the `init` command.
