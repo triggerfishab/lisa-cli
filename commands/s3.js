@@ -18,10 +18,11 @@ async function setupS3Bucket() {
 
   await exec(`aws s3 mb s3://${bucketName}`)
   await exec(
-    `aws s3api put-bucket-acl --bucket ${bucketName} --acl public-read`
+    `aws s3api put-bucket-acl --grant-full-control id=${canonicalUserId} --bucket ${bucketName} --grant-read uri=http://acs.amazonaws.com/groups/global/AllUsers`
   )
 
   let s3BucketUrl = `https://s3.eu-north-1.amazonaws.com/${bucketName}`
+
   conf.set("s3Bucket", bucketName)
   conf.set("s3BucketUrl", s3BucketUrl)
 }
