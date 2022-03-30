@@ -26,12 +26,12 @@ You will need to install the following stuff to use lisa-cli:
 ## 🏃‍♂️ Usage
 
 ### Set global sites path
-Use this command to set your global sites path to prevent you from running other commands from the wrong directory
+Use this command to set your global sites path (for example `~/Sites`)to prevent you from running other commands from the wrong directory
 
-```lisa path```
+```lisa path {PATH}```
 
 ### Create a new site
-From your generic sites folder (i.e. `~/Sites`) run the following command:
+From your generic sites folder (for example `~/Sites`) run the following command:
 
 ```lisa init```
 
