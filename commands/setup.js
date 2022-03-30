@@ -52,6 +52,11 @@ async function s3() {
   let s3Credentials = await prompts([
     {
       type: "text",
+      message: "Enter the S3 canonical user id",
+      name: "canonicalUserId",
+    },
+    {
+      type: "text",
       message: "Enter the S3 access key ID",
       name: "accessKeyId",
     },

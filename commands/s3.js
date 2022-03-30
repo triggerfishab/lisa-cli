@@ -10,6 +10,7 @@ async function setupS3Bucket() {
   let projectName = await getProjectName()
   let bucketName = `${projectName}.cdn.triggerfish.cloud`
   let s3 = conf.get("s3") || (await setup("s3")).s3
+  let { canonicalUserId } = s3
 
   process.env.AWS_ACCESS_KEY_ID = s3.accessKeyId
   process.env.AWS_SECRET_ACCESS_KEY = s3.secretAccessKey
