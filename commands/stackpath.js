@@ -1,10 +1,3 @@
-/**
- * TODO:
- * generate correct url for site names
- * get correct s3 bucket url
- * add correct custom domain
- */
-
 const { getProjectName } = require("../lib/app-name")
 const setup = require("./setup")
 const conf = require("../lib/conf")
@@ -13,16 +6,23 @@ const crypto = require("crypto")
 const OAuth = require("oauth-1.0a")
 const fetch = require("node-fetch")
 const store = require("../lib/store")
+const { writeStep } = require("../lib/write")
 
 program
   .command("stackpath")
   .description("Setup Stackpath")
   .action(setupStackpath)
 
-async function setupStackpath() {
+async function setupStackpath(environment = "production") {
+  writeStep(`Setting up StackPath site for ${environment} environment`)
+
   let projectName = await getProjectName()
   let s3Bucket = conf.get("s3Bucket")
   let s3BucketUrl = conf.get("s3BucketUrl")
+
+  if (environment === "staging") {
+    projectName = `staging-${projectName}`
+  }
 
   let stackpath = conf.get("stackpath") || (await setup("stackpath")).stackpath
 
@@ -36,6 +36,8 @@ async function setupStackpath() {
       },
     })
 
+    writeSuccess(`Stackpath site created for ${environment} environment`)
+
     store.set("stackpathCdnUrl", json.data.pullzone.cdn_url)
 
     await request({
@@ -47,6 +49,8 @@ async function setupStackpath() {
       },
     })
 
+    writeSuccess(`Custom domain added for ${environment} environment`)
+
     await request({
       url: `https://api.stackpath.com/v1/${stackpath.alias}/sites/${json.data.pullzone.id}/ssl`,
       method: "POST",
@@ -55,6 +59,8 @@ async function setupStackpath() {
         ssl_sni: "1",
       },
     })
+
+    writeSuccess(`SSL certificate installed for ${environment} environment`)
   } catch (e) {
     console.log(e)
   }
