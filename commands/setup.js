@@ -13,7 +13,7 @@ program
   .action(setup)
 
 async function setup(service) {
-  let services = ["s3", "stackpath", "godaddy"]
+  let services = ["s3", "stackpath", "godaddy", "sendgrid"]
   let results = {}
 
   if (service) {
@@ -41,6 +41,10 @@ async function setup(service) {
 
       case "godaddy": {
         results["goDaddy"] = await goDaddy()
+      }
+
+      case "sendgrid": {
+        results["sendgrid"] = await sendgrid()
       }
     }
   })
@@ -107,7 +111,7 @@ async function goDaddy() {
     },
     {
       type: "invisible",
-      message: "Enter the GoDaddy API secret",
+      message: "Enter the GoDaddy API secret (hidden input)",
       name: "secret",
     },
   ])
@@ -116,6 +120,21 @@ async function goDaddy() {
   writeSuccess("Your GoDaddy credentials was saved.")
 
   return goDaddyCredentials
+}
+
+async function sendgrid() {
+  let sendgridCredentials = await prompts([
+    {
+      type: "invisible",
+      message: "Enter the Sendgrid secret (hidden input)",
+      name: "apiKey",
+    },
+  ])
+
+  conf.set("sendgrid", sendgridCredentials)
+  writeSuccess("Your Sendgrid credentials was saved.")
+
+  return sendgridCredentials
 }
 
 module.exports = setup

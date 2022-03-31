@@ -4,6 +4,7 @@ const setupS3Bucket = require("./s3")
 const setupStackpath = require("./stackpath")
 const setupGoDaddy = require("./godaddy")
 const { writeStep } = require("../lib/write")
+const setupSendgridAccount = require("./sendgrid")
 
 program
   .command("services")
@@ -24,6 +25,8 @@ async function setupServices() {
   await setupS3Bucket()
   await setupStackpath()
   await setupGoDaddy()
+
+  await setupSendgridAccount()
 }
 
 module.exports = setupServices
