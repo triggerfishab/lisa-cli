@@ -1,6 +1,5 @@
 /**
  * TODO:
- * replace request with fetch
  * generate correct url for site names
  * get correct s3 bucket url
  * add correct custom domain
@@ -12,7 +11,8 @@ const conf = require("../lib/conf")
 const { program } = require("commander")
 const crypto = require("crypto")
 const OAuth = require("oauth-1.0a")
-const request = require("request")
+const fetch = require("node-fetch")
+const store = require("../lib/store")
 
 program
   .command("stackpath")
@@ -26,6 +26,43 @@ async function setupStackpath() {
 
   let stackpath = conf.get("stackpath") || (await setup("stackpath")).stackpath
 
+  try {
+    let json = await request({
+      url: `https://api.stackpath.com/v1/${stackpath.alias}/sites`,
+      method: "POST",
+      data: {
+        name: projectName,
+        url: s3BucketUrl,
+      },
+    })
+
+    store.set("stackpathCdnUrl", json.data.pullzone.cdn_url)
+
+    await request({
+      url: `https://api.stackpath.com/v1/${stackpath.alias}/sites/${json.data.pullzone.id}/customdomains`,
+      method: "POST",
+      data: {
+        custom_domain: s3Bucket,
+        url: s3BucketUrl,
+      },
+    })
+
+    await request({
+      url: `https://api.stackpath.com/v1/${stackpath.alias}/sites/${json.data.pullzone.id}/ssl`,
+      method: "POST",
+      data: {
+        ssl_id: "26751",
+        ssl_sni: "1",
+      },
+    })
+  } catch (e) {
+    console.log(e)
+  }
+}
+
+async function request(data) {
+  let stackpath = conf.get("stackpath") || (await setup("stackpath")).stackpath
+
   const oauth = OAuth({
     consumer: { key: stackpath.consumerKey, secret: stackpath.consumerSecret },
     signature_method: "HMAC-SHA1",
@@ -34,47 +71,16 @@ async function setupStackpath() {
     },
   })
 
-  const request_data = {
-    url: `https://api.stackpath.com/v1/${stackpath.alias}/sites`,
-    method: "POST",
-    data: {
-      name: projectName,
-      url: s3BucketUrl,
+  let response = await fetch(data.url, {
+    method: data.method,
+    body: new URLSearchParams(data.data),
+    headers: {
+      ...oauth.toHeader(oauth.authorize(data)),
+      "Content-Type": "application/x-www-form-urlencoded",
     },
-  }
+  })
 
-  request(
-    {
-      url: request_data.url,
-      method: request_data.method,
-      form: request_data.data,
-      headers: oauth.toHeader(oauth.authorize(request_data)),
-    },
-    function (error, response, body) {
-      body = JSON.parse(body)
-      let { id } = body.data.pullzone
-
-      const request_data = {
-        url: `https://api.stackpath.com/v1/${stackpath.alias}/sites/${id}/customdomains`,
-        method: "POST",
-        data: {
-          custom_domain: s3Bucket,
-        },
-      }
-
-      request(
-        {
-          url: request_data.url,
-          method: request_data.method,
-          form: request_data.data,
-          headers: oauth.toHeader(oauth.authorize(request_data)),
-        },
-        function (error, response, body) {
-          console.log(body)
-        }
-      )
-    }
-  )
+  return await response.json()
 }
 
 module.exports = setupStackpath

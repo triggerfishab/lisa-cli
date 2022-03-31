@@ -1,5 +1,7 @@
 const { program } = require("commander")
 const { getProjectName } = require("../lib/app-name")
+const store = require("../lib/store")
+const fetch = require("node-fetch")
 
 program
   .command("godaddy")
@@ -7,7 +9,7 @@ program
   .action(goDaddy)
 
 async function goDaddy() {
-  await getProjectName()
+  console.log(`setup dns for: ${store.get("stackpathCdnUrl")}`)
 
   console.log("lets go daddy")
 }
