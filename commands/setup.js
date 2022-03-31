@@ -29,36 +29,35 @@ async function setup(service) {
     services = [service]
   }
 
-  services.map(async (service) => {
-    switch (service) {
+  for (const key in services) {
+    switch (services[key]) {
       case "s3": {
         results["s3"] = await s3()
+        break
       }
 
       case "stackpath": {
         results["stackpath"] = await stackpath()
+        break
       }
 
       case "godaddy": {
         results["goDaddy"] = await goDaddy()
+        break
       }
 
       case "sendgrid": {
         results["sendgrid"] = await sendgrid()
+        break
       }
     }
-  })
+  }
 
   return results
 }
 
 async function s3() {
   let s3Credentials = await prompts([
-    {
-      type: "text",
-      message: "Enter the S3 canonical user id",
-      name: "canonicalUserId",
-    },
     {
       type: "text",
       message: "Enter the S3 access key ID",
@@ -68,6 +67,11 @@ async function s3() {
       type: "invisible",
       message: "Enter the S3 secret access key (hidden input)",
       name: "secretAccessKey",
+    },
+    {
+      type: "text",
+      message: "Enter the S3 canonical user id",
+      name: "canonicalUserId",
     },
   ])
 
@@ -81,11 +85,6 @@ async function stackpath() {
   let stackpathCredentials = await prompts([
     {
       type: "text",
-      message: "Enter the Stackpath alias",
-      name: "alias",
-    },
-    {
-      type: "text",
       message: "Enter the Stackpath consumer key",
       name: "consumerKey",
     },
@@ -93,6 +92,11 @@ async function stackpath() {
       type: "invisible",
       message: "Enter the Stackpath consumer secret (hidden input)",
       name: "consumerSecret",
+    },
+    {
+      type: "text",
+      message: "Enter the Stackpath company alias",
+      name: "alias",
     },
   ])
 
