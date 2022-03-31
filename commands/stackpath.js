@@ -6,7 +6,7 @@ const crypto = require("crypto")
 const OAuth = require("oauth-1.0a")
 const fetch = require("node-fetch")
 const store = require("../lib/store")
-const { writeStep } = require("../lib/write")
+const { writeStep, writeSuccess } = require("../lib/write")
 
 program
   .command("stackpath")
@@ -36,7 +36,7 @@ async function setupStackpath(environment = "production") {
       },
     })
 
-    writeSuccess(`Stackpath site created for ${environment} environment`)
+    writeSuccess(`StackPath site created for ${environment} environment`)
 
     store.set("stackpathCdnUrl", json.data.pullzone.cdn_url)
 

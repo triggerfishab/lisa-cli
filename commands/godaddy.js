@@ -4,6 +4,7 @@ const store = require("../lib/store")
 const fetch = require("node-fetch")
 const conf = require("../lib/conf")
 const setup = require("./setup")
+const { writeStep, writeSuccess } = require("../lib/write")
 
 program
   .command("godaddy")
@@ -11,6 +12,8 @@ program
   .action(goDaddy)
 
 async function goDaddy() {
+  writeStep(`Setting up GoDaddy DNS record for ${environment} environment`)
+
   let goDaddy = conf.get("goDaddy") || (await setup("goDaddy")).goDaddy
   let projectName = await getProjectName()
   let stackpathCdnUrl = store.get("stackpathCdnUrl")
@@ -31,6 +34,8 @@ async function goDaddy() {
       },
     ]),
   })
+
+  writeSuccess(`GoDaddy DNS record added for ${environment} environment`)
 }
 
 module.exports = goDaddy

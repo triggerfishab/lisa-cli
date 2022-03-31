@@ -3,6 +3,7 @@ const { program } = require("commander")
 const setupS3Bucket = require("./s3")
 const setupStackpath = require("./stackpath")
 const setupGoDaddy = require("./godaddy")
+const { writeStep } = require("../lib/write")
 
 program
   .command("services")
@@ -10,6 +11,10 @@ program
   .action(setupServices)
 
 async function setupServices() {
+  writeStep(
+    "Installing the following services for staging and production environment: Amason AWS S3, StackPath, GoDaddy"
+  )
+
   await getProjectName()
 
   await setupS3Bucket("staging")
