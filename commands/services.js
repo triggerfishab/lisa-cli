@@ -11,6 +11,11 @@ program
 
 async function setupServices() {
   await getProjectName()
+
+  await setupS3Bucket("staging")
+  await setupStackpath("staging")
+  await setupGoDaddy("staging")
+
   await setupS3Bucket()
   await setupStackpath()
   await setupGoDaddy()

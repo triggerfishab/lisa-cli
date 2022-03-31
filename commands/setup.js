@@ -40,7 +40,7 @@ async function setup(service) {
       }
 
       case "godaddy": {
-        results["godaddy"] = await godaddy()
+        results["goDaddy"] = await goDaddy()
       }
     }
   })
@@ -94,9 +94,11 @@ async function stackpath() {
 
   conf.set("stackpath", stackpathCredentials)
   writeSuccess("Your Stackpath credentials was saved.")
+
+  return stackpathCredentials
 }
 
-async function godaddy() {
+async function goDaddy() {
   let goDaddyCredentials = await prompts([
     {
       type: "text",
@@ -112,6 +114,8 @@ async function godaddy() {
 
   conf.set("goDaddy", goDaddyCredentials)
   writeSuccess("Your GoDaddy credentials was saved.")
+
+  return goDaddyCredentials
 }
 
 module.exports = setup

@@ -2,6 +2,8 @@ const { program } = require("commander")
 const { getProjectName } = require("../lib/app-name")
 const store = require("../lib/store")
 const fetch = require("node-fetch")
+const conf = require("../lib/conf")
+const setup = require("./setup")
 
 program
   .command("godaddy")
@@ -9,9 +11,26 @@ program
   .action(goDaddy)
 
 async function goDaddy() {
-  console.log(`setup dns for: ${store.get("stackpathCdnUrl")}`)
+  let goDaddy = conf.get("goDaddy") || (await setup("goDaddy")).goDaddy
+  let projectName = await getProjectName()
+  let stackpathCdnUrl = store.get("stackpathCdnUrl")
 
-  console.log("lets go daddy")
+  await fetch("https://api.godaddy.com/v1/domains/triggerfish.cloud/records", {
+    method: "PATCH",
+    headers: {
+      Authorization: `sso-key ${goDaddy.key}:${goDaddy.secret}`,
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify([
+      {
+        data: stackpathCdnUrl,
+        name: `${projectName}.cdn`,
+        ttl: 1800,
+        type: "CNAME",
+      },
+    ]),
+  })
 }
 
 module.exports = goDaddy
