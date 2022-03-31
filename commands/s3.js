@@ -3,12 +3,20 @@ const setup = require("./setup")
 const conf = require("../lib/conf")
 const exec = require("../lib/exec")
 const { program } = require("commander")
+const { writeStep, writeSuccess } = require("../lib/write")
 
 program.command("s3").description("Setup S3 bucket").action(setupS3Bucket)
 
-async function setupS3Bucket() {
+async function setupS3Bucket(environment = "production") {
+  writeStep(`Setting up S3 bucket for ${environment} environment`)
+
   let projectName = await getProjectName()
   let bucketName = `${projectName}.cdn.triggerfish.cloud`
+
+  if (environment === "staging") {
+    bucketName = `staging-${bucketName}`
+  }
+
   let s3 = conf.get("s3") || (await setup("s3")).s3
   let { canonicalUserId } = s3
 
@@ -17,9 +25,14 @@ async function setupS3Bucket() {
   process.env.AWS_DEFAULT_REGION = "eu-north-1"
 
   await exec(`aws s3 mb s3://${bucketName}`)
+
+  writeSuccess(`S3 bucket for ${environment} created.`)
+
   await exec(
     `aws s3api put-bucket-acl --grant-full-control id=${canonicalUserId} --bucket ${bucketName} --grant-read uri=http://acs.amazonaws.com/groups/global/AllUsers`
   )
+
+  writeSuccess(`Correct permissions configured for ${environment}`)
 
   let s3BucketUrl = `https://s3.eu-north-1.amazonaws.com/${bucketName}`
 
