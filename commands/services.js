@@ -8,7 +8,9 @@ const setupSendgridAccount = require("./sendgrid")
 
 program
   .command("services")
-  .description("Setup services (currently Amazon AWS S3 and Stackpath CDN)")
+  .description(
+    "Setup services (currently Amazon AWS S3 and Stackpath CDN, Sendgrid)"
+  )
   .action(setupServices)
 
 async function setupServices() {
