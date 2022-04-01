@@ -130,7 +130,7 @@ async function sendgrid() {
   let sendgridCredentials = await prompts([
     {
       type: "invisible",
-      message: "Enter the Sendgrid secret (hidden input)",
+      message: "Enter the Sendgrid api key (hidden input)",
       name: "apiKey",
     },
   ])
