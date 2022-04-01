@@ -54,6 +54,7 @@ async function setupSendgridAccount() {
       password: passwordGenerator.generate({
         numbers: true,
         symbols: true,
+        strict: true,
       }),
       ips: [ip],
     }
