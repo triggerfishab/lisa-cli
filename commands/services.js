@@ -10,6 +10,7 @@ const {
   writeEnvDataToVault,
 } = require("../lib/vault")
 const conf = require("../lib/conf")
+const { getTrellisPath } = require("../lib/trellis")
 
 program
   .command("services")
@@ -43,8 +44,10 @@ async function setupServices() {
 }
 
 async function writeTrellisConfig() {
+  let trellisPath = getTrellisPath()
   let s3BucketStaging = conf.get("s3Bucket-staging")
   let s3BucketProduction = conf.get("s3Bucket-production")
+  let sendgridApiKey = conf.get("sendgridApiKey")
   let s3Config = conf.get("s3")
 
   writeEnvDataToWordPressSites(
@@ -82,6 +85,26 @@ async function writeTrellisConfig() {
     s3_access_key_id: s3Config.accessKeyId,
     s3_secret_access_key: s3Config.accessKeyId,
   })
+
+  writeEnvDataToVault(
+    {
+      tf_smtp_username: "apikey",
+      tf_smtp_password: sendgridApiKey,
+    },
+    "production"
+  )
+
+  writeEnvDataToVault(
+    {
+      tf_smtp_username: "apikey",
+      tf_smtp_password: sendgridApiKey,
+    },
+    "staging"
+  )
+
+  await exec("trellis dotenv", { cwd: trellisPath })
+
+  writeSuccess("Trellis dotenv done.")
 }
 
 module.exports = setupServices
