@@ -36,8 +36,8 @@ async function setupS3Bucket(environment = "production") {
 
   let s3BucketUrl = `https://s3.eu-north-1.amazonaws.com/${bucketName}`
 
-  conf.set("s3Bucket", bucketName)
-  conf.set("s3BucketUrl", s3BucketUrl)
+  conf.set(`s3Bucket-${environment}`, bucketName)
+  conf.set(`s3BucketUrl-${environment}`, s3BucketUrl)
 }
 
 module.exports = setupS3Bucket

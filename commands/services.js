@@ -3,8 +3,13 @@ const { program } = require("commander")
 const setupS3Bucket = require("./s3")
 const setupStackpath = require("./stackpath")
 const setupGoDaddy = require("./godaddy")
-const { writeStep } = require("../lib/write")
+const { writeStep, writeSuccess } = require("../lib/write")
 const setupSendgridAccount = require("./sendgrid")
+const {
+  writeEnvDataToWordPressSites,
+  writeEnvDataToVault,
+} = require("../lib/vault")
+const conf = require("../lib/conf")
 
 program
   .command("services")
@@ -15,7 +20,7 @@ program
 
 async function setupServices() {
   writeStep(
-    "Installing the following services for staging and production environment: Amason AWS S3, StackPath, GoDaddy"
+    "Installing the following services for staging and production environment: Amason AWS S3, StackPath, GoDaddy, Sendgrid"
   )
 
   await getProjectName()
@@ -29,6 +34,54 @@ async function setupServices() {
   await setupGoDaddy()
 
   await setupSendgridAccount()
+
+  await writeTrellisConfig()
+
+  writeSuccess(
+    "All services have been configured. You are now ready to go with Amazon AWS S3, StackPath, GoDaddy and Sendgrid!"
+  )
+}
+
+async function writeTrellisConfig() {
+  let s3BucketStaging = conf.get("s3Bucket-staging")
+  let s3BucketProduction = conf.get("s3Bucket-production")
+  let s3Config = conf.get("s3")
+
+  writeEnvDataToWordPressSites(
+    {
+      s3_bucket: s3BucketStaging,
+      tf_upload_media_to_s3: true,
+      tf_serve_media_from_cdn: true,
+      cdn_delivery_domain: s3BucketStaging,
+    },
+    "staging"
+  )
+
+  writeEnvDataToWordPressSites(
+    {
+      s3_bucket: s3BucketProduction,
+      tf_upload_media_to_s3: true,
+      tf_serve_media_from_cdn: true,
+      cdn_delivery_domain: s3BucketProduction,
+    },
+    "production"
+  )
+
+  writeEnvDataToWordPressSites(
+    {
+      s3_bucket: s3BucketStaging,
+      tf_upload_media_to_s3: false,
+      tf_serve_media_from_cdn: true,
+      cdn_delivery_domain: s3BucketStaging,
+    },
+    "development"
+  )
+
+  writeEnvDataToVault({
+    s3_region: "eu-north-1",
+    s3_access_key_id: s3Config.accessKeyId,
+    s3_secret_access_key: s3Config.accessKeyId,
+  })
 }
 
 module.exports = setupServices
