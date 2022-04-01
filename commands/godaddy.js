@@ -12,16 +12,16 @@ program
   .action(goDaddy)
 
 async function goDaddy() {
-  writeStep(`Setting up GoDaddy DNS record for ${environment} environment`)
+  writeStep(`Setting up GoDaddy DNS record for your project.`)
 
-  let goDaddy = conf.get("goDaddy") || (await configure("goDaddy")).goDaddy
+  let godaddy = conf.get("godaddy") || (await configure("godaddy")).godaddy
   let projectName = await getProjectName()
   let stackpathCdnUrl = store.get("stackpathCdnUrl")
 
   await fetch("https://api.godaddy.com/v1/domains/triggerfish.cloud/records", {
     method: "PATCH",
     headers: {
-      Authorization: `sso-key ${goDaddy.key}:${goDaddy.secret}`,
+      Authorization: `sso-key ${godaddy.key}:${godaddy.secret}`,
       Accept: "application/json",
       "Content-Type": "application/json",
     },
@@ -35,7 +35,7 @@ async function goDaddy() {
     ]),
   })
 
-  writeSuccess(`GoDaddy DNS record added for ${environment} environment`)
+  writeSuccess(`GoDaddy DNS record added for your project.`)
 }
 
 module.exports = goDaddy

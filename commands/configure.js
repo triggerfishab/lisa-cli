@@ -158,7 +158,7 @@ async function goDaddy() {
     },
   ])
 
-  conf.set("goDaddy", goDaddyCredentials)
+  conf.set("godaddy", goDaddyCredentials)
   writeSuccess("Your GoDaddy credentials was saved.")
 
   return goDaddyCredentials

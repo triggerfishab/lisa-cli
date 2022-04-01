@@ -47,18 +47,21 @@ async function setupSendgridAccount() {
       }
     }
     */
+
+    let body = {
+      username: projectName,
+      email: `${projectName}@sendgrid.triggerfish.se`,
+      password: passwordGenerator.generate({
+        numbers: true,
+        symbols: true,
+      }),
+      ips: [ip],
+    }
+
     const [, subuser] = await client.request({
       method: "POST",
       url: "/v3/subusers",
-      body: {
-        username: projectName,
-        email: `${projectName}@sendgrid.triggerfish.se`,
-        password: passwordGenerator.generate({
-          numbers: true,
-          symbols: true,
-        }),
-        ips: [ip],
-      },
+      body,
     })
 
     writeSuccess(`Sendgrid subuser created`)
@@ -96,6 +99,7 @@ async function setupSendgridAccount() {
     writeSuccess("Sendgrid subuser api key created")
   } catch (e) {
     console.error(e)
+    console.error(e.response.body.errors)
     writeError("Error setting up Sendgrid subuser")
   }
 }

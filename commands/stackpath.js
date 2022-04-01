@@ -17,8 +17,8 @@ async function setupStackpath(environment = "production") {
   writeStep(`Setting up StackPath site for ${environment} environment`)
 
   let projectName = await getProjectName()
-  let s3Bucket = conf.get("s3Bucket")
-  let s3BucketUrl = conf.get("s3BucketUrl")
+  let s3Bucket = conf.get(`s3Bucket-${environment}`)
+  let s3BucketUrl = conf.get(`s3BucketUrl-${environment}`)
 
   if (environment === "staging") {
     projectName = `staging-${projectName}`

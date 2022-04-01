@@ -11,6 +11,7 @@ const {
 } = require("../lib/vault")
 const conf = require("../lib/conf")
 const { getTrellisPath } = require("../lib/trellis")
+const exec = require("../lib/exec")
 
 program
   .command("services")
@@ -80,11 +81,14 @@ async function writeTrellisConfig() {
     "development"
   )
 
-  writeEnvDataToVault({
-    s3_region: "eu-north-1",
-    s3_access_key_id: s3Config.accessKeyId,
-    s3_secret_access_key: s3Config.accessKeyId,
-  })
+  writeEnvDataToVault(
+    {
+      s3_region: "eu-north-1",
+      s3_access_key_id: s3Config.accessKeyId,
+      s3_secret_access_key: s3Config.accessKeyId,
+    },
+    "all"
+  )
 
   writeEnvDataToVault(
     {

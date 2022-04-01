@@ -29,6 +29,8 @@ async function initProgram() {
     .description("Generate secrets")
     .action(generateSecrets)
 
+  program.option("-d, --debug", "Show extra debug output")
+
   program.parse()
 }
 

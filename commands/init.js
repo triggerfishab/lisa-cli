@@ -8,6 +8,7 @@ const { generateSecrets } = require("../lib/secrets")
 const addSiteToVercel = require("../lib/vercel")
 const { writeStep } = require("../lib/write")
 const { writeSummary } = require("../lib/summary")
+const setupServices = require("./services")
 
 program
   .command("init")
@@ -26,6 +27,7 @@ async function init() {
   await configureTrellisForKinsta()
   await addSiteToVercel()
   await generateSecrets()
+  await setupServices()
   await writeSummary()
 
   writeStep("All done! Good luck and have fun!")
