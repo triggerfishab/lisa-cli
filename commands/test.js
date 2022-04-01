@@ -8,6 +8,8 @@ async function vault() {
     { test: "13", test2: "1337", force_uploads: false },
     "staging"
   )
+
+  writeEnvValueToVault({ data132: "johan" }, "all")
 }
 
 module.exports = vault
