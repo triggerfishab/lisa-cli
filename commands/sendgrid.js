@@ -8,7 +8,7 @@ const {
 } = require("../lib/write")
 const client = require("@sendgrid/client")
 const conf = require("../lib/conf")
-const setup = require("../commands/setup")
+const configure = require("./configure")
 const passwordGenerator = require("generate-password")
 const store = require("../lib/store")
 
@@ -22,7 +22,8 @@ async function setupSendgridAccount() {
 
   writeStep("Creating Sendgrid subuser")
 
-  let { apiKey } = conf.get("sendgrid") || (await setup("sendgrid")).sendgrid
+  let { apiKey } =
+    conf.get("sendgrid") || (await configure("sendgrid")).sendgrid
 
   client.setApiKey(apiKey)
 

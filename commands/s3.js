@@ -1,5 +1,5 @@
 const { getProjectName } = require("../lib/app-name")
-const setup = require("./setup")
+const configure = require("./configure")
 const conf = require("../lib/conf")
 const exec = require("../lib/exec")
 const { program } = require("commander")
@@ -17,7 +17,7 @@ async function setupS3Bucket(environment = "production") {
     bucketName = `staging-${bucketName}`
   }
 
-  let s3 = conf.get("s3") || (await setup("s3")).s3
+  let s3 = conf.get("s3") || (await configure("s3")).s3
   let { canonicalUserId } = s3
 
   process.env.AWS_ACCESS_KEY_ID = s3.accessKeyId

@@ -1,5 +1,5 @@
 const { getProjectName } = require("../lib/app-name")
-const setup = require("./setup")
+const configure = require("./configure")
 const conf = require("../lib/conf")
 const { program } = require("commander")
 const crypto = require("crypto")
@@ -24,7 +24,8 @@ async function setupStackpath(environment = "production") {
     projectName = `staging-${projectName}`
   }
 
-  let stackpath = conf.get("stackpath") || (await setup("stackpath")).stackpath
+  let stackpath =
+    conf.get("stackpath") || (await configure("stackpath")).stackpath
 
   try {
     let json = await request({
@@ -67,7 +68,8 @@ async function setupStackpath(environment = "production") {
 }
 
 async function request(data) {
-  let stackpath = conf.get("stackpath") || (await setup("stackpath")).stackpath
+  let stackpath =
+    conf.get("stackpath") || (await configure("stackpath")).stackpath
 
   const oauth = OAuth({
     consumer: { key: stackpath.consumerKey, secret: stackpath.consumerSecret },

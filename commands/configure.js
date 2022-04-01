@@ -1,19 +1,24 @@
 const conf = require("../lib/conf")
 const prompts = require("prompts")
 const { program } = require("commander")
-const { writeError, writeSuccess } = require("../lib/write")
+const { writeError, writeSuccess, writeInfo } = require("../lib/write")
 
 program
-  .command("setup")
-  .description("Setup all credentials for third party services")
+  .command("configure")
+  .description("Configure all credentials for third party services")
+  .option(
+    "--reset",
+    "Reset the config for one or all services, see argument [service] for available services."
+  )
   .argument(
     "[service]",
-    "Pass an argument for which service to setup, available services: s3, stackpath, godaddy"
+    "Pass an argument for which service to configure, available services: s3, stackpath, godaddy"
   )
-  .action(setup)
+  .action(configure)
 
-async function setup(service) {
+async function configure(service, options) {
   let services = ["s3", "stackpath", "godaddy", "sendgrid"]
+
   let results = {}
 
   if (service) {
@@ -29,25 +34,50 @@ async function setup(service) {
     services = [service]
   }
 
-  for (const key in services) {
-    switch (services[key]) {
+  if (options.reset) {
+    for (let service of services) {
+      conf.delete(service)
+    }
+
+    writeSuccess("Specified services config has been reset")
+    return
+  }
+
+  for (let service of services) {
+    switch (service) {
       case "s3": {
-        results["s3"] = await s3()
+        if (conf.get(service)) {
+          writeInfo("S3 credentials already set.")
+          break
+        }
+        results[service] = await s3()
         break
       }
 
       case "stackpath": {
-        results["stackpath"] = await stackpath()
+        if (conf.get(service)) {
+          writeInfo("Stackpath credentials already set.")
+          break
+        }
+        results[service] = await stackpath()
         break
       }
 
       case "godaddy": {
-        results["goDaddy"] = await goDaddy()
+        if (conf.get(service)) {
+          writeInfo("GoDaddy credentials already set.")
+          break
+        }
+        results[service] = await goDaddy()
         break
       }
 
       case "sendgrid": {
-        results["sendgrid"] = await sendgrid()
+        if (conf.get(service)) {
+          writeInfo("Sendgrid credentials already set.")
+          break
+        }
+        results[service] = await sendgrid()
         break
       }
     }
@@ -62,16 +92,19 @@ async function s3() {
       type: "text",
       message: "Enter the S3 access key ID",
       name: "accessKeyId",
+      validate: (value) => Boolean(value),
     },
     {
       type: "invisible",
       message: "Enter the S3 secret access key (hidden input)",
       name: "secretAccessKey",
+      validate: (value) => Boolean(value),
     },
     {
       type: "text",
       message: "Enter the S3 canonical user id",
       name: "canonicalUserId",
+      validate: (value) => Boolean(value),
     },
   ])
 
@@ -87,16 +120,19 @@ async function stackpath() {
       type: "text",
       message: "Enter the Stackpath consumer key",
       name: "consumerKey",
+      validate: (value) => Boolean(value),
     },
     {
       type: "invisible",
       message: "Enter the Stackpath consumer secret (hidden input)",
       name: "consumerSecret",
+      validate: (value) => Boolean(value),
     },
     {
       type: "text",
       message: "Enter the Stackpath company alias",
       name: "alias",
+      validate: (value) => Boolean(value),
     },
   ])
 
@@ -112,11 +148,13 @@ async function goDaddy() {
       type: "text",
       message: "Enter the GoDaddy API key",
       name: "key",
+      validate: (value) => Boolean(value),
     },
     {
       type: "invisible",
       message: "Enter the GoDaddy API secret (hidden input)",
       name: "secret",
+      validate: (value) => Boolean(value),
     },
   ])
 
@@ -132,6 +170,7 @@ async function sendgrid() {
       type: "invisible",
       message: "Enter the Sendgrid api key (hidden input)",
       name: "apiKey",
+      validate: (value) => Boolean(value),
     },
   ])
 
@@ -141,4 +180,4 @@ async function sendgrid() {
   return sendgridCredentials
 }
 
-module.exports = setup
+module.exports = configure

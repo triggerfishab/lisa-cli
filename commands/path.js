@@ -4,6 +4,7 @@ const { access } = require("fs/promises")
 const conf = require("../lib/conf")
 const { program } = require("commander")
 const { writeSuccess, writeError } = require("../lib/write")
+const prompts = require("prompts")
 
 program
   .command("path")
