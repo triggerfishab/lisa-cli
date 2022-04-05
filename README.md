@@ -24,43 +24,49 @@ You will need to install the following stuff to use lisa-cli:
 ```npm i -g lisa-cli```
 
 ## 🏃‍♂️ Usage
-
-### Set global sites path
-Use this command to set your global sites path (for example `~/Sites`) to prevent you from running other commands from the wrong directory
-
-```lisa path {PATH}```
-
 ### Create a new site
-From your generic sites folder (for example `~/Sites`) run the following command:
 
-```lisa init```
+1. Setup a new site on Kinsta, with both staging and production environments.
+2. [Configure your Lisa path](path2)
+3. [Configure your services API keys](configure)
+4. [Generate Kinsta template file](kinsta)
 
-You will also need to create a YAML file with all the config from Kinsta, run the following command to get a file template:
+	4.1 Fill your template
+5. Run `lisa init --config-file <kinsta-config-file.yml>`
 
-```lisa kinsta --help```
+## ✏️ Commands
 
-### Setup an existing site
+### path \<PATH\>
+Use this command to set your global sites path to prevent you from running other commands from the wrong directory
+
+### configure
+Before setting up your first site, you will need to run this command to enter all the necessary API keys that the program uses. All of these can be found in the "Lisa CLI" item in 1Password.
+
+### kinsta
+Use this command to get a template file for all your Kinsta configuration values.
+
+Example: `lisa kinsta > kinsta.yml`
+
+After the file has been created, update all existing values with the corresponding values from the site at Kinsta that you created earlier.
+
+### init
+This command will create a new Lisa site for you. You will get both a WordPress API and a Next.js application for the frontend.
+
+The following will be included:
+* GitHub repos
+* Amazon AWS S3 bucket for media handling
+* StackPath CDN for media files
+* GoDaddy records for DNS
+* Sendgrid subuser for email sending
+
+When the command is done, you will have the following on your computer:
+* API site linked to Valet on the domain https://{projectName}-api.test
+* Next.js frontend app on http://localhost:3000
+
+### clone
 If you want to setup an already existing Lisa site for local development, you can just run the following command:
 
-```lisa clone```
-
-### Import database from staging/production
+### db import
 Use this command to import a database from the production/staging environment of the site that you're working on. A prompt will ask you whether you will import it from staging or production
 
-```lisa db import```
-
 This command will ask for the project name and try to find the correct repos that you should use. If not the correct repos are found, the prompt will let you specify them manually.
-
-```lisa destroy```
-
-This command will ask for the project name, find the directories for both API and app, find the database and the site linked to valet and remove them.
-
-## 🔨 TODO
-- Local Trellis development
-	- S3 bucket
-	- Stackpath domain
-	- Sendgrid
-- Stackpath
-- Sendgrid
-- S3
-- GoDaddy

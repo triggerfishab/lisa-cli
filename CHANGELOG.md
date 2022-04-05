@@ -1,3 +1,22 @@
+## 2.0 (2022-04-05)
+### Features
+📦 Add support to setup all services we usually use on a project.
+* When you run `lisa init`, S3, StackPath, GoDaddy and Sendgrid will automatically be installed and all the necessary configuration will be saved in your Trellis files.
+
+📦 Add `configure` command
+* Run this command to configure API keys for S3, StackPath, GoDaddy and Sendgrid
+
+📦 ES Modules
+* The whole application has been rewritten from CommonJS to ES Modules
+
+📦 Introducing Store
+* A new Store library has been introduced in 2.0 which is supposed to hold all information about project specific data.
+
+### Changes
+🛠 Make `--config-file` a required option to `init` command
+
+🛠 Change `kinsta` command to only output the template file when running the command.
+
 ## 1.7.0 (2022-03-29)
 ### Features
 📦 Rewrite all console messages with new functions
