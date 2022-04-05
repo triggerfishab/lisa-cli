@@ -28,17 +28,19 @@ You will need to install and configure the following stuff to use Lisa CLI:
 ### Create a new site
 
 1. Setup a new site on Kinsta, with both staging and production environments.
-2. [Configure your Lisa path](path2)
-3. [Configure your services API keys](configure)
-4. [Generate Kinsta template file](kinsta)
+2. [Configure your Lisa path](#path)
+3. [Configure your services API keys](#configure)
+4. [Generate Kinsta template file](#kinsta)
 
 	4.1 Fill your template
 5. Run `lisa init --config-file <kinsta-config-file.yml>`
 
 ## ✏️ Commands
 
-### path \<PATH\>
+### path
 Use this command to set your global sites path to prevent you from running other commands from the wrong directory
+
+Example: `lisa path <PATH>`
 
 ### configure
 Before setting up your first site, you will need to run this command to enter all the necessary API keys that the program uses. All of these can be found in the "Lisa CLI" item in 1Password.
