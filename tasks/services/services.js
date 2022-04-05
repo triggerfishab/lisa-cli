@@ -31,10 +31,22 @@ async function setupServices() {
   await setupSendgridAccount()
 
   await writeTrellisConfig()
+  await commitAndPushTrellisConfig()
 
   writeSuccess(
     "All services have been configured. You are now ready to go with Amazon AWS S3, StackPath, GoDaddy and Sendgrid!"
   )
+}
+
+async function commitAndPushTrellisConfig() {
+  let trellisPath = getTrellisPath()
+  await exec("git add .", { cwd: trellisPath })
+  await exec("git commit -m 'Trellis configuration triggered by Lisa-CLI'", {
+    cwd: trellisPath,
+  })
+  await exec("git push", { cwd: trellisPath })
+
+  writeSuccess("Trellis config pushed to GitHub")
 }
 
 async function writeTrellisConfig() {
