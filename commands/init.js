@@ -9,14 +9,21 @@ const addSiteToVercel = require("../lib/vercel")
 const { writeStep } = require("../lib/write")
 const { writeSummary } = require("../lib/summary")
 const setupServices = require("./services")
+const chalk = require("chalk")
 
 program
   .command("init")
   .description("Create a Lisa project")
-  .option("--skip-github", "Skip setup for Git repositories")
+  .requiredOption(
+    "-c, --config-file <file>",
+    `File with configuration options from Kinsta (relative or absolute path). Generate this file with ${chalk.bold(
+      chalk.underline("lisa kinsta")
+    )}`
+  )
   .action(init)
 
-async function init() {
+async function init({ configFile }) {
+  console.log({ configFile })
   await getSitesPath()
 
   writeStep("Creating new Lisa project!")
@@ -24,7 +31,7 @@ async function init() {
   await askForProjectName()
   await createRepos()
   await setupLocalSiteForDevelopment()
-  await configureTrellisForKinsta()
+  await configureTrellisForKinsta(configFile || "")
   await addSiteToVercel()
   await generateSecrets()
   await setupServices()
