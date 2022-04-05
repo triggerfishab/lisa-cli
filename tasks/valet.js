@@ -1,6 +1,6 @@
-const exec = require("../lib/exec")
-const { writeInfo, writeSuccess } = require("../lib/write")
-const conf = require("../lib/conf")
+import conf from "../lib/conf.js"
+import exec from "../lib/exec.js"
+import { writeInfo, writeSuccess } from "../lib/write.js"
 
 async function linkValetSite() {
   writeInfo("Linking site to Valet.")
@@ -15,11 +15,10 @@ async function linkValetSite() {
   writeSuccess(`Site linked as ${apiUrl}`)
 }
 
-async function getValetTld() {
+export async function getValetTld() {
   let tld = await exec("valet tld")
 
   return tld.stdout.trim()
 }
 
-const valetModule = (module.exports = linkValetSite)
-valetModule.getValetTld = getValetTld
+export default linkValetSite

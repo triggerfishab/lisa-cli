@@ -1,11 +1,18 @@
-#! /usr/bin/env node
+#!/usr/bin/env node
 
-const { program } = require("commander")
+import chalk from "chalk"
+import { Command } from "commander"
+import cloneLisaProject from "./commands/clone.js"
+import configure from "./commands/configure.js"
+import dbImport from "./commands/db.js"
+import init from "./commands/init.js"
+import setupPath from "./commands/path.js"
+import { getKinstaHelpMessage } from "./help/kinsta.js"
+import { resetConf } from "./lib/conf.js"
+import { checkDependencies, checkNodeVersion } from "./lib/dependencies.js"
+import { validateCurrentPath } from "./lib/path.js"
 
-const { resetConf } = require("./lib/conf")
-const { validateCurrentPath } = require("./lib/path")
-const { generateSecrets } = require("./lib/secrets")
-const { checkNodeVersion, checkDependencies } = require("./lib/dependencies")
+const program = new Command()
 
 resetConf()
 checkNodeVersion()
@@ -16,13 +23,52 @@ async function initProgram() {
   await validateCurrentPath(command)
   await checkDependencies()
 
-  var normalizedPath = require("path").join(__dirname, "commands")
+  program
+    .command("path")
+    .description("Run this command to set your global sites path")
+    .argument("<path>", "Your global sites path")
+    .action(setupPath)
 
-  require("fs")
-    .readdirSync(normalizedPath)
-    .forEach(function (file) {
-      require("./commands/" + file)
+  program
+    .command("kinsta")
+    .description("Output Kinsta configuration file template")
+    .action(function () {
+      console.log(getKinstaHelpMessage())
     })
+
+  program
+    .command("init")
+    .description("Create a Lisa project")
+    .requiredOption(
+      "-c, --config-file <file>",
+      `File with configuration options from Kinsta (relative or absolute path). Generate this file with ${chalk.bold(
+        chalk.underline("lisa kinsta")
+      )}`
+    )
+    .action(init)
+
+  program
+    .command("db import")
+    .description("Import a database from staging/production environment")
+    .action(dbImport)
+
+  program
+    .command("configure")
+    .description("Configure all credentials for third party services")
+    .option(
+      "--reset",
+      "Reset the config for one or all services, see argument [service] for available services."
+    )
+    .argument(
+      "[service]",
+      "Pass an argument for which service to configure, available services: s3, stackpath, godaddy"
+    )
+    .action(configure)
+
+  program
+    .command("clone")
+    .description("Clone an existing Lisa project for local development")
+    .action(cloneLisaProject)
 
   program.parse()
 }

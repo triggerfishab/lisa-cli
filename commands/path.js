@@ -1,18 +1,10 @@
-const chalk = require("chalk")
-const { constants } = require("fs")
-const { access } = require("fs/promises")
-const conf = require("../lib/conf")
-const { program } = require("commander")
-const { writeSuccess, writeError } = require("../lib/write")
-const prompts = require("prompts")
+import chalk from "chalk"
+import { constants } from "fs"
+import { access } from "fs/promises"
+import conf from "../lib/conf.js"
+import { writeError, writeSuccess } from "../lib/write.js"
 
-program
-  .command("path")
-  .description("Run this command to set your global sites path")
-  .argument("<path>", "Your global sites path")
-  .action(path)
-
-async function path(path) {
+async function setupPath(path) {
   try {
     await access(path, constants.R_OK | constants.W_OK)
 
@@ -23,4 +15,4 @@ async function path(path) {
   }
 }
 
-module.exports = path
+export default setupPath

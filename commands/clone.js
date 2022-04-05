@@ -1,23 +1,17 @@
-const chalk = require("chalk")
-const { askForProjectName } = require("../lib/app-name")
-const { askForCorrectRepoNames } = require("../lib/clone")
-const linkValetSite = require("../tasks/valet")
-const installDependencies = require("../tasks/dependencies")
-const conf = require("../lib/conf")
-const { getTrellisPath } = require("../lib/trellis")
-const prompts = require("prompts")
-const exec = require("../lib/exec")
-const { spawnSync } = require("child_process")
-const fs = require("fs")
-const dbImport = require("./db")
-const { getAdminUrl } = require("../lib/wordpress")
-const { program } = require("commander")
-const { writeStep, writeError, writeSuccess } = require("../lib/write")
-
-program
-  .command("clone")
-  .description("Clone an existing Lisa project for local development")
-  .action(cloneLisaProject)
+import chalk from "chalk"
+import { spawnSync } from "child_process"
+import fs from "fs"
+import prompts from "prompts"
+import { askForProjectName } from "../lib/app-name.js"
+import { askForCorrectRepoNames } from "../lib/clone.js"
+import conf from "../lib/conf.js"
+import exec from "../lib/exec.js"
+import { getTrellisPath } from "../lib/trellis.js"
+import { getAdminUrl } from "../lib/wordpress.js"
+import { writeStep, writeSuccess } from "../lib/write.js"
+import installDependencies from "../tasks/dependencies.js"
+import linkValetSite from "../tasks/valet.js"
+import dbImport from "./db.js"
 
 async function cloneLisaProject() {
   writeStep("Cloning Lisa project")
@@ -115,4 +109,4 @@ async function cloneLisaProject() {
   )
 }
 
-module.exports = cloneLisaProject
+export default cloneLisaProject

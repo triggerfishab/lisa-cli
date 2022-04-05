@@ -1,15 +1,14 @@
-const conf = require("../lib/conf")
-const { program } = require("commander")
-const { getApiName } = require("../lib/app-name")
-const exec = require("../lib/exec")
-const {
-  writeInfo,
+import { getApiName } from "../lib/app-name.js"
+import conf from "../lib/conf.js"
+import exec from "../lib/exec.js"
+import {
   writeEmptyLine,
   writeError,
+  writeInfo,
   writeSuccess,
-} = require("../lib/write")
+} from "../lib/write.js"
 
-async function createRepos() {
+export async function createRepos() {
   writeEmptyLine()
   writeInfo("Setting up repos at GitHub for app and api.")
 
@@ -42,12 +41,10 @@ async function createRepos() {
   writeSuccess(`Repo created: ${apiGithubURL}.`)
 }
 
-async function addGithubRepoSecrets() {
+export async function addGithubRepoSecrets() {
   let vaultPass = conf.get("vaultPass")
   let apiRepo = await getApiName()
 
   await exec(`gh secret set VAULT_PASS -b"${vaultPass}"`, { cwd: apiRepo })
   writeSuccess("Vault pass saved as secret for api repo.")
 }
-
-module.exports = { createRepos, addGithubRepoSecrets }

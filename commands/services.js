@@ -1,25 +1,17 @@
-const { getProjectName } = require("../lib/app-name")
-const { program } = require("commander")
-const setupS3Bucket = require("./s3")
-const setupStackpath = require("./stackpath")
-const setupGoDaddy = require("./godaddy")
-const { writeStep, writeSuccess } = require("../lib/write")
-const setupSendgridAccount = require("./sendgrid")
-const {
-  writeEnvDataToWordPressSites,
+import { getProjectName } from "../lib/app-name.js"
+import conf from "../lib/conf.js"
+import exec from "../lib/exec.js"
+import * as store from "../lib/store.js"
+import { getTrellisPath } from "../lib/trellis.js"
+import {
   writeEnvDataToVault,
-} = require("../lib/vault")
-const conf = require("../lib/conf")
-const store = require("../lib/store")
-const { getTrellisPath } = require("../lib/trellis")
-const exec = require("../lib/exec")
-
-program
-  .command("services")
-  .description(
-    "Setup services (currently Amazon AWS S3 and Stackpath CDN, Sendgrid)"
-  )
-  .action(setupServices)
+  writeEnvDataToWordPressSites,
+} from "../lib/vault.js"
+import { writeStep, writeSuccess } from "../lib/write.js"
+import setupGoDaddy from "./godaddy.js"
+import setupS3Bucket from "./s3.js"
+import setupSendgridAccount from "./sendgrid.js"
+import setupStackpath from "./stackpath.js"
 
 async function setupServices() {
   writeStep(
@@ -51,6 +43,8 @@ async function writeTrellisConfig() {
   let s3BucketProduction = conf.get("s3Bucket-production")
   let sendgridApiKey = store.get("sendgridApiKey")
   let s3Config = conf.get("s3")
+
+  writeStep("Writing all services data to vault files.")
 
   writeEnvDataToWordPressSites(
     {
@@ -112,4 +106,4 @@ async function writeTrellisConfig() {
   writeSuccess("Trellis dotenv done.")
 }
 
-module.exports = setupServices
+export default setupServices

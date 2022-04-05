@@ -1,28 +1,15 @@
-const { program } = require("commander")
-const { createRepos } = require("./repo")
-const { askForProjectName } = require("../lib/app-name")
-const setupLocalSiteForDevelopment = require("./local")
-const { configureTrellisForKinsta } = require("../lib/kinsta")
-const { getSitesPath } = require("../lib/path")
-const { generateSecrets } = require("../lib/secrets")
-const addSiteToVercel = require("../lib/vercel")
-const { writeStep } = require("../lib/write")
-const { writeSummary } = require("../lib/summary")
-const setupServices = require("./services")
-const chalk = require("chalk")
+import { askForProjectName } from "../lib/app-name.js"
+import { configureTrellisForKinsta } from "../lib/kinsta.js"
+import { getSitesPath } from "../lib/path.js"
+import { generateSecrets } from "../lib/secrets.js"
+import { writeSummary } from "../lib/summary.js"
+import addSiteToVercel from "../lib/vercel.js"
+import { writeStep } from "../lib/write.js"
+import setupLocalSiteForDevelopment from "./local.js"
+import { createRepos } from "./repo.js"
+import setupServices from "./services.js"
 
-program
-  .command("init")
-  .description("Create a Lisa project")
-  .requiredOption(
-    "-c, --config-file <file>",
-    `File with configuration options from Kinsta (relative or absolute path). Generate this file with ${chalk.bold(
-      chalk.underline("lisa kinsta")
-    )}`
-  )
-  .action(init)
-
-async function init({ configFile }) {
+export async function init({ configFile }) {
   console.log({ configFile })
   await getSitesPath()
 
@@ -40,4 +27,4 @@ async function init({ configFile }) {
   writeStep("All done! Good luck and have fun!")
 }
 
-module.exports = init
+export default init

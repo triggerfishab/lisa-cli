@@ -1,6 +1,6 @@
-const conf = require("../lib/conf")
-const exec = require("../lib/exec")
-const { writeSuccess, writeInfo } = require("../lib/write")
+import conf from "../lib/conf.js"
+import exec from "../lib/exec.js"
+import { writeInfo, writeSuccess } from "../lib/write.js"
 
 async function installDependencies() {
   writeInfo("Installing dependencies.")
@@ -32,4 +32,4 @@ async function installApiDependencies() {
   return Promise.all([sitePromise, themePromise])
 }
 
-module.exports = installDependencies
+export default installDependencies

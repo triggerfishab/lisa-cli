@@ -1,21 +1,14 @@
-const { getProjectName, getApiName } = require("../lib/app-name")
-const yaml = require("js-yaml")
-const fs = require("fs")
-const { getValetTld } = require("../tasks/valet")
-const exec = require("../lib/exec")
-const generator = require("generate-password")
-const { getTrellisPath, getGroupVarsPath } = require("../lib/trellis")
-const { changeVaultPasswords, addVaultPassword } = require("../tasks/trellis")
-const linkValetSite = require("../tasks/valet")
-const installDependencies = require("../tasks/dependencies")
-const { addGithubRepoSecrets } = require("./repo")
-const { writeStep, writeSuccess } = require("../lib/write")
-const { program } = require("commander")
-
-program
-  .command("local")
-  .description("Setup Lisa site for local development")
-  .action(setupLocalSiteForDevelopment)
+import fs from "fs"
+import generator from "generate-password"
+import yaml from "js-yaml"
+import { getApiName, getProjectName } from "../lib/app-name.js"
+import exec from "../lib/exec.js"
+import { getGroupVarsPath, getTrellisPath } from "../lib/trellis.js"
+import { writeStep, writeSuccess } from "../lib/write.js"
+import installDependencies from "../tasks/dependencies.js"
+import { addVaultPassword, changeVaultPasswords } from "../tasks/trellis.js"
+import linkValetSite, { getValetTld } from "../tasks/valet.js"
+import { addGithubRepoSecrets } from "./repo.js"
 
 async function setupLocalSiteForDevelopment() {
   writeStep("Setup site for local development")
@@ -130,4 +123,4 @@ async function setupLocalSiteForDevelopment() {
   }
 }
 
-module.exports = setupLocalSiteForDevelopment
+export default setupLocalSiteForDevelopment

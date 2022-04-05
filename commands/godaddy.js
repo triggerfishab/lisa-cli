@@ -1,15 +1,9 @@
-const { program } = require("commander")
-const { getProjectName } = require("../lib/app-name")
-const store = require("../lib/store")
-const fetch = require("node-fetch")
-const conf = require("../lib/conf")
-const configure = require("./configure")
-const { writeStep, writeSuccess } = require("../lib/write")
-
-program
-  .command("godaddy")
-  .description("Setup GoDaddy DNS records")
-  .action(goDaddy)
+import fetch from "node-fetch"
+import { getProjectName } from "../lib/app-name.js"
+import conf from "../lib/conf.js"
+import * as store from "../lib/store.js"
+import { writeStep, writeSuccess } from "../lib/write.js"
+import configure from "./configure.js"
 
 async function goDaddy(environment = "production") {
   writeStep(`Setting up GoDaddy DNS record for your project.`)
@@ -42,4 +36,4 @@ async function goDaddy(environment = "production") {
   writeSuccess(`GoDaddy DNS record added for your project.`)
 }
 
-module.exports = goDaddy
+export default goDaddy

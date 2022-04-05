@@ -1,21 +1,10 @@
-const { getProjectName } = require("../lib/app-name")
-const { program } = require("commander")
-const {
-  writeStep,
-  writeInfo,
-  writeSuccess,
-  writeError,
-} = require("../lib/write")
-const client = require("@sendgrid/client")
-const conf = require("../lib/conf")
-const configure = require("./configure")
-const passwordGenerator = require("generate-password")
-const store = require("../lib/store")
-
-program
-  .command("sendgrid")
-  .description("Setup Sendgrid account")
-  .action(setupSendgridAccount)
+import client from "@sendgrid/client"
+import passwordGenerator from "generate-password"
+import { getProjectName } from "../lib/app-name.js"
+import conf from "../lib/conf.js"
+import * as store from "../lib/store.js"
+import { writeError, writeStep, writeSuccess } from "../lib/write.js"
+import configure from "./configure.js"
 
 async function setupSendgridAccount() {
   let projectName = await getProjectName()
@@ -105,4 +94,4 @@ async function setupSendgridAccount() {
   }
 }
 
-module.exports = setupSendgridAccount
+export default setupSendgridAccount

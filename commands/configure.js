@@ -1,20 +1,6 @@
-const conf = require("../lib/conf")
-const prompts = require("prompts")
-const { program } = require("commander")
-const { writeError, writeSuccess, writeInfo } = require("../lib/write")
-
-program
-  .command("configure")
-  .description("Configure all credentials for third party services")
-  .option(
-    "--reset",
-    "Reset the config for one or all services, see argument [service] for available services."
-  )
-  .argument(
-    "[service]",
-    "Pass an argument for which service to configure, available services: s3, stackpath, godaddy"
-  )
-  .action(configure)
+import prompts from "prompts"
+import conf from "../lib/conf.js"
+import { writeError, writeInfo, writeSuccess } from "../lib/write.js"
 
 async function configure(service, options) {
   let services = ["s3", "stackpath", "godaddy", "sendgrid"]
@@ -181,4 +167,4 @@ async function sendgrid() {
   return sendgridCredentials
 }
 
-module.exports = configure
+export default configure

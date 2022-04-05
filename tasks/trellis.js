@@ -1,17 +1,17 @@
-const fs = require("fs")
-const exec = require("../lib/exec")
-const generator = require("generate-password")
-const { getTrellisPath, getGroupVarsPath } = require("../lib/trellis")
-const {
-  writeTempLisaVaultPass,
+import fs from "fs"
+import generator from "generate-password"
+import conf from "../lib/conf.js"
+import exec from "../lib/exec.js"
+import { getGroupVarsPath, getTrellisPath } from "../lib/trellis.js"
+import {
   getLisaVaultPassPath,
   getVaultPassPath,
   removeTempLisaVaultPass,
-} = require("../lib/vault")
-const { writeSuccess, writeStep } = require("../lib/write")
-const conf = require("../lib/conf")
+  writeTempLisaVaultPass,
+} from "../lib/vault.js"
+import { writeStep, writeSuccess } from "../lib/write.js"
 
-async function addVaultPassword() {
+export async function addVaultPassword() {
   let trellisPath = getTrellisPath()
   let vaultPassPath = `${trellisPath}/.vault_pass`
   let password = generator.generate({
@@ -30,7 +30,7 @@ async function addVaultPassword() {
   writeSuccess(`Vault pass written to ${vaultPassPath}`)
 }
 
-async function changeVaultPasswords() {
+export async function changeVaultPasswords() {
   writeStep("Update all vault files with new vault pass")
 
   let lisaVaultPassPath = getLisaVaultPassPath()
@@ -81,5 +81,3 @@ async function changeVaultPasswords() {
 
   await removeTempLisaVaultPass()
 }
-
-module.exports = { addVaultPassword, changeVaultPasswords }

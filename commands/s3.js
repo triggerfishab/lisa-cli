@@ -1,11 +1,8 @@
-const { getProjectName } = require("../lib/app-name")
-const configure = require("./configure")
-const conf = require("../lib/conf")
-const exec = require("../lib/exec")
-const { program } = require("commander")
-const { writeStep, writeSuccess } = require("../lib/write")
-
-program.command("s3").description("Setup S3 bucket").action(setupS3Bucket)
+import { getProjectName } from "../lib/app-name.js"
+import conf from "../lib/conf.js"
+import exec from "../lib/exec.js"
+import { writeStep, writeSuccess } from "../lib/write.js"
+import configure from "./configure.js"
 
 async function setupS3Bucket(environment = "production") {
   writeStep(`Setting up S3 bucket for ${environment} environment`)
@@ -40,4 +37,4 @@ async function setupS3Bucket(environment = "production") {
   conf.set(`s3BucketUrl-${environment}`, s3BucketUrl)
 }
 
-module.exports = setupS3Bucket
+export default setupS3Bucket

@@ -1,15 +1,9 @@
-const fs = require("fs")
-const prompts = require("prompts")
-const { getProjectName } = require("../lib/app-name")
-const { getTrellisPath, getTrellisSitePath } = require("../lib/trellis")
-const exec = require("../lib/exec")
-const { program } = require("commander")
-const { writeInfo, writeSuccess } = require("../lib/write")
-
-program
-  .command("db import")
-  .description("Import a database from staging/production environment")
-  .action(dbImport)
+import fs from "fs"
+import prompts from "prompts"
+import { getProjectName } from "../lib/app-name.js"
+import exec from "../lib/exec.js"
+import { getTrellisPath, getTrellisSitePath } from "../lib/trellis.js"
+import { writeInfo, writeSuccess } from "../lib/write.js"
 
 async function dbImport() {
   await getProjectName()
@@ -59,4 +53,4 @@ async function dbImport() {
   writeSuccess("Database successfully imported!")
 }
 
-module.exports = dbImport
+export default dbImport

@@ -1,17 +1,11 @@
-const { getProjectName } = require("../lib/app-name")
-const configure = require("./configure")
-const conf = require("../lib/conf")
-const { program } = require("commander")
-const crypto = require("crypto")
-const OAuth = require("oauth-1.0a")
-const fetch = require("node-fetch")
-const store = require("../lib/store")
-const { writeStep, writeSuccess } = require("../lib/write")
-
-program
-  .command("stackpath")
-  .description("Setup Stackpath")
-  .action(setupStackpath)
+import crypto from "crypto"
+import fetch from "node-fetch"
+import OAuth from "oauth-1.0a"
+import { getProjectName } from "../lib/app-name.js"
+import conf from "../lib/conf.js"
+import * as store from "../lib/store.js"
+import { writeStep, writeSuccess } from "../lib/write.js"
+import configure from "./configure.js"
 
 async function setupStackpath(environment = "production") {
   writeStep(`Setting up StackPath site for ${environment} environment`)
@@ -91,4 +85,4 @@ async function request(data) {
   return await response.json()
 }
 
-module.exports = setupStackpath
+export default setupStackpath

@@ -1,4 +1,4 @@
-function getKinstaHelpMessage() {
+export function getKinstaHelpMessage() {
   return `\nTemplate file:
 
 # kinsta.yml
@@ -37,5 +37,3 @@ production:
   ansible_ssh_port: 12345
 `
 }
-
-module.exports = { getKinstaHelpMessage }
