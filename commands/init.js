@@ -10,7 +10,6 @@ import { createRepos } from "../tasks/repo.js"
 import setupServices from "../tasks/services/services.js"
 
 export async function init({ configFile }) {
-  console.log({ configFile })
   await getSitesPath()
 
   writeStep("Creating new Lisa project!")
