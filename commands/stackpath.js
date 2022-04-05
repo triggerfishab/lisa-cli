@@ -39,7 +39,7 @@ async function setupStackpath(environment = "production") {
 
     writeSuccess(`StackPath site created for ${environment} environment`)
 
-    store.set("stackpathCdnUrl", json.data.pullzone.cdn_url)
+    store.set(`stackpathCdnUrl-${environment}`, json.data.pullzone.cdn_url)
 
     await request({
       url: `https://api.stackpath.com/v1/${stackpath.alias}/sites/${json.data.pullzone.id}/customdomains`,

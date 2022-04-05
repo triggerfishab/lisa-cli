@@ -11,12 +11,16 @@ program
   .description("Setup GoDaddy DNS records")
   .action(goDaddy)
 
-async function goDaddy() {
+async function goDaddy(environment = "production") {
   writeStep(`Setting up GoDaddy DNS record for your project.`)
 
   let godaddy = conf.get("godaddy") || (await configure("godaddy")).godaddy
   let projectName = await getProjectName()
-  let stackpathCdnUrl = store.get("stackpathCdnUrl")
+  let stackpathCdnUrl = store.get(`stackpathCdnUrl-${environment}`)
+
+  if (environment === "staging") {
+    projectName = `staging-${projectName}`
+  }
 
   await fetch("https://api.godaddy.com/v1/domains/triggerfish.cloud/records", {
     method: "PATCH",

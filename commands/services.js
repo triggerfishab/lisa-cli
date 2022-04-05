@@ -10,6 +10,7 @@ const {
   writeEnvDataToVault,
 } = require("../lib/vault")
 const conf = require("../lib/conf")
+const store = require("../lib/store")
 const { getTrellisPath } = require("../lib/trellis")
 const exec = require("../lib/exec")
 
@@ -31,9 +32,9 @@ async function setupServices() {
   await setupStackpath("staging")
   await setupGoDaddy("staging")
 
-  await setupS3Bucket()
-  await setupStackpath()
-  await setupGoDaddy()
+  await setupS3Bucket("production")
+  await setupStackpath("production")
+  await setupGoDaddy("production")
 
   await setupSendgridAccount()
 
@@ -48,7 +49,7 @@ async function writeTrellisConfig() {
   let trellisPath = getTrellisPath()
   let s3BucketStaging = conf.get("s3Bucket-staging")
   let s3BucketProduction = conf.get("s3Bucket-production")
-  let sendgridApiKey = conf.get("sendgridApiKey")
+  let sendgridApiKey = store.get("sendgridApiKey")
   let s3Config = conf.get("s3")
 
   writeEnvDataToWordPressSites(
@@ -85,7 +86,7 @@ async function writeTrellisConfig() {
     {
       s3_region: "eu-north-1",
       s3_access_key_id: s3Config.accessKeyId,
-      s3_secret_access_key: s3Config.accessKeyId,
+      s3_secret_access_key: s3Config.secretAccessKey,
     },
     "all"
   )
