@@ -88,7 +88,7 @@ async function cloneLisaProject() {
     await dbImport()
   }
 
-  spawnSync(`vercel link`, [], {
+  spawnSync(`vercel link --confirm`, [], {
     cwd: appName,
     stdio: "inherit",
     shell: true,

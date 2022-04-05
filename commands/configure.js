@@ -18,7 +18,7 @@ program
 
 async function configure(service, options) {
   let services = ["s3", "stackpath", "godaddy", "sendgrid"]
-  options ||= {}
+  options = options || {}
 
   let results = {}
 
