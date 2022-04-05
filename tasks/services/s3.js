@@ -1,8 +1,8 @@
-import { getProjectName } from "../lib/app-name.js"
-import conf from "../lib/conf.js"
-import exec from "../lib/exec.js"
-import { writeStep, writeSuccess } from "../lib/write.js"
-import configure from "./configure.js"
+import configure from "../../commands/configure.js"
+import { getProjectName } from "../../lib/app-name.js"
+import conf from "../../lib/conf.js"
+import exec from "../../lib/exec.js"
+import { writeStep, writeSuccess } from "../../lib/write.js"
 
 async function setupS3Bucket(environment = "production") {
   writeStep(`Setting up S3 bucket for ${environment} environment`)

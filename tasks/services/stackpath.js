@@ -1,11 +1,11 @@
 import crypto from "crypto"
 import fetch from "node-fetch"
 import OAuth from "oauth-1.0a"
-import { getProjectName } from "../lib/app-name.js"
-import conf from "../lib/conf.js"
-import * as store from "../lib/store.js"
-import { writeStep, writeSuccess } from "../lib/write.js"
-import configure from "./configure.js"
+import configure from "../../commands/configure.js"
+import { getProjectName } from "../../lib/app-name.js"
+import conf from "../../lib/conf.js"
+import * as store from "../../lib/store.js"
+import { writeStep, writeSuccess } from "../../lib/write.js"
 
 async function setupStackpath(environment = "production") {
   writeStep(`Setting up StackPath site for ${environment} environment`)

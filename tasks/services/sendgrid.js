@@ -1,10 +1,10 @@
 import client from "@sendgrid/client"
 import passwordGenerator from "generate-password"
-import { getProjectName } from "../lib/app-name.js"
-import conf from "../lib/conf.js"
-import * as store from "../lib/store.js"
-import { writeError, writeStep, writeSuccess } from "../lib/write.js"
-import configure from "./configure.js"
+import configure from "../../commands/configure.js"
+import { getProjectName } from "../../lib/app-name.js"
+import conf from "../../lib/conf.js"
+import * as store from "../../lib/store.js"
+import { writeError, writeStep, writeSuccess } from "../../lib/write.js"
 
 async function setupSendgridAccount() {
   let projectName = await getProjectName()

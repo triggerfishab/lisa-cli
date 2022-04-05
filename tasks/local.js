@@ -5,10 +5,10 @@ import { getApiName, getProjectName } from "../lib/app-name.js"
 import exec from "../lib/exec.js"
 import { getGroupVarsPath, getTrellisPath } from "../lib/trellis.js"
 import { writeStep, writeSuccess } from "../lib/write.js"
-import installDependencies from "../tasks/dependencies.js"
-import { addVaultPassword, changeVaultPasswords } from "../tasks/trellis.js"
-import linkValetSite, { getValetTld } from "../tasks/valet.js"
+import installDependencies from "./dependencies.js"
 import { addGithubRepoSecrets } from "./repo.js"
+import { addVaultPassword, changeVaultPasswords } from "./trellis.js"
+import linkValetSite, { getValetTld } from "./valet.js"
 
 async function setupLocalSiteForDevelopment() {
   writeStep("Setup site for local development")

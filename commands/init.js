@@ -5,9 +5,9 @@ import { generateSecrets } from "../lib/secrets.js"
 import { writeSummary } from "../lib/summary.js"
 import addSiteToVercel from "../lib/vercel.js"
 import { writeStep } from "../lib/write.js"
-import setupLocalSiteForDevelopment from "./local.js"
-import { createRepos } from "./repo.js"
-import setupServices from "./services.js"
+import setupLocalSiteForDevelopment from "../tasks/local.js"
+import { createRepos } from "../tasks/repo.js"
+import setupServices from "../tasks/services/services.js"
 
 export async function init({ configFile }) {
   console.log({ configFile })

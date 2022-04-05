@@ -1,9 +1,9 @@
 import fetch from "node-fetch"
-import { getProjectName } from "../lib/app-name.js"
-import conf from "../lib/conf.js"
-import * as store from "../lib/store.js"
-import { writeStep, writeSuccess } from "../lib/write.js"
-import configure from "./configure.js"
+import configure from "../../commands/configure.js"
+import { getProjectName } from "../../lib/app-name.js"
+import conf from "../../lib/conf.js"
+import * as store from "../../lib/store.js"
+import { writeStep, writeSuccess } from "../../lib/write.js"
 
 async function goDaddy(environment = "production") {
   writeStep(`Setting up GoDaddy DNS record for your project.`)

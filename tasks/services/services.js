@@ -1,13 +1,13 @@
-import { getProjectName } from "../lib/app-name.js"
-import conf from "../lib/conf.js"
-import exec from "../lib/exec.js"
-import * as store from "../lib/store.js"
-import { getTrellisPath } from "../lib/trellis.js"
+import { getProjectName } from "../../lib/app-name.js"
+import conf from "../../lib/conf.js"
+import exec from "../../lib/exec.js"
+import * as store from "../../lib/store.js"
+import { getTrellisPath } from "../../lib/trellis.js"
 import {
   writeEnvDataToVault,
   writeEnvDataToWordPressSites,
-} from "../lib/vault.js"
-import { writeStep, writeSuccess } from "../lib/write.js"
+} from "../../lib/vault.js"
+import { writeStep, writeSuccess } from "../../lib/write.js"
 import setupGoDaddy from "./godaddy.js"
 import setupS3Bucket from "./s3.js"
 import setupSendgridAccount from "./sendgrid.js"
