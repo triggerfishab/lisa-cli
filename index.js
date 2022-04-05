@@ -24,13 +24,6 @@ async function initProgram() {
       require("./commands/" + file)
     })
 
-  program
-    .command("secrets")
-    .description("Generate secrets")
-    .action(generateSecrets)
-
-  program.option("-d, --debug", "Show extra debug output")
-
   program.parse()
 }
 

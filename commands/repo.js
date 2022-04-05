@@ -10,12 +10,6 @@ const {
 } = require("../lib/write")
 
 async function createRepos() {
-  let { skipGithub } = program.opts()
-
-  if (skipGithub) {
-    return
-  }
-
   writeEmptyLine()
   writeInfo("Setting up repos at GitHub for app and api.")
 
