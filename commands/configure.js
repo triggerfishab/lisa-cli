@@ -18,6 +18,7 @@ program
 
 async function configure(service, options) {
   let services = ["s3", "stackpath", "godaddy", "sendgrid"]
+  options ||= {}
 
   let results = {}
 
@@ -34,7 +35,7 @@ async function configure(service, options) {
     services = [service]
   }
 
-  if (options.reset) {
+  if (typeof options.reset !== "undefined" && options.reset) {
     for (let service of services) {
       conf.delete(service)
     }
