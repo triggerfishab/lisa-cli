@@ -1,9 +1,5 @@
 export function getKinstaHelpMessage() {
-  return `\nTemplate file:
-
-# kinsta.yml
-
-sitename: api-lisa.se
+  return `sitename: api-lisa.se
 staging:
   canonical: staging-lisa-se.kinsta.cloud
 
