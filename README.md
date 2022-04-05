@@ -37,23 +37,34 @@ You will need to install and configure the following stuff to use Lisa CLI:
 
 ## ✏️ Commands
 
-### path
+### `path`
 Use this command to set your global sites path to prevent you from running other commands from the wrong directory
 
 Example: `lisa path <PATH>`
 
-### configure
+### `configure`
 Before setting up your first site, you will need to run this command to enter all the necessary API keys that the program uses. All of these can be found in the "Lisa CLI" item in 1Password.
 
-### kinsta
+Example: `lisa configure [service]`
+
+If you've entered incorrect values or need to change them, use the `--reset` option below. _💡 Pass an argument for which service to configure to not reset all of them._
+
+#### `--reset`
+Use this option with the `configure` command to reset your previously configured API keys.
+
+Example: `lisa configure --reset`
+
+### `kinsta`
 Use this command to get a template file for all your Kinsta configuration values.
 
 Example: `lisa kinsta > kinsta.yml`
 
 After the file has been created, update all existing values with the corresponding values from the site at Kinsta that you created earlier.
 
-### init
+### `init`
 This command will create a new Lisa site for you. You will get both a WordPress API and a Next.js application for the frontend.
+
+The command has a required option `--config-file <kinsta-config-file.yml>`, use this to supply the path to your Kinsta configuration file from the [kinsta command](#kinsta).
 
 The following will be included:
 * GitHub repos
@@ -66,10 +77,10 @@ When the command is done, you will have the following on your computer:
 * API site linked to Valet on the domain https://{projectName}-api.test
 * Next.js frontend app on http://localhost:3000
 
-### clone
+### `clone`
 If you want to setup an already existing Lisa site for local development, you can just run the following command:
 
-### db import
+### `db import`
 Use this command to import a database from the production/staging environment of the site that you're working on. A prompt will ask you whether you will import it from staging or production
 
 This command will ask for the project name and try to find the correct repos that you should use. If not the correct repos are found, the prompt will let you specify them manually.
