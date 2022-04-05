@@ -41,7 +41,7 @@ async function setupServices() {
 async function commitAndPushTrellisConfig() {
   let trellisPath = getTrellisPath()
   await exec("git add .", { cwd: trellisPath })
-  await exec("git commit -m 'Trellis configuration triggered by Lisa-CLI'", {
+  await exec("git commit -m 'Trellis configuration triggered by Lisa CLI'", {
     cwd: trellisPath,
   })
   await exec("git push", { cwd: trellisPath })

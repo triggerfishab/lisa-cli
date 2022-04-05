@@ -11,7 +11,7 @@ The features that is included now is the following:
 * Add all the config needed to be able to deploy the site to Kinsta with Trellis
 
 ## 🔧 Prerequisites
-You will need to install the following stuff to use lisa-cli:
+You will need to install and configure the following stuff to use Lisa CLI:
 * [Node](https://nodejs.org/en/) version >= 12
 * [GitHub CLI](https://github.com/cli/cli) ([setup instructions](https://cli.github.com/manual/))
 * [ansible-vault](https://docs.ansible.com/ansible/2.9/user_guide/vault.html) (comes from Ansible)
@@ -19,6 +19,7 @@ You will need to install the following stuff to use lisa-cli:
 * [Trellis CLI](https://github.com/roots/trellis-cli)
 * [Valet](https://laravel.com/docs/8.x/valet)
 * [Vercel CLI](https://vercel.com/cli)
+* [AWS CLI](https://aws.amazon.com/cli/)
 
 ## 🪚 Installation
 ```npm i -g lisa-cli```
