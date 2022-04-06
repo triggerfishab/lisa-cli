@@ -65,7 +65,7 @@ async function initProgram() {
     )
     .argument(
       "[service]",
-      "Pass an argument for which service to configure, available services: s3, stackpath, godaddy"
+      "Pass an argument for which service to configure, available services: s3, stackpath, godaddy, stackpath"
     )
     .action(configure)
 

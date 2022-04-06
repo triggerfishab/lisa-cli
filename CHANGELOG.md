@@ -7,6 +7,10 @@
 
 🛠 The argument `<path>` to the [path command](README.md#path) is now optional.
 
+### Documentation
+📝 All options and arguments for all of the command are now documented in the [README](README.md#%EF%B8%8F-commands)
+
+📝 Refactored the documentation of the options to use `<summary>` and `<details>` element to make it a bit shorter by default.
 
 ## 2.0 (2022-04-05)
 ### Features

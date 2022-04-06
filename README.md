@@ -37,19 +37,21 @@ You will need to install and configure the following stuff to use Lisa CLI:
 
 ## ✏️ Commands
 
-### `path`
+### `clone`
+Use this command to setup a local Lisa site that already has been configured.
 <details>
 <summary>Read more</summary>
 <p>
-Use this command to set (or get) your global sites path. This needs to be set to inform Lisa CLI where to do it's 🪄magic🪄.
+If you want to setup an already existing Lisa site for local development, you can just run the following command:
 
-Example: `lisa path [path]`
+Example: `lisa clone`
 </p>
 </details>
 
 &nbsp;
 
 ### `configure`
+Use this command to configure all the necessary API keys.
 <details>
 <summary>Read more</summary>
 <p>
@@ -63,13 +65,54 @@ If you've entered incorrect values or need to change them, use the `--reset` opt
 Use this option with the `configure` command to reset your previously configured API keys.
 
 Example: `lisa configure --reset`
+
+#### `[service]`
+Use this argument for which service to configure, available services: `s3`, `stackpath`, `godaddy`, `stackpath`
 </p>
 </details>
 
 &nbsp;
 
+### `db import`
+Use this command to import a database from the production/staging environment of your site.
+<details>
+<summary>Read more</summary>
+<p>
+Use this command to import a database from the production/staging environment of the site that you're working on. A prompt will ask you whether you will import it from staging or production
+
+This command will ask for the project name and try to find the correct repos that you should use. If not the correct repos are found, the prompt will let you specify them manually.
+</p>
+</details>
+
+&nbsp;
+
+### `init`
+Use this command to create a new Lisa site.
+<details>
+<summary>Read more</summary>
+<p>
+This command will create a new Lisa site for you. You will get both a WordPress API and a Next.js application for the frontend.
+
+The following will be included:
+* GitHub repos
+* Amazon AWS S3 bucket for media handling
+* StackPath CDN for media files
+* GoDaddy records for DNS
+* Sendgrid subuser for email sending
+
+When the command is done, you will have the following on your computer:
+* API site linked to Valet on the domain https://{projectName}-api.test
+* Next.js frontend app on http://localhost:3000
+
+#### `-c, --config-file`
+Specify the location of your Kinsta config file that you have created via the command `lisa kinsta`
+</p>
+</details>
+
+&nbsp;
 
 ### `kinsta`
+Use this command to get a template file for all your Kinsta configuration values.
 <details>
 <summary>Read more</summary>
 <p>
@@ -83,48 +126,17 @@ After the file has been created, update all existing values with the correspondi
 
 &nbsp;
 
-### `init`
+### `path`
+Use this command to set (or get) your global sites path.
 <details>
 <summary>Read more</summary>
 <p>
-This command will create a new Lisa site for you. You will get both a WordPress API and a Next.js application for the frontend.
+Use this command to set (or get) your global sites path. This needs to be set to inform Lisa CLI where to do it's 🪄magic🪄.
 
-The command has a required option `--config-file <kinsta-config-file.yml>`, use this to supply the path to your Kinsta configuration file from the [kinsta command](#kinsta).
+Example: `lisa path [path]`
 
-The following will be included:
-* GitHub repos
-* Amazon AWS S3 bucket for media handling
-* StackPath CDN for media files
-* GoDaddy records for DNS
-* Sendgrid subuser for email sending
-
-When the command is done, you will have the following on your computer:
-* API site linked to Valet on the domain https://{projectName}-api.test
-* Next.js frontend app on http://localhost:3000
-</p>
-</details>
-
-&nbsp;
-
-### `clone`
-<details>
-<summary>Read more</summary>
-<p>
-If you want to setup an already existing Lisa site for local development, you can just run the following command:
-
-Example: `lisa clone`
-</p>
-</details>
-
-&nbsp;
-
-### `db import`
-<details>
-<summary>Read more</summary>
-<p>
-Use this command to import a database from the production/staging environment of the site that you're working on. A prompt will ask you whether you will import it from staging or production
-
-This command will ask for the project name and try to find the correct repos that you should use. If not the correct repos are found, the prompt will let you specify them manually.
+#### `[path]`
+Specify a path to set that as your Lisa path. If not specified, you will be given your current Lisa path as output instead.
 </p>
 </details>
 
