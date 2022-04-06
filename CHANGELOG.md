@@ -1,3 +1,8 @@
+## 2.1.0 (2022-04-06)
+### Changes
+🛠 All commands can now be run outside of the [configured path](README.md#path)
+
+
 ## 2.0 (2022-04-05)
 ### Features
 📦 Add support to setup all services we usually use on a project.
