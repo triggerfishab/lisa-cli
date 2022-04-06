@@ -10,7 +10,7 @@ import setupPath from "./commands/path.js"
 import { getKinstaHelpMessage } from "./help/kinsta.js"
 import { resetConf } from "./lib/conf.js"
 import { checkDependencies, checkNodeVersion } from "./lib/dependencies.js"
-import { validateCurrentPath } from "./lib/path.js"
+import { getSitesPath } from "./lib/path.js"
 
 const program = new Command()
 
@@ -20,8 +20,9 @@ checkNodeVersion()
 let command = process.argv[2]
 
 async function initProgram() {
-  await validateCurrentPath(command)
   await checkDependencies()
+
+  process.chdir(getSitesPath())
 
   program
     .command("path")
