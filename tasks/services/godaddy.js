@@ -3,7 +3,7 @@ import configure from "../../commands/configure.js"
 import { getProjectName } from "../../lib/app-name.js"
 import conf from "../../lib/conf.js"
 import * as store from "../../lib/store.js"
-import { writeStep, writeSuccess } from "../../lib/write.js"
+import { writeError, writeStep, writeSuccess } from "../../lib/write.js"
 
 async function goDaddy(environment = "production") {
   writeStep(`Setting up GoDaddy DNS record for your project.`)
@@ -16,24 +16,35 @@ async function goDaddy(environment = "production") {
     projectName = `staging-${projectName}`
   }
 
-  await fetch("https://api.godaddy.com/v1/domains/triggerfish.cloud/records", {
-    method: "PATCH",
-    headers: {
-      Authorization: `sso-key ${godaddy.key}:${godaddy.secret}`,
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify([
+  try {
+    await fetch(
+      "https://api.godaddy.com/v1/domains/triggerfish.cloud/records",
       {
-        data: stackpathCdnUrl,
-        name: `${projectName}.cdn`,
-        ttl: 1800,
-        type: "CNAME",
-      },
-    ]),
-  })
+        method: "PATCH",
+        headers: {
+          Authorization: `sso-key ${godaddy.key}:${godaddy.secret}`,
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify([
+          {
+            data: stackpathCdnUrl,
+            name: `${projectName}.cdn`,
+            ttl: 1800,
+            type: "CNAME",
+          },
+        ]),
+      }
+    )
 
-  writeSuccess(`GoDaddy DNS record added for your project.`)
+    writeSuccess(`GoDaddy DNS record added for your project.`)
+  } catch (e) {
+    writeError(
+      "Error adding DNS records on GoDaddy. Create an issue (https://github.com/triggerfishab/lisa-cli/issues/new/choose) with the following info"
+    )
+
+    console.dir(e)
+  }
 }
 
 export default goDaddy

@@ -5,7 +5,7 @@ import configure from "../../commands/configure.js"
 import { getProjectName } from "../../lib/app-name.js"
 import conf from "../../lib/conf.js"
 import * as store from "../../lib/store.js"
-import { writeStep, writeSuccess } from "../../lib/write.js"
+import { writeError, writeStep, writeSuccess } from "../../lib/write.js"
 
 async function setupStackpath(environment = "production") {
   writeStep(`Setting up StackPath site for ${environment} environment`)
@@ -30,6 +30,14 @@ async function setupStackpath(environment = "production") {
         url: s3BucketUrl,
       },
     })
+
+    if (typeof json?.data?.pullzone?.cdn_url === "undefined") {
+      writeError(
+        "Error creating site on Stackpath. Create an issue (https://github.com/triggerfishab/lisa-cli/issues/new/choose) with the following info"
+      )
+
+      throw json
+    }
 
     writeSuccess(`StackPath site created for ${environment} environment`)
 
@@ -57,7 +65,7 @@ async function setupStackpath(environment = "production") {
 
     writeSuccess(`SSL certificate installed for ${environment} environment`)
   } catch (e) {
-    console.log(e)
+    console.dir(e)
   }
 }
 
