@@ -1,3 +1,10 @@
+## 2.2.0 (2022-04-06)
+### Features
+📦 Added [`status`](README.md#status) to get an output of your Lisa path and your package versions.
+
+### Documentation
+📝 Added documentation about [`status`](README.md#status) command.
+
 ## 2.1.0 (2022-04-06)
 ### Features
 📦 Not supplying the `<path>` argument to the [path command](README.md#path) will now output the current set path.

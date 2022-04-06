@@ -7,6 +7,7 @@ import configure from "./commands/configure.js"
 import dbImport from "./commands/db.js"
 import init from "./commands/init.js"
 import setupPath from "./commands/path.js"
+import writeLisaStatusSummary from "./commands/status.js"
 import { getKinstaHelpMessage } from "./help/kinsta.js"
 import { resetConf } from "./lib/conf.js"
 import { checkDependencies, checkNodeVersion } from "./lib/dependencies.js"
@@ -73,6 +74,11 @@ async function initProgram() {
     .command("clone")
     .description("Clone an existing Lisa project for local development")
     .action(cloneLisaProject)
+
+  program
+    .command("status")
+    .description("Show a status summary of your Lisa site.")
+    .action(writeLisaStatusSummary)
 
   program.parse()
 }

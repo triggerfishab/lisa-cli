@@ -141,3 +141,16 @@ Specify a path to set that as your Lisa path. If not specified, you will be give
 </details>
 
 &nbsp;
+
+### `status`
+Use this command to show your Lisa status.
+<details>
+<summary>Read more</summary>
+<p>
+Use this command to show your Lisa status. You will get output including your current Lisa path and all versions of your packages.
+
+Example: `lisa status`
+</p>
+</details>
+
+&nbsp;
