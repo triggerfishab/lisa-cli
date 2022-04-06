@@ -11,7 +11,9 @@ assignees: ''
 - A clear and concise description of what the bug is.
 
 **Error message output**
- - Please enter the error message output that you recieved here.
+ ```
+Please enter the error message output that you recieved here.
+```
 
 **Versions (please complete the following information):**
 Hint: use the following command to output all your versions:
