@@ -38,11 +38,21 @@ You will need to install and configure the following stuff to use Lisa CLI:
 ## ✏️ Commands
 
 ### `path`
+<details>
+<summary>Read more</summary>
+<p>
 Use this command to set (or get) your global sites path. This needs to be set to inform Lisa CLI where to do it's 🪄magic🪄.
 
 Example: `lisa path [path]`
+</p>
+</details>
+
+&nbsp;
 
 ### `configure`
+<details>
+<summary>Read more</summary>
+<p>
 Before setting up your first site, you will need to run this command to enter all the necessary API keys that the program uses. All of these can be found in the "Lisa CLI" item in 1Password.
 
 Example: `lisa configure [service]`
@@ -53,15 +63,30 @@ If you've entered incorrect values or need to change them, use the `--reset` opt
 Use this option with the `configure` command to reset your previously configured API keys.
 
 Example: `lisa configure --reset`
+</p>
+</details>
+
+&nbsp;
+
 
 ### `kinsta`
+<details>
+<summary>Read more</summary>
+<p>
 Use this command to get a template file for all your Kinsta configuration values.
 
 Example: `lisa kinsta > kinsta.yml`
 
 After the file has been created, update all existing values with the corresponding values from the site at Kinsta that you created earlier.
+</p>
+</details>
+
+&nbsp;
 
 ### `init`
+<details>
+<summary>Read more</summary>
+<p>
 This command will create a new Lisa site for you. You will get both a WordPress API and a Next.js application for the frontend.
 
 The command has a required option `--config-file <kinsta-config-file.yml>`, use this to supply the path to your Kinsta configuration file from the [kinsta command](#kinsta).
@@ -76,11 +101,31 @@ The following will be included:
 When the command is done, you will have the following on your computer:
 * API site linked to Valet on the domain https://{projectName}-api.test
 * Next.js frontend app on http://localhost:3000
+</p>
+</details>
+
+&nbsp;
 
 ### `clone`
+<details>
+<summary>Read more</summary>
+<p>
 If you want to setup an already existing Lisa site for local development, you can just run the following command:
 
+Example: `lisa clone`
+</p>
+</details>
+
+&nbsp;
+
 ### `db import`
+<details>
+<summary>Read more</summary>
+<p>
 Use this command to import a database from the production/staging environment of the site that you're working on. A prompt will ask you whether you will import it from staging or production
 
 This command will ask for the project name and try to find the correct repos that you should use. If not the correct repos are found, the prompt will let you specify them manually.
+</p>
+</details>
+
+&nbsp;
