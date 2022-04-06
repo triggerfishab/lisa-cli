@@ -27,7 +27,10 @@ async function initProgram() {
   program
     .command("path")
     .description("Run this command to set your global sites path")
-    .argument("<path>", "Your global sites path")
+    .argument(
+      "[path]",
+      `Your global sites path, for example ${chalk.bold("~/Sites")}`
+    )
     .action(setupPath)
 
   program

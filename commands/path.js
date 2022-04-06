@@ -5,6 +5,13 @@ import conf from "../lib/conf.js"
 import { writeError, writeSuccess } from "../lib/write.js"
 
 async function setupPath(path) {
+  if (!path) {
+    let sitesPath = conf.get("sitesPath")
+
+    console.log(sitesPath)
+    return
+  }
+
   try {
     await access(path, constants.R_OK | constants.W_OK)
 

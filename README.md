@@ -38,9 +38,9 @@ You will need to install and configure the following stuff to use Lisa CLI:
 ## ✏️ Commands
 
 ### `path`
-Use this command to set your global sites path to prevent you from running other commands from the wrong directory
+Use this command to set (or get) your global sites path. This needs to be set to inform Lisa CLI where to do it's 🪄magic🪄.
 
-Example: `lisa path <PATH>`
+Example: `lisa path [path]`
 
 ### `configure`
 Before setting up your first site, you will need to run this command to enter all the necessary API keys that the program uses. All of these can be found in the "Lisa CLI" item in 1Password.

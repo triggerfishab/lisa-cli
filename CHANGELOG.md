@@ -1,6 +1,11 @@
 ## 2.1.0 (2022-04-06)
+### Features
+📦 Not supplying the `<path>` argument to the [path command](README.md#path) will now output the current set path.
+
 ### Changes
 🛠 All commands can now be run outside of the [configured path](README.md#path)
+
+🛠 The argument `<path>` to the [path command](README.md#path) is now optional.
 
 
 ## 2.0 (2022-04-05)
