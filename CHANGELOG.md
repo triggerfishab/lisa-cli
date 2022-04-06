@@ -1,3 +1,7 @@
+## 2.2.1 (2022-04-06)
+### Changes
+🛠 Add minor error handling to Stackpath and GoDaddy setup.
+
 ## 2.2.0 (2022-04-06)
 ### Features
 📦 Added [`status`](README.md#status) to get an output of your Lisa path and your package versions.
