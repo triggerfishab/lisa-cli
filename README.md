@@ -22,7 +22,7 @@ You will need to install and configure the following stuff to use Lisa CLI:
 * [AWS CLI](https://aws.amazon.com/cli/) version >= 2.4
 
 ## 🪚 Installation
-```npm i -g lisa-cli```
+```npm i -g @triggerfishab/lisa-cli```
 
 ## 🏃‍♂️ Usage
 ### Create a new site
