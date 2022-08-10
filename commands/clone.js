@@ -58,6 +58,10 @@ async function cloneLisaProject() {
     }
   })
 
+  await exec(`trellis init`, {
+    cwd: trellisPath,
+  })
+
   await exec(`trellis dotenv`, {
     cwd: trellisPath,
   })
