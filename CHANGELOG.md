@@ -1,3 +1,7 @@
+## [Unreleased]
+### Changes
+🛠 Add fix for trellis commands failure.
+
 ## 2.2.1 (2022-04-06)
 ### Changes
 🛠 Add minor error handling to Stackpath and GoDaddy setup.
