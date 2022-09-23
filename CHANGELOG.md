@@ -1,4 +1,4 @@
-## 2.2.2 (2022-08-10)
+## [Unreleased]
 ### Changes
 🛠 Add fix for trellis commands failure.
 
