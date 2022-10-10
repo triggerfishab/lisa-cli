@@ -1,4 +1,4 @@
-## Unreleased
+## 2.3.0 (2022-10-10)
 ### Features
 📦 Generate revalidate secret when creating a new project to enable the use of [Lisa Frontend Cache Purger](https://github.com/triggerfishab/lisa-frontend-cache-purger).
 
