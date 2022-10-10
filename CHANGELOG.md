@@ -1,3 +1,7 @@
+## Unreleased
+### Features
+📦 Generate revalidate secret when creating a new project to enable the use of [Lisa Frontend Cache Purger](https://github.com/triggerfishab/lisa-frontend-cache-purger).
+
 ## 2.2.2 (2022-09-23)
 ### Changes
 🛠 Add fix for trellis commands failure.
