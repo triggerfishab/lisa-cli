@@ -12,6 +12,7 @@ import { getKinstaHelpMessage } from "./help/kinsta.js"
 import { resetConf } from "./lib/conf.js"
 import { checkDependencies, checkNodeVersion } from "./lib/dependencies.js"
 import { getSitesPath } from "./lib/path.js"
+import setupAWS from "./tasks/services/aws.js"
 
 const program = new Command()
 
@@ -24,6 +25,8 @@ async function initProgram() {
   await checkDependencies()
 
   process.chdir(getSitesPath())
+
+  program.command("aws").action(() => setupAWS("production"))
 
   program
     .command("path")
@@ -66,7 +69,7 @@ async function initProgram() {
     )
     .argument(
       "[service]",
-      "Pass an argument for which service to configure, available services: s3, stackpath, godaddy, stackpath"
+      "Pass an argument for which service to configure, available services: aws, godaddy, sendgrid"
     )
     .action(configure)
 

@@ -67,7 +67,7 @@ Use this option with the `configure` command to reset your previously configured
 Example: `lisa configure --reset`
 
 #### `[service]`
-Use this argument for which service to configure, available services: `s3`, `stackpath`, `godaddy`, `stackpath`
+Use this argument for which service to configure, available services: `aws`, `godaddy`, `sendgrid`
 </p>
 </details>
 
@@ -96,7 +96,7 @@ This command will create a new Lisa site for you. You will get both a WordPress 
 The following will be included:
 * GitHub repos
 * Amazon AWS S3 bucket for media handling
-* StackPath CDN for media files
+* Amazon AWS Cloudfront CDN for media files
 * GoDaddy records for DNS
 * Sendgrid subuser for email sending
 

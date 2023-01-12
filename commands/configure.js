@@ -3,7 +3,7 @@ import conf from "../lib/conf.js"
 import { writeError, writeInfo, writeSuccess } from "../lib/write.js"
 
 async function configure(service, options) {
-  let services = ["s3", "stackpath", "godaddy", "sendgrid"]
+  let services = ["aws", "godaddy", "sendgrid"]
   options = options || {}
 
   let results = {}
@@ -32,21 +32,12 @@ async function configure(service, options) {
 
   for (let service of services) {
     switch (service) {
-      case "s3": {
+      case "aws": {
         if (conf.get(service)) {
-          writeInfo("S3 credentials already set.")
+          writeInfo("AWS credentials already set.")
           break
         }
-        results[service] = await s3()
-        break
-      }
-
-      case "stackpath": {
-        if (conf.get(service)) {
-          writeInfo("Stackpath credentials already set.")
-          break
-        }
-        results[service] = await stackpath()
+        results[service] = await aws()
         break
       }
 
@@ -73,60 +64,32 @@ async function configure(service, options) {
   return results
 }
 
-async function s3() {
-  let s3Credentials = await prompts([
+async function aws() {
+  let awsCredentials = await prompts([
     {
       type: "text",
-      message: "Enter the S3 access key ID",
+      message: "Enter the AWS access key ID",
       name: "accessKeyId",
       validate: (value) => Boolean(value),
     },
     {
       type: "invisible",
-      message: "Enter the S3 secret access key (hidden input)",
+      message: "Enter the AWS secret access key (hidden input)",
       name: "secretAccessKey",
       validate: (value) => Boolean(value),
     },
     {
       type: "text",
-      message: "Enter the S3 canonical user id",
+      message: "Enter the AWS canonical user id",
       name: "canonicalUserId",
       validate: (value) => Boolean(value),
     },
   ])
 
-  conf.set("s3", s3Credentials)
-  writeSuccess("Your S3 credentials was saved.")
+  conf.set("aws", awsCredentials)
+  writeSuccess("Your AWS credentials was saved.")
 
-  return s3Credentials
-}
-
-async function stackpath() {
-  let stackpathCredentials = await prompts([
-    {
-      type: "text",
-      message: "Enter the Stackpath consumer key",
-      name: "consumerKey",
-      validate: (value) => Boolean(value),
-    },
-    {
-      type: "invisible",
-      message: "Enter the Stackpath consumer secret (hidden input)",
-      name: "consumerSecret",
-      validate: (value) => Boolean(value),
-    },
-    {
-      type: "text",
-      message: "Enter the Stackpath company alias",
-      name: "alias",
-      validate: (value) => Boolean(value),
-    },
-  ])
-
-  conf.set("stackpath", stackpathCredentials)
-  writeSuccess("Your Stackpath credentials was saved.")
-
-  return stackpathCredentials
+  return awsCredentials
 }
 
 async function goDaddy() {

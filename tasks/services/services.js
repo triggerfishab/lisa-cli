@@ -8,24 +8,21 @@ import {
   writeEnvDataToWordPressSites,
 } from "../../lib/vault.js"
 import { writeStep, writeSuccess } from "../../lib/write.js"
+import setupAWS from "./aws.js"
 import setupGoDaddy from "./godaddy.js"
-import setupS3Bucket from "./s3.js"
 import setupSendgridAccount from "./sendgrid.js"
-import setupStackpath from "./stackpath.js"
 
 async function setupServices() {
   writeStep(
-    "Installing the following services for staging and production environment: Amason AWS S3, StackPath, GoDaddy, Sendgrid"
+    "Installing the following services for staging and production environment: Amason AWS, GoDaddy and Sendgrid!"
   )
 
   await getProjectName()
 
-  await setupS3Bucket("staging")
-  await setupStackpath("staging")
+  await setupAWS("staging")
   await setupGoDaddy("staging")
 
-  await setupS3Bucket("production")
-  await setupStackpath("production")
+  await setupAWS("production")
   await setupGoDaddy("production")
 
   await setupSendgridAccount()
@@ -34,7 +31,7 @@ async function setupServices() {
   await commitAndPushTrellisConfig()
 
   writeSuccess(
-    "All services have been configured. You are now ready to go with Amazon AWS S3, StackPath, GoDaddy and Sendgrid!"
+    "All services have been configured. You are now ready to go with Amazon AWS, GoDaddy and Sendgrid!"
   )
 }
 
@@ -54,7 +51,7 @@ async function writeTrellisConfig() {
   let s3BucketStaging = conf.get("s3Bucket-staging")
   let s3BucketProduction = conf.get("s3Bucket-production")
   let sendgridApiKey = store.get("sendgridApiKey")
-  let s3Config = conf.get("s3")
+  let awsConfig = conf.get("aws")
 
   writeStep("Writing all services data to vault files.")
 
@@ -91,8 +88,8 @@ async function writeTrellisConfig() {
   writeEnvDataToVault(
     {
       s3_region: "eu-north-1",
-      s3_access_key_id: s3Config.accessKeyId,
-      s3_secret_access_key: s3Config.secretAccessKey,
+      s3_access_key_id: awsConfig.accessKeyId,
+      s3_secret_access_key: awsConfig.secretAccessKey,
     },
     "all"
   )

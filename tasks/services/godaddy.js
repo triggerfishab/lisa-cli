@@ -10,7 +10,7 @@ async function goDaddy(environment = "production") {
 
   let godaddy = conf.get("godaddy") || (await configure("godaddy")).godaddy
   let projectName = await getProjectName()
-  let stackpathCdnUrl = store.get(`stackpathCdnUrl-${environment}`)
+  let cdnUrl = store.get(`${environment}CdnUrl`)
 
   if (environment === "staging") {
     projectName = `staging-${projectName}`
@@ -28,7 +28,7 @@ async function goDaddy(environment = "production") {
         },
         body: JSON.stringify([
           {
-            data: stackpathCdnUrl,
+            data: cdnUrl,
             name: `${projectName}.cdn`,
             ttl: 1800,
             type: "CNAME",

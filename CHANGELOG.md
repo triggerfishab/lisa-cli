@@ -1,3 +1,10 @@
+## [Unreleased]
+### Features
+📦 Add support to create an AWS distribution for CDN use.
+
+### Removed
+❌ We no longer use StackPath as CDN, so the integration is removed and replaced with Cloudfront.
+
 ## 2.3.1 (2022-11-09)
 ### Changes
 🛠 Remove `/wp/graphql` from API url used in frontend-app.
