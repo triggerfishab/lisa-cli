@@ -86,21 +86,19 @@ async function cloneLisaProject() {
     await dbImport()
   }
 
-  spawnSync(`vercel link --confirm`, [], {
+  spawnSync(`vercel link --yes`, [], {
     cwd: appName,
     stdio: "inherit",
     shell: true,
   })
 
-  spawnSync(`vercel pull`, [], {
+  spawnSync(`vercel env pull`, [], {
     cwd: appName,
     stdio: "inherit",
     shell: true,
   })
 
-  writeSuccess(
-    "Generated .env.local file with environment variables from Vercel."
-  )
+  writeSuccess("Generated .env file with environment variables from Vercel.")
 
   let adminUrl = await getAdminUrl()
 

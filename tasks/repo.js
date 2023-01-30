@@ -19,7 +19,7 @@ export async function createRepos() {
   let apiGithubURL = `https://github.com/triggerfishab/${apiName}`
 
   let appResponse = await exec(
-    `gh repo create --template triggerfishab/lisa-app ${appGithubURL} -y --private --clone`
+    `gh repo create --template triggerfishab/lisa-app triggerfishab/${appName} --private --clone`
   )
 
   if (appResponse.error) {
@@ -30,7 +30,7 @@ export async function createRepos() {
   writeSuccess(`Repo created: ${appGithubURL}.`)
 
   let apiResponse = await exec(
-    `gh repo create --template triggerfishab/lisa-api ${apiGithubURL} -y --private --clone`
+    `gh repo create --template triggerfishab/lisa-api triggerfishab/${apiName} --private --clone`
   )
 
   if (apiResponse.error) {

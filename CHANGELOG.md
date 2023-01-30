@@ -2,6 +2,9 @@
 ### Features
 📦 Add support to create an AWS distribution for CDN use.
 
+### Changes
+🛠 Add fix for failure when cloning the newly created repos.
+
 ### Removed
 ❌ We no longer use StackPath as CDN, so the integration is removed and replaced with Cloudfront.
 
