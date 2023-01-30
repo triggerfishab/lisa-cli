@@ -1,4 +1,4 @@
-## [Unreleased]
+## 2.4.0 (2023-01-30)
 ### Features
 📦 Add support to create an AWS distribution for CDN use.
 
