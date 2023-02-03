@@ -18,7 +18,7 @@ You will need to install and configure the following stuff to use Lisa CLI:
 * [WP-CLI](https://wp-cli.org/) version >= 2.5
 * [Trellis CLI](https://github.com/roots/trellis-cli) version >= 1.5
 * [Valet](https://laravel.com/docs/8.x/valet) version >= 2.18
-* [Vercel CLI](https://vercel.com/cli) version >= 24.0
+* [Vercel CLI](https://vercel.com/cli) version >= 28.0
 * [AWS CLI](https://aws.amazon.com/cli/) version >= 2.4
 
 ## 🪚 Installation
