@@ -12,6 +12,7 @@ import { getKinstaHelpMessage } from "./help/kinsta.js"
 import { resetConf } from "./lib/conf.js"
 import { checkDependencies, checkNodeVersion } from "./lib/dependencies.js"
 import { getSitesPath } from "./lib/path.js"
+import { checkLisaVersion } from "./lib/versions.js"
 
 const program = new Command()
 
@@ -21,6 +22,7 @@ checkNodeVersion()
 let command = process.argv[2]
 
 async function initProgram() {
+  await checkLisaVersion()
   await checkDependencies()
 
   process.chdir(getSitesPath())
