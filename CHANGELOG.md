@@ -1,3 +1,7 @@
+## Unreleased
+### Features
+📦 Get more output when running `lisa status`, if a dependency is outdated, you will be told which new version to install.
+
 ## 2.4.0 (2023-01-30)
 ### Features
 📦 Add support to create an AWS distribution for CDN use.
