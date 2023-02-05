@@ -1,4 +1,4 @@
-## Unreleased
+## 2.6.0 (2023-02-05)
 ### Features
 📦 Added a new function (`checkLisaVersion()`) that runs before the main script to detect if a new version of `lisa-cli` is available.
 
