@@ -6,15 +6,18 @@ import cloneLisaProject from "./commands/clone.js"
 import configure from "./commands/configure.js"
 import dbImport from "./commands/db.js"
 import init from "./commands/init.js"
+import { createPageComponent } from "./commands/pageComponent.js"
 import setupPath from "./commands/path.js"
 import writeLisaStatusSummary from "./commands/status.js"
 import { getKinstaHelpMessage } from "./help/kinsta.js"
 import { resetConf } from "./lib/conf.js"
 import { checkDependencies, checkNodeVersion } from "./lib/dependencies.js"
+import exec from "./lib/exec.js"
 import { getSitesPath } from "./lib/path.js"
+import { set } from "./lib/store.js"
 import { checkLisaVersion } from "./lib/versions.js"
 
-const program = new Command()
+export const program = new Command()
 
 resetConf()
 checkNodeVersion()
@@ -24,6 +27,9 @@ let command = process.argv[2]
 async function initProgram() {
   await checkLisaVersion()
   await checkDependencies()
+
+  const initialPath = await exec("pwd")
+  set("initialPath", initialPath.stdout.trim())
 
   process.chdir(getSitesPath())
 
@@ -81,6 +87,13 @@ async function initProgram() {
     .command("status")
     .description("Show a status summary of your Lisa site.")
     .action(writeLisaStatusSummary)
+
+  program
+    .command("page-component create")
+    .description("Create a new page component for your frontend app")
+    .action(createPageComponent)
+
+  program.command("pcc", { hidden: true }).action(createPageComponent)
 
   program.parse()
 }
