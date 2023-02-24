@@ -22,6 +22,7 @@ export async function createPageComponent() {
   writeStep("Creating a new page component")
 
   let targetPath
+  let storybookPath
   let gitRoot = await exec("git rev-parse --show-toplevel")
   gitRoot = gitRoot.stdout.trim()
 
@@ -35,8 +36,12 @@ export async function createPageComponent() {
         "What will your new component be called? Use camelCase for the name.",
       validate: async (name) => {
         targetPath = `${gitRoot}/components/pageComponents/${name}`
+        storybookPath = `${gitRoot}/stories/pageComponents`
         if (existsSync(targetPath)) {
           return "Component already exists, please try another name."
+        }
+        if (existsSync(`${storybookPath}/${name}.stories.tsx`)) {
+          return "Story already exists, please try another name."
         }
         return true
       },
@@ -69,11 +74,16 @@ export async function createPageComponent() {
     `${__dirname}/templates/pageComponents/componentName.tsx`,
     `${targetPath}/${name}.tsx`
   )
+  cpSync(
+    `${__dirname}/templates/pageComponents/componentName.stories.tsx`,
+    `${storybookPath}/${name}.stories.tsx`
+  )
 
   writeInfo(`${targetPath}/query.ts created.`)
   writeInfo(`${targetPath}/index.tsx created.`)
   writeInfo(`${targetPath}/types.ts created.`)
   writeInfo(`${targetPath}/${name}.tsx created.`)
+  writeInfo(`${storybookPath}/${name}.stories.tsx created.`)
 
   exec(
     `sed -i '' 's/COMPONENTNAME/${pascalCaseName}/g' ${targetPath}/${name}.tsx`
@@ -84,8 +94,13 @@ export async function createPageComponent() {
     `sed -i '' 's/COMPONENTNAME/${pascalCaseName}/g' ${targetPath}/index.tsx`
   )
   exec(`sed -i '' 's/componentName/${name}/g' ${targetPath}/index.tsx`)
+  exec(
+    `sed -i '' 's/COMPONENTNAME/${pascalCaseName}/g' ${storybookPath}/${name}.stories.tsx`
+  )
+  exec(
+    `sed -i '' 's/componentName/${name}/g' ${storybookPath}/${name}.stories.tsx`
+  )
 
-  // add component to fragments.ts
   const fragmentsPath = `${gitRoot}/lib/graphql/fragments.ts`
   const fragmentsTs = readFileSync(fragmentsPath, { encoding: "utf-8" })
 
@@ -111,7 +126,6 @@ export async function createPageComponent() {
   writeFileSync(fragmentsPath, formattedFragmentsTs, { encoding: "utf-8" })
   writeInfo(`${fragmentsPath} modified.`)
 
-  // add import to pageComponents/index.tsx
   const pageComponentsPath = `${gitRoot}/components/pageComponents/index.tsx`
   const pageComponentsFile = readFileSync(pageComponentsPath, {
     encoding: "utf8",
@@ -138,7 +152,6 @@ export async function createPageComponent() {
   })
   writeInfo(`${pageComponentsPath} modified.`)
 
-  // add type to types/graphql/pageComponents.ts
   const typesPath = `${gitRoot}/types/graphql/pageComponents.ts`
   const typesTs = readFileSync(typesPath, { encoding: "utf-8" })
 
