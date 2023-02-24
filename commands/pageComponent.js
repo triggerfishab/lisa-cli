@@ -55,7 +55,7 @@ export async function createPageComponent() {
   ])
 
   let pascalCaseName = name[0].toUpperCase() + name.substring(1)
-  
+
   mkdirSync(targetPath)
 
   cpSync(
@@ -97,7 +97,10 @@ export async function createPageComponent() {
   exec(
     `sed -i '' 's/COMPONENTNAME/${pascalCaseName}/g' ${storybookPath}/${name}.stories.tsx`
   )
-  // add component to fragments.ts
+  exec(
+    `sed -i '' 's/componentName/${name}/g' ${storybookPath}/${name}.stories.tsx`
+  )
+
   const fragmentsPath = `${gitRoot}/lib/graphql/fragments.ts`
   const fragmentsTs = readFileSync(fragmentsPath, { encoding: "utf-8" })
 
@@ -123,7 +126,6 @@ export async function createPageComponent() {
   writeFileSync(fragmentsPath, formattedFragmentsTs, { encoding: "utf-8" })
   writeInfo(`${fragmentsPath} modified.`)
 
-  // add import to pageComponents/index.tsx
   const pageComponentsPath = `${gitRoot}/components/pageComponents/index.tsx`
   const pageComponentsFile = readFileSync(pageComponentsPath, {
     encoding: "utf8",
@@ -150,7 +152,6 @@ export async function createPageComponent() {
   })
   writeInfo(`${pageComponentsPath} modified.`)
 
-  // add type to types/graphql/pageComponents.ts
   const typesPath = `${gitRoot}/types/graphql/pageComponents.ts`
   const typesTs = readFileSync(typesPath, { encoding: "utf-8" })
 
