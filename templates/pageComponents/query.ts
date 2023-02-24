@@ -1,3 +1,5 @@
 export const QUERY = `#graphql
-  fieldGroupName
+  ... on Page_Pagecomponentsgroup_PageComponents_COMPONENTNAME {
+    fieldGroupName
+  }
 `

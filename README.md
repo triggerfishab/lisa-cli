@@ -154,3 +154,20 @@ Example: `lisa status`
 </details>
 
 &nbsp;
+
+### `page-component create`
+Use this command to create a new page component in a Lisa project.
+
+Alias: `pcc`
+<details>
+<summary>Read more</summary>
+<p>
+Use this command to create a new page component in a Lisa project.
+
+It will create basic ACF fields in the api, create a GraphQL fragment, type definitions and a base component in the app.
+
+Example: `lisa page-component create`
+</p>
+</details>
+
+&nbsp;

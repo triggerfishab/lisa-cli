@@ -31,7 +31,7 @@ async function initProgram() {
   const initialPath = await exec("pwd")
   set("initialPath", initialPath.stdout.trim())
 
-  process.chdir(getSitesPath())
+  process.chdir(await getSitesPath())
 
   program
     .command("path")

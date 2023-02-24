@@ -1,15 +1,21 @@
 import chalk from "chalk"
 import { constants } from "fs"
 import { access } from "fs/promises"
+import prompts from "prompts"
 import conf from "../lib/conf.js"
 import { writeError, writeSuccess } from "../lib/write.js"
 
 async function setupPath(path) {
   if (!path) {
-    let sitesPath = conf.get("sitesPath")
-
-    console.log(sitesPath)
-    return
+    let { sitesPath } = await prompts([
+      {
+        type: "text",
+        message:
+          "Enter the full path for your sites, i.e. `/Users/username/Sites`",
+        name: "sitesPath",
+      },
+    ])
+    path = sitesPath
   }
 
   try {
