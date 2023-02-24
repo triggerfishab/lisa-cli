@@ -15,6 +15,7 @@ import { checkDependencies, checkNodeVersion } from "./lib/dependencies.js"
 import exec from "./lib/exec.js"
 import { getSitesPath } from "./lib/path.js"
 import { set } from "./lib/store.js"
+import { checkLisaVersion } from "./lib/versions.js"
 
 export const program = new Command()
 

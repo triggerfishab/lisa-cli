@@ -9,7 +9,7 @@ export default async function writeLisaStatusSummary() {
 
   let lisaPath = await asyncExec("lisa path")
 
-  writeInfo(`Lisa path: ${lisaPath.stdout.trim()}`)
+  console.log(lisaPath.stdout.trim())
   writeInfo("Versions of your packages:")
 
   let summary = []
