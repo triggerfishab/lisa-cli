@@ -1,21 +1,21 @@
 import chalk from "chalk"
 import { constants } from "fs"
 import { access } from "fs/promises"
-import prompts from "prompts"
 import conf from "../lib/conf.js"
-import { writeError, writeSuccess } from "../lib/write.js"
+import { getSitesPath } from "../lib/path.js"
+import { writeError, writeInfo, writeSuccess } from "../lib/write.js"
 
 async function setupPath(path) {
   if (!path) {
-    let { sitesPath } = await prompts([
-      {
-        type: "text",
-        message:
-          "Enter the full path for your sites, i.e. `/Users/username/Sites`",
-        name: "sitesPath",
-      },
-    ])
-    path = sitesPath
+    const currentPath = await getSitesPath()
+
+    if (currentPath) {
+      writeInfo(`Your path is: ${currentPath}`)
+    } else {
+      writeError(`No path is set, run \`lisa path [path]\` to set a paht.`)
+    }
+
+    return
   }
 
   try {
