@@ -1,4 +1,4 @@
-## 2.7.6 (2023-04-17)
+## Unreleased
 ### Features
 📦 Added a new command (`create cdn`) that allows users to create services for S3, CloudFront & GoDaddy without all the other Lisa stuff.
 
