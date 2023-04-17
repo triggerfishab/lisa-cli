@@ -1,7 +1,6 @@
-## 2.6.0 (2023-02-05)
+## 2.7.6 (2023-04-17)
 ### Features
-📦 Added a new function (`checkLisaVersion()`) that runs before the main script to detect if a new version of `lisa-cli` is available.
-
+📦 Added ip-check before attempting to run the `lisa init` command. The Triggerfish office ip is required for api calls to SendGrid to function.
 ## 2.5.0 (2023-02-03)
 ### Features
 📦 Get more output when running `lisa status`, if a dependency is outdated, you will be told which new version to install.
