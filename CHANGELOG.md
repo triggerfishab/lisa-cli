@@ -1,4 +1,7 @@
 ## Unreleased
+### Features
+📦 Added a new command (`create sendgrid`) that allows users to create user account and api key for SendGrid.
+
 ### Changes
 🛠 Let the user select for which environment(s) they want to create the CDN services.
 
