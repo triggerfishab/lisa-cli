@@ -1,6 +1,7 @@
 import { askForProjectName } from "../lib/app-name.js"
 import { configureTrellisForKinsta } from "../lib/kinsta.js"
 import { getSitesPath } from "../lib/path.js"
+import { isTriggerfishOfficeIp } from "../lib/triggerfish.js"
 import { generateSecrets } from "../lib/secrets.js"
 import { writeSummary } from "../lib/summary.js"
 import addSiteToVercel from "../lib/vercel.js"
@@ -13,7 +14,7 @@ export async function init({ configFile }) {
   await getSitesPath()
 
   writeStep("Creating new Lisa project!")
-
+  await isTriggerfishOfficeIp()
   await askForProjectName()
   await createRepos()
   await setupLocalSiteForDevelopment()

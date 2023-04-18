@@ -1,10 +1,12 @@
 ## Unreleased
+
 ### Features
 📦 Added a new command (`create cdn`) that allows users to create services for S3, CloudFront & GoDaddy without all the other Lisa stuff.
+📦 Added ip-check before attempting to run the `lisa init` command. The Triggerfish office ip is required for api calls to SendGrid to function.
 
 ## 2.6.0 (2023-02-05)
 ### Features
-📦 Added a new function (`checkLisaVersion()`) that runs before the main script to detect if a new version of `lisa-cli` is available.
+📦 Added a new function (checkLisaVersion()) that runs before the main script to detect if a new version of lisa-cli is available.
 
 ## 2.5.0 (2023-02-03)
 ### Features
