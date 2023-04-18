@@ -9,6 +9,7 @@ import init from "./commands/init.js"
 import { createPageComponent } from "./commands/pageComponent.js"
 import setupPath from "./commands/path.js"
 import writeLisaStatusSummary from "./commands/status.js"
+import { createCdnS3GoDaddy } from "./commands/cdnS3GoDaddy.js"
 import { getKinstaHelpMessage } from "./help/kinsta.js"
 import { resetConf } from "./lib/conf.js"
 import { checkDependencies, checkNodeVersion } from "./lib/dependencies.js"
@@ -94,6 +95,11 @@ async function initProgram() {
     .action(createPageComponent)
 
   program.command("pcc", { hidden: true }).action(createPageComponent)
+
+  program
+    .command("cdn create")
+    .description("Create S3 bucket and CloudFront distribution. Also create CNAME recrods in GoDaddy DNS.")
+    .action(createCdnS3GoDaddy)
 
   program.parse()
 }
