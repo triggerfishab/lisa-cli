@@ -202,7 +202,7 @@ export async function createPageComponent() {
     _page_components: "field_page_components_flexible",
   })
   const postIdOutput = await exec(
-    `wp post create --post_type=page --post_title="${label}" --post_name=${kebabCaseName} --post_status=publish --porcelain --meta_input='${meta}'`
+    `wp post create --post_type=page --post_title="Component: ${label}" --post_name=${kebabCaseName} --post_status=publish --porcelain --meta_input='${meta}'`
   )
 
   const postId = postIdOutput.stdout.trim()
