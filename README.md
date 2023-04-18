@@ -179,6 +179,19 @@ Use this command to create services for S3, CloudFront & GoDaddy without all the
 <summary>Read more</summary>
 <p>
 
-Example: `lisa page-component create`
+Example: `lisa create cdn`
+</p>
+</details>
+
+&nbsp;
+
+### `create sendgrid`
+Use this command to create user account and generate api key for SendGrid
+
+<details>
+<summary>Read more</summary>
+<p>
+
+Example: `lisa create sendgrid`
 </p>
 </details>
