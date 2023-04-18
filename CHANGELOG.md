@@ -1,6 +1,23 @@
+## 2.9.0 (2023-04-18)
+### Features
+📦 Added a new command (`create sendgrid`) that allows users to create user account and api key for SendGrid.
+
+### Changes
+🛠 Let the user select for which environment(s) they want to create the CDN services.
+
+## 2.8.0 (2023-04-18)
+### Features
+📦 Added a new command (`create cdn`) that allows users to create services for S3, CloudFront & GoDaddy without all the other Lisa stuff.
+
+📦 Added ip-check before attempting to run the `lisa init` command. The Triggerfish office ip is required for api calls to SendGrid to function.
+
+📦 When creating a new component with `lisa pcc`, a page with the new component will automatically be created.
+
+📦 When running `lisa init`, the CLI will check whether GitHub has any errors at the moment.
+
 ## 2.6.0 (2023-02-05)
 ### Features
-📦 Added a new function (`checkLisaVersion()`) that runs before the main script to detect if a new version of `lisa-cli` is available.
+📦 Added a new function (checkLisaVersion()) that runs before the main script to detect if a new version of lisa-cli is available.
 
 ## 2.5.0 (2023-02-03)
 ### Features

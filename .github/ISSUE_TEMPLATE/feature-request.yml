@@ -1,0 +1,17 @@
+name: Feature request
+description: Make a wish for a new feature!
+title: "[Feature request]: "
+labels: ["feature-request"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this feature request form.
+  - type: textarea
+    id: feature-request
+    attributes:
+      label: Feature request
+      description: What feature do you wish for?
+      placeholder: Tell us about your feature request
+    validations:
+      required: true

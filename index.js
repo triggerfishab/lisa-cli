@@ -2,12 +2,14 @@
 
 import chalk from "chalk"
 import { Command } from "commander"
+import { createCdnS3GoDaddy } from "./commands/cdnS3GoDaddy.js"
 import cloneLisaProject from "./commands/clone.js"
 import configure from "./commands/configure.js"
 import dbImport from "./commands/db.js"
 import init from "./commands/init.js"
 import { createPageComponent } from "./commands/pageComponent.js"
 import setupPath from "./commands/path.js"
+import { createSendGrid } from "./commands/sendgrid.js"
 import writeLisaStatusSummary from "./commands/status.js"
 import { getKinstaHelpMessage } from "./help/kinsta.js"
 import { resetConf } from "./lib/conf.js"
@@ -94,6 +96,18 @@ async function initProgram() {
     .action(createPageComponent)
 
   program.command("pcc", { hidden: true }).action(createPageComponent)
+
+  program
+    .command("cdn create")
+    .description(
+      "Create S3 bucket and CloudFront distribution. Also create CNAME recrods in GoDaddy DNS."
+    )
+    .action(createCdnS3GoDaddy)
+
+  program
+    .command("sendgrid create")
+    .description("Create SendGrid account")
+    .action(createSendGrid)
 
   program.parse()
 }

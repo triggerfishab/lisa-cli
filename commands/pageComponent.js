@@ -1,3 +1,4 @@
+import chalk from "chalk"
 import { cpSync, existsSync, mkdirSync, readFileSync, writeFileSync } from "fs"
 import path from "path"
 import prompts from "prompts"
@@ -187,12 +188,37 @@ export async function createPageComponent() {
   targetPath = `${gitRoot}/site/web/app/themes/lisa/includes/Fields/page-components/${kebabCaseName}.php`
 
   cpSync(`${__dirname}/templates/pageComponents/page-component.php`, targetPath)
-  exec(`sed -i '' 's/COMPONENTNAMESNAKECASE/${snakeCaseName}/g' ${targetPath}`)
-  exec(`sed -i '' 's/COMPONENTLABEL/${label}/g' ${targetPath}`)
+  await exec(
+    `sed -i '' 's/COMPONENTNAMESNAKECASE/${snakeCaseName}/g' ${targetPath}`
+  )
+  await exec(`sed -i '' 's/COMPONENTLABEL/${label}/g' ${targetPath}`)
 
   writeInfo(`${targetPath} created.`)
 
+  process.chdir("site/web")
+
+  const meta = JSON.stringify({
+    page_components: [snakeCaseName],
+    _page_components: "field_page_components_flexible",
+  })
+  const postIdOutput = await exec(
+    `wp post create --post_type=page --post_title="Component: ${label}" --post_name=${kebabCaseName} --post_status=publish --porcelain --meta_input='${meta}'`
+  )
+
+  const postId = postIdOutput.stdout.trim()
+  process.chdir(gitRoot)
+
   writeStep(`Page component ${label} created!`)
+
+  writeStep(`Page ${label} created.`)
+  writeInfo(
+    `Edit it here: ${chalk.bold(
+      `https://${apiName}.test/wp/wp-admin/post.php?post=${postId}&action=edit`
+    )}`
+  )
+  writeInfo(
+    `Visit it here: ${chalk.bold(`http://localhost:3000/${kebabCaseName}`)}`
+  )
   writeInfo(
     "Your next step is to add the needed ACF fields in the api repo, add them to your new type, your new query and use them in your new component."
   )
