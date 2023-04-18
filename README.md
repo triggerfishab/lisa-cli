@@ -73,6 +73,50 @@ Use this argument for which service to configure, available services: `aws`, `go
 
 &nbsp;
 
+### `create page-component`
+Use this command to create a new page component in a Lisa project.
+
+Alias: `pcc`
+<details>
+<summary>Read more</summary>
+<p>
+Use this command to create a new page component in a Lisa project.
+
+It will create basic ACF fields in the api, create a GraphQL fragment, type definitions and a base component in the app.
+
+Example: `lisa page-component create`
+</p>
+</details>
+
+&nbsp;
+
+### `create cdn`
+Use this command to create services for S3, CloudFront & GoDaddy without all the other Lisa stuff.
+
+<details>
+<summary>Read more</summary>
+<p>
+
+Example: `lisa create cdn`
+</p>
+</details>
+
+&nbsp;
+
+### `create sendgrid`
+Use this command to create user account and generate api key for SendGrid
+
+<details>
+<summary>Read more</summary>
+<p>
+
+Example: `lisa create sendgrid`
+</p>
+</details>
+
+
+&nbsp;
+
 ### `db import`
 Use this command to import a database from the production/staging environment of your site.
 <details>
@@ -150,48 +194,5 @@ Use this command to show your Lisa status.
 Use this command to show your Lisa status. You will get output including your current Lisa path and all versions of your packages.
 
 Example: `lisa status`
-</p>
-</details>
-
-&nbsp;
-
-### `page-component create`
-Use this command to create a new page component in a Lisa project.
-
-Alias: `pcc`
-<details>
-<summary>Read more</summary>
-<p>
-Use this command to create a new page component in a Lisa project.
-
-It will create basic ACF fields in the api, create a GraphQL fragment, type definitions and a base component in the app.
-
-Example: `lisa page-component create`
-</p>
-</details>
-
-&nbsp;
-
-### `create cdn`
-Use this command to create services for S3, CloudFront & GoDaddy without all the other Lisa stuff.
-
-<details>
-<summary>Read more</summary>
-<p>
-
-Example: `lisa create cdn`
-</p>
-</details>
-
-&nbsp;
-
-### `create sendgrid`
-Use this command to create user account and generate api key for SendGrid
-
-<details>
-<summary>Read more</summary>
-<p>
-
-Example: `lisa create sendgrid`
 </p>
 </details>

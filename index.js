@@ -91,21 +91,21 @@ async function initProgram() {
     .action(writeLisaStatusSummary)
 
   program
-    .command("page-component create")
+    .command("create page-component ")
     .description("Create a new page component for your frontend app")
     .action(createPageComponent)
 
   program.command("pcc", { hidden: true }).action(createPageComponent)
 
   program
-    .command("cdn create")
+    .command("create cdn")
     .description(
       "Create S3 bucket and CloudFront distribution. Also create CNAME recrods in GoDaddy DNS."
     )
     .action(createCdnS3GoDaddy)
 
   program
-    .command("sendgrid create")
+    .command("create sendgrid")
     .description("Create SendGrid account")
     .action(createSendGrid)
 
