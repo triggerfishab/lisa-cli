@@ -171,3 +171,14 @@ Example: `lisa page-component create`
 </details>
 
 &nbsp;
+
+### `create cdn`
+Use this command to create services for S3, CloudFront & GoDaddy without all the other Lisa stuff.
+
+<details>
+<summary>Read more</summary>
+<p>
+
+Example: `lisa page-component create`
+</p>
+</details>
