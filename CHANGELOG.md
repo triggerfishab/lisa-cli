@@ -1,4 +1,4 @@
-## 2.7.6 (2023-04-17)
+## Unreleased
 ### Features
 📦 Added ip-check before attempting to run the `lisa init` command. The Triggerfish office ip is required for api calls to SendGrid to function.
 ## 2.5.0 (2023-02-03)
