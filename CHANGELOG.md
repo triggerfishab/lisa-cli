@@ -1,3 +1,7 @@
+## Unreleased
+### Changes
+🛠 Let the user select for which environment(s) they want to create the CDN services.
+
 ## 2.8.0 (2023-04-18)
 ### Features
 📦 Added a new command (`create cdn`) that allows users to create services for S3, CloudFront & GoDaddy without all the other Lisa stuff.

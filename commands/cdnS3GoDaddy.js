@@ -1,8 +1,9 @@
-import { writeStep, writeSuccess, writeError } from "../lib/write.js"
+import prompts from "prompts"
+import { askForProjectName, getProjectName } from "../lib/app-name.js"
+import conf from "../lib/conf.js"
+import { writeError, writeStep, writeSuccess } from "../lib/write.js"
 import setupAWS from "../tasks/services/aws.js"
 import setupGoDaddy from "../tasks/services/godaddy.js"
-import { getProjectName, askForProjectName } from "../lib/app-name.js"
-import conf from "../lib/conf.js"
 
 export async function createCdnS3GoDaddy() {
   writeStep(
@@ -19,15 +20,38 @@ export async function createCdnS3GoDaddy() {
     await askForProjectName()
   }
 
-  await setupAWS("staging")
-  await setupGoDaddy("staging")
+  const { environments } = await prompts([
+    {
+      type: "multiselect",
+      name: "environments",
+      message: "Select environment",
+      instructions: "",
+      choices: [
+        { title: "Staging", value: "staging", selected: false },
+        { title: "Production", value: "production", selected: false },
+      ],
+      hint: "- Space to select. Return to submit",
+      min: 1,
+    },
+  ])
 
-  await setupAWS("production")
-  await setupGoDaddy("production")
+  const cdnUrls = []
+
+  if (environments.includes("staging")) {
+    await setupAWS("staging")
+    await setupGoDaddy("staging")
+    cdnUrls.push(`staging-${conf.get("projectName")}${cdnDomain}`)
+  }
+
+  if (environments.includes("production")) {
+    await setupAWS("production")
+    await setupGoDaddy("production")
+    cdnUrls.push(`${conf.get("projectName")}${cdnDomain}`)
+  }
 
   writeSuccess(
-    `Services created! The urls to be used are as follows: staging-${conf.get(
-      "projectName"
-    )}${cdnDomain}, ${conf.get("projectName")}${cdnDomain}`
+    `Services created! The urls to be used are as follows: ${cdnUrls.join(
+      ", "
+    )}`
   )
 }
