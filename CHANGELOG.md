@@ -1,4 +1,4 @@
-## Unreleased
+## 2.9.0 (2023-04-18)
 ### Features
 📦 Added a new command (`create sendgrid`) that allows users to create user account and api key for SendGrid.
 
