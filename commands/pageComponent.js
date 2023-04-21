@@ -113,7 +113,7 @@ export async function createPageComponent() {
   const fragmentsImportMatches = fragmentsTs.match(/import { QUERY as(.*)\n/gm)
   const fragmentsImportMatch = fragmentsImportMatches.pop()
 
-  const fragmentsImportFormattedValue = `${fragmentsImportMatch}import { QUERY as ${name}Query } from "@/pageComponents/${name}"\n`
+  const fragmentsImportFormattedValue = `${fragmentsImportMatch}import { QUERY as ${name}Query } from "@/pageComponents/${name}/query"\n`
 
   let formattedFragmentsTs = fragmentsTs.replace(
     fragmentsMatch,
