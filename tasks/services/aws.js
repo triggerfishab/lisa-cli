@@ -64,6 +64,7 @@ async function setupAWS(environment = "production") {
       },
       CallerReference: Date.now(),
       Comment: origin,
+      Compress: true,
       DefaultCacheBehavior: {
         TargetOriginId: origin,
         ViewerProtocolPolicy: "allow-all",
