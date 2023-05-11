@@ -64,8 +64,8 @@ async function setupAWS(environment = "production") {
       },
       CallerReference: Date.now(),
       Comment: origin,
-      Compress: true,
       DefaultCacheBehavior: {
+        Compress: true,
         TargetOriginId: origin,
         ViewerProtocolPolicy: "redirect-to-https",
         CachePolicyId: "658327ea-f89d-4fab-a63d-7e88639e58f6",
