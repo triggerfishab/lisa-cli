@@ -64,7 +64,7 @@ async function checkGithubApiStatus() {
   )
 
   if (
-    filteredComponents.some((component) => component.status === "operational")
+    filteredComponents.some((component) => component.status !== "operational")
   ) {
     writeError(
       "GitHub is having some issues right now, read more at: https://www.githubstatus.com/"

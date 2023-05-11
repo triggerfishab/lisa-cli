@@ -1,10 +1,10 @@
 import { askForProjectName } from "../lib/app-name.js"
 import { configureTrellisForKinsta } from "../lib/kinsta.js"
 import { getSitesPath } from "../lib/path.js"
-import { isTriggerfishOfficeIp } from "../lib/triggerfish.js"
 import { generateSecrets } from "../lib/secrets.js"
 import { writeSummary } from "../lib/summary.js"
-import addSiteToVercel from "../lib/vercel.js"
+import { isTriggerfishOfficeIp } from "../lib/triggerfish.js"
+import { addSiteToVercel, configureNextConfig } from "../lib/vercel.js"
 import { writeStep } from "../lib/write.js"
 import setupLocalSiteForDevelopment from "../tasks/local.js"
 import { createRepos } from "../tasks/repo.js"
@@ -20,6 +20,7 @@ export async function init({ configFile }) {
   await setupLocalSiteForDevelopment()
   await configureTrellisForKinsta(configFile || "")
   await addSiteToVercel()
+  await configureNextConfig()
   await generateSecrets()
   await setupServices()
   await writeSummary()

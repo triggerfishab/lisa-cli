@@ -4,6 +4,7 @@
 
 ### Changes
 🛠 Let the user select for which environment(s) they want to create the CDN services.
+🛠 Change the template for new page components
 
 ## 2.8.0 (2023-04-18)
 ### Features
