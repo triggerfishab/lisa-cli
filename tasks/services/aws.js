@@ -2,12 +2,15 @@ import {
   CloudFrontClient,
   CreateDistributionCommand,
 } from "@aws-sdk/client-cloudfront"
-import { CreateBucketCommand, S3Client } from "@aws-sdk/client-s3"
+import {
+  CreateBucketCommand,
+  PutBucketPolicyCommand,
+  S3Client,
+} from "@aws-sdk/client-s3"
 import configure from "../../commands/configure.js"
 import { getProjectName } from "../../lib/app-name.js"
 import conf from "../../lib/conf.js"
 import * as store from "../../lib/store.js"
-
 import { writeStep, writeSuccess } from "../../lib/write.js"
 
 const DEFAULT_REGION = "eu-north-1"
@@ -79,7 +82,8 @@ async function setupAWS(environment = "production") {
             Id: origin,
             DomainName: origin,
             S3OriginConfig: {
-              OriginAccessIdentity: "",
+              OriginAccessIdentity:
+                "origin-access-identity/cloudfront/EXA6BVZLQ1EY",
             },
           },
         ],
@@ -97,6 +101,32 @@ async function setupAWS(environment = "production") {
     })
 
     const distribution = await cloudFrontClient.send(command)
+
+    writeStep(`Update bucket policy for bucket: ${bucketName}`)
+
+    // Update bucket policy
+    const bucketPolicy = {
+      Version: "2008-10-17",
+      Id: "PolicyForCloudFrontPrivateContent",
+      Statement: [
+        {
+          Sid: "1",
+          Effect: "Allow",
+          Principal: {
+            AWS: "arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity EXA6BVZLQ1EY",
+          },
+          Action: "s3:GetObject",
+          Resource: `arn:aws:s3:::${bucketName}/*`,
+        },
+      ],
+    }
+
+    const policyRes = await s3Client.send(
+      new PutBucketPolicyCommand({
+        Bucket: bucketName,
+        Policy: JSON.stringify(bucketPolicy),
+      })
+    )
 
     writeSuccess(`Cloudfront distribution for ${environment} created.`)
 
