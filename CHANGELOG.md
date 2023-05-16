@@ -1,9 +1,12 @@
-## Unreleased
+## 2.10.1 (2023-05-16)
 
 ### Changes
 🛠 Redirect http to https in CloudFront Behavior.
 🛠 Set Compress to true in CloudFront Behavior.
 🛠 Update s3 bucket policy to ONLY allow CloudFront to read from the bucket.
+
+### Documentation
+📝 Update README with correct commands.
 
 ## 2.9.0 (2023-04-18)
 ### Features
