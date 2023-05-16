@@ -1,3 +1,10 @@
+## Unreleased
+
+### Changes
+🛠 Redirect http to https in CloudFront Behavior.
+🛠 Set Compress to true in CloudFront Behavior.
+🛠 Update s3 bucket policy to ONLY allow CloudFront to read from the bucket.
+
 ## 2.9.0 (2023-04-18)
 ### Features
 📦 Added a new command (`create sendgrid`) that allows users to create user account and api key for SendGrid.
