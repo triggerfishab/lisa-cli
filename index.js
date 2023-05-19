@@ -26,7 +26,7 @@ checkNodeVersion()
 
 let command = process.argv[2]
 
-async function initProgram() {
+export async function initProgram() {
   await checkLisaVersion()
   await checkDependencies()
 
