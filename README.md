@@ -172,26 +172,26 @@ Example: `lisa page-component create`
 
 &nbsp;
 
-### `create cdn`
+### `cdn create`
 Use this command to create services for S3, CloudFront & GoDaddy without all the other Lisa stuff.
 
 <details>
 <summary>Read more</summary>
 <p>
 
-Example: `lisa create cdn`
+Example: `lisa cdn create`
 </p>
 </details>
 
 &nbsp;
 
-### `create sendgrid`
+### `sendgrid create`
 Use this command to create user account and generate api key for SendGrid
 
 <details>
 <summary>Read more</summary>
 <p>
 
-Example: `lisa create sendgrid`
+Example: `lisa sendgrid create`
 </p>
 </details>
