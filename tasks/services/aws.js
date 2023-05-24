@@ -51,7 +51,6 @@ async function setupAWS(environment = "production") {
 
     let origin = bucket.Location.replace("http://", "")
     origin = origin.replace("/", "")
-
     const cloudFrontClient = new CloudFrontClient({
       region: DEFAULT_REGION,
       credentials: {
@@ -80,7 +79,10 @@ async function setupAWS(environment = "production") {
         Items: [
           {
             Id: origin,
-            DomainName: origin,
+            DomainName: origin.replace(
+              "s3.amazonaws.com",
+              `s3-${DEFAULT_REGION}.amazonaws.com`
+            ),
             S3OriginConfig: {
               OriginAccessIdentity:
                 "origin-access-identity/cloudfront/EXA6BVZLQ1EY",
