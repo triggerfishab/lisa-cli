@@ -5,6 +5,7 @@ import {
 import {
   CreateBucketCommand,
   PutBucketPolicyCommand,
+  PutBucketVersioningCommand,
   S3Client,
 } from "@aws-sdk/client-s3"
 import configure from "../../commands/configure.js"
@@ -127,6 +128,15 @@ async function setupAWS(environment = "production") {
       new PutBucketPolicyCommand({
         Bucket: bucketName,
         Policy: JSON.stringify(bucketPolicy),
+      })
+    )
+
+    await s3Client.send(
+      new PutBucketVersioningCommand({
+        Bucket: bucketName,
+        VersioningConfiguration: {
+          Status: "Enabled",
+        },
       })
     )
 

@@ -1,5 +1,5 @@
 ## Unreleased
-
+🛠 Activate bucket versioning after bucket has been created.
 🛠 Add region to origin domain name when creating CloudFront distribution to fix caching issues before AWS has propagated properly.
 ## 2.10.1 (2023-05-16)
 
