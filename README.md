@@ -113,14 +113,19 @@ Specify the location of your Kinsta config file that you have created via the co
 &nbsp;
 
 ### `kinsta`
-Use this command to get a template file for all your Kinsta configuration values.
+Use this command to create a site  on Kinsta or get a template file for all your Kinsta configuration values.
 <details>
 <summary>Read more</summary>
 <p>
-Use this command to get a template file for all your Kinsta configuration values.
+Use this command to create a site  on Kinsta or get a template file for all your Kinsta configuration values.
 
-Example: `lisa kinsta > kinsta.yml`
+Example: `lisa kinsta [action]`
 
+
+`create`
+After the site has been created, an email will be sent to the provided email address.
+
+`show-config`
 After the file has been created, update all existing values with the corresponding values from the site at Kinsta that you created earlier.
 </p>
 </details>
