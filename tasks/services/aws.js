@@ -19,23 +19,15 @@ const DEFAULT_REGION = "eu-north-1"
 async function setupAWS(environment = "production") {
   writeStep(`Setting up S3 bucket for ${environment} environment`)
 
-  let projectName = await getProjectName()
-  let bucketName = `${projectName}.cdn.triggerfish.cloud`
+  const projectName = await getProjectName()
+  const bucketName = `${environment === "staging" ? "staging-" : ""}${projectName}.cdn.triggerfish.cloud`
 
-  if (environment === "staging") {
-    bucketName = `staging-${bucketName}`
-  }
-
-  let aws = conf.get("aws") || (await configure("aws")).aws
-  let { canonicalUserId } = aws
+  const { aws: { accessKeyId, secretAccessKey, canonicalUserId } } = conf.get("aws") || await configure("aws")
 
   try {
     const s3Client = new S3Client({
       region: DEFAULT_REGION,
-      credentials: {
-        accessKeyId: aws.accessKeyId,
-        secretAccessKey: aws.secretAccessKey,
-      },
+      credentials: { accessKeyId, secretAccessKey },
       canonicalUserId,
     })
 
@@ -52,12 +44,10 @@ async function setupAWS(environment = "production") {
 
     let origin = bucket.Location.replace("http://", "")
     origin = origin.replace("/", "")
+    
     const cloudFrontClient = new CloudFrontClient({
       region: DEFAULT_REGION,
-      credentials: {
-        accessKeyId: aws.accessKeyId,
-        secretAccessKey: aws.secretAccessKey,
-      },
+      credentials: { accessKeyId, secretAccessKey }
     })
 
     const distributionConfig = {
@@ -124,7 +114,7 @@ async function setupAWS(environment = "production") {
       ],
     }
 
-    const policyRes = await s3Client.send(
+    await s3Client.send(
       new PutBucketPolicyCommand({
         Bucket: bucketName,
         Policy: JSON.stringify(bucketPolicy),
