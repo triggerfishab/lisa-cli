@@ -13,7 +13,7 @@ export async function createSendGrid() {
 
   writeSuccess("SendGrid account created!")
   writeInfo(`Add the following values to your vault file or .env:
-   tf_smtp_username: "apikey",
-   tf_smtp_password: ${sendgridApiKey}
+    tf_smtp_username: "apikey",
+    tf_smtp_password: ${sendgridApiKey}
 `)
 }
