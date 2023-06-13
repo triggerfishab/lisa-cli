@@ -1,4 +1,4 @@
-## Unreleased
+## 2.11.0 (2023-06-13)
 
 ### Features
 📦 Improved the `kinsta` command for usage with creation of sites (`kinsta create`) and (`kinsta show-config`) for display of config file.
