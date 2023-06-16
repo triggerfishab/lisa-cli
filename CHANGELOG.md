@@ -1,3 +1,7 @@
+## Unreleased
+
+### Changes
+🛠 Retrieve credentials for services from 1password instead of having them stored in configs.
 ## 2.11.0 (2023-06-13)
 
 ### Features
