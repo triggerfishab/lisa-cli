@@ -1,14 +1,16 @@
 import fetch from "node-fetch"
-import configure from "../../commands/configure.js"
 import { getProjectName } from "../../lib/app-name.js"
-import conf from "../../lib/conf.js"
 import * as store from "../../lib/store.js"
 import { writeError, writeStep, writeSuccess } from "../../lib/write.js"
+import exec from "../../lib/exec.js"
 
 async function goDaddy(environment = "production") {
   writeStep(`Setting up GoDaddy DNS record for your project.`)
 
-  let godaddy = conf.get("godaddy") || (await configure("godaddy")).godaddy
+  const [apiKey, apiSecret] = await exec(
+    `op item get l2i57yslyjfr5jsieew4imwxgq --fields label="godaddy.api key",label="godaddy.api secret"`
+  ).then((res) => res.stdout.trim().split(","))
+
   let projectName = await getProjectName()
   let cdnUrl = store.get(`${environment}CdnUrl`)
 
@@ -22,7 +24,7 @@ async function goDaddy(environment = "production") {
       {
         method: "PATCH",
         headers: {
-          Authorization: `sso-key ${godaddy.key}:${godaddy.secret}`,
+          Authorization: `sso-key ${apiKey}:${apiSecret}`,
           Accept: "application/json",
           "Content-Type": "application/json",
         },

@@ -1,18 +1,18 @@
 import client from "@sendgrid/client"
 import passwordGenerator from "generate-password"
-import configure from "../../commands/configure.js"
 import { getProjectName } from "../../lib/app-name.js"
-import conf from "../../lib/conf.js"
 import * as store from "../../lib/store.js"
 import { writeError, writeStep, writeSuccess } from "../../lib/write.js"
+import exec from "../../lib/exec.js"
 
 async function setupSendgridAccount() {
   let projectName = await getProjectName()
 
   writeStep("Creating Sendgrid subuser")
 
-  let { apiKey } =
-    conf.get("sendgrid") || (await configure("sendgrid")).sendgrid
+  const apiKey = await exec(
+    `op item get l2i57yslyjfr5jsieew4imwxgq --fields label="sendgrid.api key"`
+  ).then((res) => res.stdout.trim())
 
   client.setApiKey(apiKey)
 

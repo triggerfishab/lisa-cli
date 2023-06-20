@@ -5,13 +5,9 @@ import exec from "../../lib/exec.js"
 import chalk from "chalk"
 
 async function createKinstaSite() {
-  let apiKey = await exec(
-    `op read op://shared/kinstahosting/lisa-cli_api-key`
-  ).then((res) => res.stdout.trim())
-
-  let companyId = await exec(
-    `op read op://shared/kinstahosting/company-id`
-  ).then((res) => res.stdout.trim())
+  const [apiKey, companyId] = await exec(
+    `op item get l2i57yslyjfr5jsieew4imwxgq --fields label="kinsta.api key",label="kinsta.company id"`
+  ).then((res) => res.stdout.trim().split(","))
 
   let projectName = await askForProjectName(
     "Enter the name of your site. Please choose wisely, as this cannot be changed later."
