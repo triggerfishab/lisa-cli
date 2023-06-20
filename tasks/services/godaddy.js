@@ -8,6 +8,10 @@ export async function createGoDaddyDnsRecord() {
   writeStep("Creating DNS-records in GoDaddy")
 }
 
+export async function recordExists() {
+  writeStep("Checking if DNS-records exists in GoDaddy")
+}
+
 async function goDaddy(environment = "production") {
   writeStep(`Setting up GoDaddy DNS record for your project.`)
 
