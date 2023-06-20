@@ -11,6 +11,7 @@ import { kinsta } from "./commands/kinsta.js"
 import { createPageComponent } from "./commands/pageComponent.js"
 import setupPath from "./commands/path.js"
 import { createSendGrid } from "./commands/sendgrid.js"
+import { createGoDaddy } from "./commands/godaddy.js"
 import writeLisaStatusSummary from "./commands/status.js"
 import { resetConf } from "./lib/conf.js"
 import { checkDependencies, checkNodeVersion } from "./lib/dependencies.js"
@@ -123,6 +124,11 @@ Make sure your standing in the folder where your composer.json file is located.
     `
     )
     .action(wpUpdate)
+
+  program
+    .command("godaddy create")
+    .description("Create DNS-records in GoDaddy")
+    .action(createGoDaddy)
 
   program.parse()
 }

@@ -4,6 +4,10 @@ import * as store from "../../lib/store.js"
 import { writeError, writeStep, writeSuccess } from "../../lib/write.js"
 import exec from "../../lib/exec.js"
 
+export async function createGoDaddyDnsRecord() {
+  writeStep("Creating DNS-records in GoDaddy")
+}
+
 async function goDaddy(environment = "production") {
   writeStep(`Setting up GoDaddy DNS record for your project.`)
 
