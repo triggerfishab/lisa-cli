@@ -1,3 +1,11 @@
+## 2.11.0 (2023-06-13)
+
+### Features
+📦 Improved the `kinsta` command for usage with creation of sites (`kinsta create`) and (`kinsta show-config`) for display of config file.
+
+### Changes
+🛠 Allow input of custom message in `askForProjectName()`
+
 ## 2.10.2 (2023-05-30)
 
 ### Changes
