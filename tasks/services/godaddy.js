@@ -4,20 +4,24 @@ import * as store from "../../lib/store.js"
 import { writeError, writeStep, writeSuccess } from "../../lib/write.js"
 import exec from "../../lib/exec.js"
 
-export async function createGoDaddyDnsRecord() {
+export async function createGoDaddyDnsRecord(recordData) {
+  console.log(recordData)
+  const { type, name, data } = recordData
+  console.log({ name })
+  await recordExists(type, name)
   writeStep("Creating DNS-records in GoDaddy")
 }
 
-export async function recordExists() {
-  writeStep("Checking if DNS-records exists in GoDaddy")
+async function getCredentials() {
+  return await exec(
+    `op item get l2i57yslyjfr5jsieew4imwxgq --fields label="godaddy.api key",label="godaddy.api secret"`
+  ).then((res) => res.stdout.trim().split(","))
 }
 
 async function goDaddy(environment = "production") {
   writeStep(`Setting up GoDaddy DNS record for your project.`)
 
-  const [apiKey, apiSecret] = await exec(
-    `op item get l2i57yslyjfr5jsieew4imwxgq --fields label="godaddy.api key",label="godaddy.api secret"`
-  ).then((res) => res.stdout.trim().split(","))
+  const [apiKey, apiSecret] = await getCredentials()
 
   let projectName = await getProjectName()
   let cdnUrl = store.get(`${environment}CdnUrl`)

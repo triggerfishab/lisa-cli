@@ -12,15 +12,16 @@ export async function createGoDaddy() {
       message: "Select record type",
       instructions: "",
       choices: [
-        { title: "A", value: "a", selected: false },
-        { title: "CNAME", value: "cname", selected: false },
+        { title: "A", value: "A", selected: false },
+        { title: "CNAME", value: "CNAME", selected: false },
+        { title: "TXT", value: "TXT", selected: false },
       ],
       hint: "- Space to select. Return to submit",
       min: 1,
     },
     {
       type: "text",
-      name: "key",
+      name: "name",
       message: (prev) => {
         previousGlobal = prev
         return "Enter record name"
@@ -35,7 +36,9 @@ export async function createGoDaddy() {
       name: "data",
       message: "Enter record data",
       validate: (value) => {
-        if (previousGlobal === "cname") {
+        if (previousGlobal === "TXT") {
+          return true
+        } else if (previousGlobal === "CNAME") {
           return /^[a-z0-9-\.]+$/.test(value)
             ? true
             : "Please use lowercase, periods and hyphens only"
@@ -45,6 +48,5 @@ export async function createGoDaddy() {
       },
     },
   ])
-
-  await createGoDaddyDnsRecord()
+  await createGoDaddyDnsRecord(recordData)
 }
