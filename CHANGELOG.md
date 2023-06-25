@@ -1,4 +1,6 @@
 ## Unreleased
+### Features
+📦 Allow creating dns-records in GoDaddy (`godaddy create`). Allowed record types are `A, CNAME, TXT`.
 
 ## 2.12.1 (2023-09-05)
 ### Changes

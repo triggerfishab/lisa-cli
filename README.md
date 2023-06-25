@@ -206,11 +206,22 @@ Example: `lisa sendgrid create`
 
 ### `wp update`
 Update WordPress and Composer dependencies.
-
 <details>
 <summary>Read more</summary>
 <p>
 
 Example: `lisa wp update`
+</p>
+</details>
+
+&nbsp;
+### `godaddy create`
+Use this command to create DNS-records in GoDaddy. I.e. for validation and pointing in Kinsta.
+
+<details>
+<summary>Read more</summary>
+<p>
+
+Example: `lisa godaddy create`
 </p>
 </details>
