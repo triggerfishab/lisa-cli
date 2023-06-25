@@ -5,11 +5,45 @@ import { writeError, writeStep, writeSuccess } from "../../lib/write.js"
 import exec from "../../lib/exec.js"
 
 export async function createGoDaddyDnsRecord(recordData) {
-  console.log(recordData)
   const { type, name, data } = recordData
-  console.log({ name })
-  await recordExists(type, name)
   writeStep("Creating DNS-records in GoDaddy")
+
+  const [apiKey, apiSecret] = await getCredentials()
+
+  let response
+  try {
+    response = await fetch(
+      "https://api.godaddy.com/v1/domains/triggerfish.cloud/records",
+      {
+        method: "PATCH",
+        headers: {
+          Authorization: `sso-key ${apiKey}:${apiSecret}`,
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify([
+          {
+            data,
+            name,
+            type,
+            ttl: 1800,
+          },
+        ]),
+      }
+    )
+    let body = await response.json()
+    if (response?.ok) {
+      writeSuccess(`DNS-record for ${name}.triggerfish.cloud created.`)
+    } else {
+      writeError("Error creating DNS-records in GoDaddy")
+      writeError(`Status: ${response?.status}, message: ${body?.message}`)
+    }
+  } catch (error) {
+    writeError(
+      "Error adding DNS records on GoDaddy. Create an issue (https://github.com/triggerfishab/lisa-cli/issues/new/choose) with the following info"
+    )
+    console.dir(error)
+  }
 }
 
 async function getCredentials() {
@@ -30,35 +64,11 @@ async function goDaddy(environment = "production") {
     projectName = `staging-${projectName}`
   }
 
-  try {
-    await fetch(
-      "https://api.godaddy.com/v1/domains/triggerfish.cloud/records",
-      {
-        method: "PATCH",
-        headers: {
-          Authorization: `sso-key ${apiKey}:${apiSecret}`,
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify([
-          {
-            data: cdnUrl,
-            name: `${projectName}.cdn`,
-            ttl: 1800,
-            type: "CNAME",
-          },
-        ]),
-      }
-    )
-
-    writeSuccess(`GoDaddy DNS record added for your project.`)
-  } catch (e) {
-    writeError(
-      "Error adding DNS records on GoDaddy. Create an issue (https://github.com/triggerfishab/lisa-cli/issues/new/choose) with the following info"
-    )
-
-    console.dir(e)
-  }
+  createGoDaddyDnsRecord({
+    type: "CNAME",
+    name: `${projectName}.cdn`,
+    data: cdnUrl,
+  })
 }
 
 export default goDaddy
