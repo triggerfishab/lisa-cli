@@ -11,13 +11,13 @@ import { createPageComponent } from "./commands/pageComponent.js"
 import setupPath from "./commands/path.js"
 import { createSendGrid } from "./commands/sendgrid.js"
 import writeLisaStatusSummary from "./commands/status.js"
-import { getKinstaHelpMessage } from "./help/kinsta.js"
 import { resetConf } from "./lib/conf.js"
 import { checkDependencies, checkNodeVersion } from "./lib/dependencies.js"
 import exec from "./lib/exec.js"
 import { getSitesPath } from "./lib/path.js"
 import { set } from "./lib/store.js"
 import { checkLisaVersion } from "./lib/versions.js"
+import { kinsta } from "./commands/kinsta.js"
 
 export const program = new Command()
 
@@ -47,9 +47,11 @@ export async function initProgram() {
   program
     .command("kinsta")
     .description("Output Kinsta configuration file template")
-    .action(function () {
-      console.log(getKinstaHelpMessage())
-    })
+    .argument(
+      "<action>",
+      "Pass an argument for which action to perform, available actions: show-config, create"
+    )
+    .action(kinsta)
 
   program
     .command("init")

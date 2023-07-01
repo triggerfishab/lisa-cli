@@ -20,6 +20,7 @@ You will need to install and configure the following stuff to use Lisa CLI:
 * [Valet](https://laravel.com/docs/8.x/valet) version >= 2.18
 * [Vercel CLI](https://vercel.com/cli) version >= 28.0
 * [AWS CLI](https://aws.amazon.com/cli/) version >= 2.4
+* [1Password CLI](https://developer.1password.com/docs/cli) version >= 2.18
 
 ## 🪚 Installation
 ```npm i -g @triggerfishab/lisa-cli```
@@ -112,14 +113,19 @@ Specify the location of your Kinsta config file that you have created via the co
 &nbsp;
 
 ### `kinsta`
-Use this command to get a template file for all your Kinsta configuration values.
+Use this command to create a site  on Kinsta or get a template file for all your Kinsta configuration values.
 <details>
 <summary>Read more</summary>
 <p>
-Use this command to get a template file for all your Kinsta configuration values.
+Use this command to create a site  on Kinsta or get a template file for all your Kinsta configuration values.
 
-Example: `lisa kinsta > kinsta.yml`
+Example: `lisa kinsta [action]`
 
+
+`create`
+After the site has been created, an email will be sent to the provided email address.
+
+`show-config`
 After the file has been created, update all existing values with the corresponding values from the site at Kinsta that you created earlier.
 </p>
 </details>
@@ -172,26 +178,26 @@ Example: `lisa page-component create`
 
 &nbsp;
 
-### `create cdn`
+### `cdn create`
 Use this command to create services for S3, CloudFront & GoDaddy without all the other Lisa stuff.
 
 <details>
 <summary>Read more</summary>
 <p>
 
-Example: `lisa create cdn`
+Example: `lisa cdn create`
 </p>
 </details>
 
 &nbsp;
 
-### `create sendgrid`
+### `sendgrid create`
 Use this command to create user account and generate api key for SendGrid
 
 <details>
 <summary>Read more</summary>
 <p>
 
-Example: `lisa create sendgrid`
+Example: `lisa sendgrid create`
 </p>
 </details>

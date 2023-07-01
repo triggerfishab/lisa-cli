@@ -1,3 +1,31 @@
+## Unreleased
+
+### Changes
+🛠 Retrieve credentials for services from 1password instead of having them stored in configs.
+## 2.11.0 (2023-06-13)
+
+### Features
+📦 Improved the `kinsta` command for usage with creation of sites (`kinsta create`) and (`kinsta show-config`) for display of config file.
+
+### Changes
+🛠 Allow input of custom message in `askForProjectName()`
+
+## 2.10.2 (2023-05-30)
+
+### Changes
+🛠 Activate bucket versioning after bucket has been created.
+🛠 Add region to origin domain name when creating CloudFront distribution to fix caching issues before AWS has propagated properly.
+
+## 2.10.1 (2023-05-16)
+
+### Changes
+🛠 Redirect http to https in CloudFront Behavior.
+🛠 Set Compress to true in CloudFront Behavior.
+🛠 Update s3 bucket policy to ONLY allow CloudFront to read from the bucket.
+
+### Documentation
+📝 Update README with correct commands.
+
 ## 2.9.0 (2023-04-18)
 ### Features
 📦 Added a new command (`create sendgrid`) that allows users to create user account and api key for SendGrid.

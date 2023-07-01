@@ -2,36 +2,35 @@ import {
   CloudFrontClient,
   CreateDistributionCommand,
 } from "@aws-sdk/client-cloudfront"
-import { CreateBucketCommand, S3Client } from "@aws-sdk/client-s3"
-import configure from "../../commands/configure.js"
+import {
+  CreateBucketCommand,
+  PutBucketPolicyCommand,
+  PutBucketVersioningCommand,
+  S3Client,
+} from "@aws-sdk/client-s3"
 import { getProjectName } from "../../lib/app-name.js"
-import conf from "../../lib/conf.js"
 import * as store from "../../lib/store.js"
-
 import { writeStep, writeSuccess } from "../../lib/write.js"
+import exec from "../../lib/exec.js"
 
 const DEFAULT_REGION = "eu-north-1"
 
 async function setupAWS(environment = "production") {
   writeStep(`Setting up S3 bucket for ${environment} environment`)
 
-  let projectName = await getProjectName()
-  let bucketName = `${projectName}.cdn.triggerfish.cloud`
+  const projectName = await getProjectName()
+  const bucketName = `${
+    environment === "staging" ? "staging-" : ""
+  }${projectName}.cdn.triggerfish.cloud`
 
-  if (environment === "staging") {
-    bucketName = `staging-${bucketName}`
-  }
-
-  let aws = conf.get("aws") || (await configure("aws")).aws
-  let { canonicalUserId } = aws
+  const [accessKeyId, secretAccessKey, canonicalUserId] = await exec(
+    `op item get l2i57yslyjfr5jsieew4imwxgq --fields label="aws.access key id",label="aws.secret access key",label="aws.canonical user id"`
+  ).then((res) => res.stdout.trim().split(","))
 
   try {
     const s3Client = new S3Client({
       region: DEFAULT_REGION,
-      credentials: {
-        accessKeyId: aws.accessKeyId,
-        secretAccessKey: aws.secretAccessKey,
-      },
+      credentials: { accessKeyId, secretAccessKey },
       canonicalUserId,
     })
 
@@ -51,10 +50,7 @@ async function setupAWS(environment = "production") {
 
     const cloudFrontClient = new CloudFrontClient({
       region: DEFAULT_REGION,
-      credentials: {
-        accessKeyId: aws.accessKeyId,
-        secretAccessKey: aws.secretAccessKey,
-      },
+      credentials: { accessKeyId, secretAccessKey },
     })
 
     const distributionConfig = {
@@ -65,8 +61,9 @@ async function setupAWS(environment = "production") {
       CallerReference: Date.now(),
       Comment: origin,
       DefaultCacheBehavior: {
+        Compress: true,
         TargetOriginId: origin,
-        ViewerProtocolPolicy: "allow-all",
+        ViewerProtocolPolicy: "redirect-to-https",
         CachePolicyId: "658327ea-f89d-4fab-a63d-7e88639e58f6",
       },
       Enabled: true,
@@ -76,9 +73,13 @@ async function setupAWS(environment = "production") {
         Items: [
           {
             Id: origin,
-            DomainName: origin,
+            DomainName: origin.replace(
+              "s3.amazonaws.com",
+              `s3-${DEFAULT_REGION}.amazonaws.com`
+            ),
             S3OriginConfig: {
-              OriginAccessIdentity: "",
+              OriginAccessIdentity:
+                "origin-access-identity/cloudfront/EXA6BVZLQ1EY",
             },
           },
         ],
@@ -96,6 +97,41 @@ async function setupAWS(environment = "production") {
     })
 
     const distribution = await cloudFrontClient.send(command)
+
+    writeStep(`Update bucket policy for bucket: ${bucketName}`)
+
+    // Update bucket policy
+    const bucketPolicy = {
+      Version: "2008-10-17",
+      Id: "PolicyForCloudFrontPrivateContent",
+      Statement: [
+        {
+          Sid: "1",
+          Effect: "Allow",
+          Principal: {
+            AWS: "arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity EXA6BVZLQ1EY",
+          },
+          Action: "s3:GetObject",
+          Resource: `arn:aws:s3:::${bucketName}/*`,
+        },
+      ],
+    }
+
+    await s3Client.send(
+      new PutBucketPolicyCommand({
+        Bucket: bucketName,
+        Policy: JSON.stringify(bucketPolicy),
+      })
+    )
+
+    await s3Client.send(
+      new PutBucketVersioningCommand({
+        Bucket: bucketName,
+        VersioningConfiguration: {
+          Status: "Enabled",
+        },
+      })
+    )
 
     writeSuccess(`Cloudfront distribution for ${environment} created.`)
 
