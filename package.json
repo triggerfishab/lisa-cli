@@ -7,7 +7,11 @@
     "lisa": "./index.js"
   },
   "scripts": {
-    "test": "NODE_OPTIONS=--experimental-vm-modules jest --detectOpenHandles"
+    "test": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:ui": "vitest --ui",
+    "test:ui:coverage": "vitest --ui --coverage",
+    "sentry:ci": "sentry-cli sourcemaps inject --org chrillep --project lisa-cli-chrillep ./out && sentry-cli sourcemaps upload --org chrillep --project lisa-cli-chrillep ./out"
   },
   "author": "Johan Möller",
   "license": "ISC",
@@ -28,10 +32,10 @@
     "semver": "^7.3.8"
   },
   "devDependencies": {
-    "@jest/globals": "^29.5.0",
-    "@types/jest": "^29.5.1",
+    "@vitest/coverage-v8": "^0.32.2",
+    "@vitest/ui": "^0.32.2",
     "eslint": "^8.40.0",
-    "jest": "^29.5.0",
-    "prettier": "^2.6.1"
+    "prettier": "^2.6.1",
+    "vitest": "^0.32.2"
   }
 }
