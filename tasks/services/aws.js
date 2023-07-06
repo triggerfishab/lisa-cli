@@ -8,9 +8,8 @@ import {
   PutBucketVersioningCommand,
   S3Client,
 } from "@aws-sdk/client-s3"
-import configure from "../../commands/configure.js"
 import { getProjectName } from "../../lib/app-name.js"
-import conf from "../../lib/conf.js"
+import exec from "../../lib/exec.js"
 import * as store from "../../lib/store.js"
 import { writeStep, writeSuccess } from "../../lib/write.js"
 
@@ -24,8 +23,9 @@ async function setupAWS(environment = "production") {
     environment === "staging" ? "staging-" : ""
   }${projectName}.cdn.triggerfish.cloud`
 
-  const { accessKeyId, secretAccessKey, canonicalUserId } =
-    conf.get("aws") || (await configure("aws"))
+  const [accessKeyId, secretAccessKey, canonicalUserId] = await exec(
+    `op item get l2i57yslyjfr5jsieew4imwxgq --fields label="aws.access key id",label="aws.secret access key",label="aws.canonical user id"`
+  ).then((res) => res.stdout.trim().split(","))
 
   try {
     const s3Client = new S3Client({

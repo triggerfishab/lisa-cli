@@ -1,7 +1,7 @@
 ## 2.11.1 (2023-07-06)
 
 ### Changes
-🛠 Fix bug when fetching 1Password items for AWS services.
+🛠 Retrieve credentials for services from 1password instead of having them stored in configs.
 
 ## 2.11.0 (2023-06-13)
 

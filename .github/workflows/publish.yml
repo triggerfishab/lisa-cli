@@ -6,14 +6,26 @@ on:
 
 jobs:
   build:
+    timeout-minutes: 15
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
+      - name: Checkout 🛎️
+        uses: actions/checkout@v3
         with:
-          node-version: 12
+          ref: ${{ github.sha }}
+          fetch-depth: false
+     
+      - name: Setup Node ⚙️
+        uses: actions/setup-node@v3
+        with:
+          cache: yarn
+          node-version-file: ".nvmrc"
           registry-url: https://registry.npmjs.org/
-      - run: yarn install
-      - run: npm publish --access public
+
+      - name: Install dependencies 🚀
+        run: yarn install
+        
+      - name: NPM Publish 🔖
+        run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
