@@ -20,9 +20,12 @@ async function setupAWS(environment = "production") {
   writeStep(`Setting up S3 bucket for ${environment} environment`)
 
   const projectName = await getProjectName()
-  const bucketName = `${environment === "staging" ? "staging-" : ""}${projectName}.cdn.triggerfish.cloud`
+  const bucketName = `${
+    environment === "staging" ? "staging-" : ""
+  }${projectName}.cdn.triggerfish.cloud`
 
-  const { aws: { accessKeyId, secretAccessKey, canonicalUserId } } = conf.get("aws") || await configure("aws")
+  const { accessKeyId, secretAccessKey, canonicalUserId } =
+    conf.get("aws") || (await configure("aws"))
 
   try {
     const s3Client = new S3Client({
@@ -44,10 +47,10 @@ async function setupAWS(environment = "production") {
 
     let origin = bucket.Location.replace("http://", "")
     origin = origin.replace("/", "")
-    
+
     const cloudFrontClient = new CloudFrontClient({
       region: DEFAULT_REGION,
-      credentials: { accessKeyId, secretAccessKey }
+      credentials: { accessKeyId, secretAccessKey },
     })
 
     const distributionConfig = {
