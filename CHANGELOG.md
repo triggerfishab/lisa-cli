@@ -1,3 +1,8 @@
+## 2.11.2 (2023-07-10)
+
+### Changes
+🛠 Check if `1password-cli` is installed before running `cdn create`.
+
 ## 2.11.1 (2023-07-06)
 
 ### Changes
