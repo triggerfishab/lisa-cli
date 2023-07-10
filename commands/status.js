@@ -1,5 +1,6 @@
 import chalk from "chalk"
 import semver from "semver"
+import { LISA_VERSION } from "../index.js"
 import asyncExec from "../lib/exec.js"
 import { versions } from "../lib/versions.js"
 import { writeInfo, writeStep } from "../lib/write.js"
@@ -13,6 +14,20 @@ export default async function writeLisaStatusSummary() {
   writeInfo("Versions of your packages:")
 
   let summary = []
+
+  summary.push(`   Lisa CLI: ${chalk.green(LISA_VERSION)}`)
+
+  let opVersion = await asyncExec("op --version")
+  opVersion = opVersion.stdout.trim()
+  summary.push(
+    `   1Password CLI: ${
+      semver.compare(opVersion, versions.op) === -1
+        ? chalk.red(
+            `${opVersion} <-- Please upgrade to ${versions.op} or higher`
+          )
+        : chalk.green(opVersion)
+    }`
+  )
 
   let ansibleVersion = await asyncExec("ansible --version")
   ansibleVersion = ansibleVersion.stdout.match(/([0-9.]+)/)

@@ -7,6 +7,7 @@ import cloneLisaProject from "./commands/clone.js"
 import configure from "./commands/configure.js"
 import dbImport from "./commands/db.js"
 import init from "./commands/init.js"
+import { kinsta } from "./commands/kinsta.js"
 import { createPageComponent } from "./commands/pageComponent.js"
 import setupPath from "./commands/path.js"
 import { createSendGrid } from "./commands/sendgrid.js"
@@ -17,9 +18,9 @@ import exec from "./lib/exec.js"
 import { getSitesPath } from "./lib/path.js"
 import { set } from "./lib/store.js"
 import { checkLisaVersion } from "./lib/versions.js"
-import { kinsta } from "./commands/kinsta.js"
 
 export const program = new Command()
+export const LISA_VERSION = "2.11.1"
 
 resetConf()
 checkNodeVersion()
@@ -34,6 +35,8 @@ async function initProgram() {
   set("initialPath", initialPath.stdout.trim())
 
   process.chdir(await getSitesPath())
+
+  program.version(LISA_VERSION, "-v, --version", "Output the current version")
 
   program
     .command("path")

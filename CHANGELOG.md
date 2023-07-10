@@ -2,6 +2,10 @@
 
 ### Changes
 🛠 Check if `1password-cli` is installed before running `cdn create`.
+🛠 Print version of `1password-cli` in `status` command.
+
+### Features
+📦 Add `--version` option to display current version of `lisa-cli`.
 
 ## 2.11.1 (2023-07-06)
 
