@@ -9,9 +9,9 @@ import {
   S3Client,
 } from "@aws-sdk/client-s3"
 import { getProjectName } from "../../lib/app-name.js"
+import exec from "../../lib/exec.js"
 import * as store from "../../lib/store.js"
 import { writeStep, writeSuccess } from "../../lib/write.js"
-import exec from "../../lib/exec.js"
 
 const DEFAULT_REGION = "eu-north-1"
 
