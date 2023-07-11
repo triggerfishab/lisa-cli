@@ -1,3 +1,8 @@
+## Unreleased
+
+### Changes
+🛠 Add better error handling if Sendgrid account name already exists.
+
 ## 2.11.2 (2023-07-10)
 
 ### Changes
