@@ -2,6 +2,7 @@
 
 import asyncExec from "../lib/exec.js"
 import fs from "fs"
+import { writeError, writeInfo } from "../lib/write.js"
 
 async function isCommandAvailable(cmd) {
   try {
@@ -14,19 +15,18 @@ async function isCommandAvailable(cmd) {
 export async function wpUpdate() {
   try {
     if (!(await isCommandAvailable("jq"))) {
-      console.log("jq is not installed. Attempting to install...")
+      writeInfo("jq is not installed. Attempting to install...")
       if (await isCommandAvailable("brew")) {
         await asyncExec("brew install jq")
       } else {
-        console.error(
-          "Error: Homebrew is not installed. Install Homebrew and try again.",
-        )
+        writeError("Homebrew is not installed. Install Homebrew and try again.")
+
         process.exit(1)
       }
     }
 
     if (!(await isCommandAvailable("composer"))) {
-      console.error("Error: composer is not installed.")
+      writeError("composer is not installed.")
       process.exit(1)
     }
 
@@ -35,7 +35,7 @@ export async function wpUpdate() {
         stdio: "inherit",
       })
     } catch {
-      console.error("Error: composer.json is not valid.")
+      writeError("composer.json is not valid.")
       process.exit(1)
     }
 
@@ -51,7 +51,7 @@ export async function wpUpdate() {
       }
     }
   } catch (err) {
-    console.error(err)
+    writeError(err)
     process.exit(1)
   }
 }
