@@ -1,12 +1,16 @@
 #!/usr/bin/env node
 
-const { Command } = require("commander")
-const { execSync } = require("child_process")
-const fs = require("fs")
+import asyncExec from "../lib/exec.js"
 
-const program = new Command()
-
-program.description("A script to check and modify composer.json").action(() => {
+function isCommandAvailable(cmd) {
+  try {
+    asyncExec(`command -v ${cmd}`, { stdio: "ignore" })
+    return true
+  } catch {
+    return false
+  }
+}
+export async function wpUpdate() {
   try {
     if (!isCommandAvailable("jq")) {
       console.log("jq is not installed. Attempting to install...")
@@ -48,16 +52,5 @@ program.description("A script to check and modify composer.json").action(() => {
   } catch (err) {
     console.error(err)
     process.exit(1)
-  }
-})
-
-program.parse(process.argv)
-
-function isCommandAvailable(cmd) {
-  try {
-    execSync(`command -v ${cmd}`, { stdio: "ignore" })
-    return true
-  } catch {
-    return false
   }
 }

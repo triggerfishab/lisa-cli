@@ -18,6 +18,7 @@ import exec from "./lib/exec.js"
 import { getSitesPath } from "./lib/path.js"
 import { set } from "./lib/store.js"
 import { checkLisaVersion } from "./lib/versions.js"
+import { wpUpdate } from "./commands/wordpressComposerUpdate.js"
 
 export const program = new Command()
 export const LISA_VERSION = "2.11.2"
@@ -43,7 +44,7 @@ async function initProgram() {
     .description("Run this command to set your global sites path")
     .argument(
       "[path]",
-      `Your global sites path, for example ${chalk.bold("~/Sites")}`
+      `Your global sites path, for example ${chalk.bold("~/Sites")}`,
     )
     .action(setupPath)
 
@@ -52,7 +53,7 @@ async function initProgram() {
     .description("Output Kinsta configuration file template")
     .argument(
       "<action>",
-      "Pass an argument for which action to perform, available actions: show-config, create"
+      "Pass an argument for which action to perform, available actions: show-config, create",
     )
     .action(kinsta)
 
@@ -62,8 +63,8 @@ async function initProgram() {
     .requiredOption(
       "-c, --config-file <file>",
       `File with configuration options from Kinsta (relative or absolute path). Generate this file with ${chalk.bold(
-        chalk.underline("lisa kinsta")
-      )}`
+        chalk.underline("lisa kinsta"),
+      )}`,
     )
     .action(init)
 
@@ -77,11 +78,11 @@ async function initProgram() {
     .description("Configure all credentials for third party services")
     .option(
       "--reset",
-      "Reset the config for one or all services, see argument [service] for available services."
+      "Reset the config for one or all services, see argument [service] for available services.",
     )
     .argument(
       "[service]",
-      "Pass an argument for which service to configure, available services: aws, godaddy, sendgrid"
+      "Pass an argument for which service to configure, available services: aws, godaddy, sendgrid",
     )
     .action(configure)
 
@@ -105,7 +106,7 @@ async function initProgram() {
   program
     .command("cdn create")
     .description(
-      "Create S3 bucket and CloudFront distribution. Also create CNAME recrods in GoDaddy DNS."
+      "Create S3 bucket and CloudFront distribution. Also create CNAME recrods in GoDaddy DNS.",
     )
     .action(createCdnS3GoDaddy)
 
@@ -113,6 +114,11 @@ async function initProgram() {
     .command("sendgrid create")
     .description("Create SendGrid account")
     .action(createSendGrid)
+
+  program
+    .command("wp update")
+    .description("Update WordPress and Composer dependencies")
+    .action(wpUpdate)
 
   program.parse()
 }
