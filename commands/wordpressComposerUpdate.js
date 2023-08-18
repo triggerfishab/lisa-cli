@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import asyncExec from "../lib/exec.js"
+import fs from "fs"
 
 async function isCommandAvailable(cmd) {
   try {
@@ -12,9 +13,9 @@ async function isCommandAvailable(cmd) {
 }
 export async function wpUpdate() {
   try {
-    if (!isCommandAvailable("jq")) {
+    if (!(await isCommandAvailable("jq"))) {
       console.log("jq is not installed. Attempting to install...")
-      if (isCommandAvailable("brew")) {
+      if (await isCommandAvailable("brew")) {
         await asyncExec("brew install jq")
       } else {
         console.error(
@@ -24,7 +25,7 @@ export async function wpUpdate() {
       }
     }
 
-    if (!isCommandAvailable("composer")) {
+    if (!(await isCommandAvailable("composer"))) {
       console.error("Error: composer is not installed.")
       process.exit(1)
     }
