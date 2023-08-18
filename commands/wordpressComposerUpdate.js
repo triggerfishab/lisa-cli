@@ -2,9 +2,9 @@
 
 import asyncExec from "../lib/exec.js"
 
-function isCommandAvailable(cmd) {
+async function isCommandAvailable(cmd) {
   try {
-    asyncExec(`command -v ${cmd}`, { stdio: "ignore" })
+    await asyncExec(`command -v ${cmd}`, { stdio: "ignore" })
     return true
   } catch {
     return false
@@ -15,7 +15,7 @@ export async function wpUpdate() {
     if (!isCommandAvailable("jq")) {
       console.log("jq is not installed. Attempting to install...")
       if (isCommandAvailable("brew")) {
-        execSync("brew install jq")
+        await asyncExec("brew install jq")
       } else {
         console.error(
           "Error: Homebrew is not installed. Install Homebrew and try again.",
@@ -30,7 +30,7 @@ export async function wpUpdate() {
     }
 
     try {
-      execSync("composer validate --no-check-all --strict", {
+      await asyncExec("composer validate --no-check-all --strict", {
         stdio: "inherit",
       })
     } catch {
@@ -46,7 +46,7 @@ export async function wpUpdate() {
 
     for (const pluginName in composerJson.require) {
       if (pluginName !== "php") {
-        execSync(`composer require ${pluginName}`)
+        await asyncExec(`composer require ${pluginName}`)
       }
     }
   } catch (err) {
