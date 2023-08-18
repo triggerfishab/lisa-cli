@@ -18,6 +18,19 @@ import { getSitesPath } from "./lib/path.js"
 import { set } from "./lib/store.js"
 import { checkLisaVersion } from "./lib/versions.js"
 import { kinsta } from "./commands/kinsta.js"
+import * as Sentry from "@sentry/node"
+import { ProfilingIntegration } from "@sentry/profiling-node"
+
+Sentry.init({
+  dsn: "https://26d1d1fb45fa4384ad72136271efe014@o353190.ingest.sentry.io/4505467144306688",
+  profilesSampleRate: 1.0,
+  tracesSampleRate: 1.0,
+  integrations: [
+    new ProfilingIntegration(),
+    new Sentry.Integrations.Http({ tracing: true }),
+    ...Sentry.autoDiscoverNodePerformanceMonitoringIntegrations(),
+  ],
+})
 
 export const program = new Command()
 
@@ -40,7 +53,7 @@ export async function initProgram() {
     .description("Run this command to set your global sites path")
     .argument(
       "[path]",
-      `Your global sites path, for example ${chalk.bold("~/Sites")}`
+      `Your global sites path, for example ${chalk.bold("~/Sites")}`,
     )
     .action(setupPath)
 
@@ -49,7 +62,7 @@ export async function initProgram() {
     .description("Output Kinsta configuration file template")
     .argument(
       "<action>",
-      "Pass an argument for which action to perform, available actions: show-config, create"
+      "Pass an argument for which action to perform, available actions: show-config, create",
     )
     .action(kinsta)
 
@@ -59,8 +72,8 @@ export async function initProgram() {
     .requiredOption(
       "-c, --config-file <file>",
       `File with configuration options from Kinsta (relative or absolute path). Generate this file with ${chalk.bold(
-        chalk.underline("lisa kinsta")
-      )}`
+        chalk.underline("lisa kinsta"),
+      )}`,
     )
     .action(init)
 
@@ -74,11 +87,11 @@ export async function initProgram() {
     .description("Configure all credentials for third party services")
     .option(
       "--reset",
-      "Reset the config for one or all services, see argument [service] for available services."
+      "Reset the config for one or all services, see argument [service] for available services.",
     )
     .argument(
       "[service]",
-      "Pass an argument for which service to configure, available services: aws, godaddy, sendgrid"
+      "Pass an argument for which service to configure, available services: aws, godaddy, sendgrid",
     )
     .action(configure)
 
@@ -102,7 +115,7 @@ export async function initProgram() {
   program
     .command("cdn create")
     .description(
-      "Create S3 bucket and CloudFront distribution. Also create CNAME recrods in GoDaddy DNS."
+      "Create S3 bucket and CloudFront distribution. Also create CNAME recrods in GoDaddy DNS.",
     )
     .action(createCdnS3GoDaddy)
 

@@ -20,10 +20,10 @@ export default async function writeLisaStatusSummary() {
     `   Ansible: ${
       semver.compare(ansibleVersion[1], versions.ansibleVault) === -1
         ? chalk.red(
-            `${ansibleVersion[1]} <-- Please upgrade to ${versions.ansibleVault} or higher`
+            `${ansibleVersion[1]} <-- Please upgrade to ${versions.ansibleVault} or higher`,
           )
         : chalk.green(ansibleVersion[1])
-    }`
+    }`,
   )
 
   let awsVersion = await asyncExec("aws --version")
@@ -32,10 +32,10 @@ export default async function writeLisaStatusSummary() {
     `   AWS CLI: ${
       semver.compare(awsVersion[1], versions.aws) === -1
         ? chalk.red(
-            `${awsVersion[1]} <-- Please upgrade to ${versions.aws} or higher`
+            `${awsVersion[1]} <-- Please upgrade to ${versions.aws} or higher`,
           )
         : chalk.green(awsVersion[1])
-    }`
+    }`,
   )
 
   let ghVersion = await asyncExec("gh --version")
@@ -44,10 +44,10 @@ export default async function writeLisaStatusSummary() {
     `   GitHub CLI: ${
       semver.compare(ghVersion[1], versions.gh) === -1
         ? chalk.red(
-            `${ghVersion[1]} <-- Please upgrade to ${versions.gh} or higher`
+            `${ghVersion[1]} <-- Please upgrade to ${versions.gh} or higher`,
           )
         : chalk.green(ghVersion[1])
-    }`
+    }`,
   )
 
   let nodeVersion = await asyncExec("node --version")
@@ -56,10 +56,10 @@ export default async function writeLisaStatusSummary() {
     `   Node: ${
       semver.compare(nodeVersion[1], versions.node) === -1
         ? chalk.red(
-            `${nodeVersion[1]} <-- Please upgrade to ${versions.node} or higher`
+            `${nodeVersion[1]} <-- Please upgrade to ${versions.node} or higher`,
           )
         : chalk.green(nodeVersion[1])
-    }`
+    }`,
   )
 
   let trellisVersion = await asyncExec("trellis --version")
@@ -68,10 +68,10 @@ export default async function writeLisaStatusSummary() {
     `   Trellis CLI: ${
       semver.compare(trellisVersion[1], versions.trellisCli) === -1
         ? chalk.red(
-            `${trellisVersion[1]} <-- Please upgrade to ${versions.trellisCli} or higher`
+            `${trellisVersion[1]} <-- Please upgrade to ${versions.trellisCli} or higher`,
           )
         : chalk.green(trellisVersion[1])
-    }`
+    }`,
   )
 
   let valetVersion = await asyncExec("valet --version")
@@ -80,10 +80,10 @@ export default async function writeLisaStatusSummary() {
     `   Valet: ${
       semver.compare(valetVersion[1], versions.valet) === -1
         ? chalk.red(
-            `${valetVersion[1]} <-- Please upgrade to ${versions.valet} or higher`
+            `${valetVersion[1]} <-- Please upgrade to ${versions.valet} or higher`,
           )
         : chalk.green(valetVersion[1])
-    }`
+    }`,
   )
 
   let vercelVersion = await asyncExec("vercel --version")
@@ -92,10 +92,10 @@ export default async function writeLisaStatusSummary() {
     `   Vercel: ${
       semver.compare(vercelVersion[1], versions.vercel) === -1
         ? chalk.red(
-            `${vercelVersion[1]} <-- Please upgrade to ${versions.vercel} or higher`
+            `${vercelVersion[1]} <-- Please upgrade to ${versions.vercel} or higher`,
           )
         : chalk.green(vercelVersion[1])
-    }`
+    }`,
   )
 
   let wpCliVersion = await asyncExec("wp --version")
@@ -104,10 +104,10 @@ export default async function writeLisaStatusSummary() {
     `   WP CLI: ${
       semver.compare(wpCliVersion[1], versions.wpCli) === -1
         ? chalk.red(
-            `${wpCliVersion[1]} <-- Please upgrade to ${versions.wpCli} or higher`
+            `${wpCliVersion[1]} <-- Please upgrade to ${versions.wpCli} or higher`,
           )
         : chalk.green(wpCliVersion[1])
-    }`
+    }`,
   )
 
   summary.map((row) => console.log(row))
