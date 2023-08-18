@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 import asyncExec from "../lib/exec.js"
 import fs from "fs"
 import { writeError, writeInfo } from "../lib/write.js"
