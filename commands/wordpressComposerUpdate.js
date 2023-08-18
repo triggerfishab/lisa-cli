@@ -2,32 +2,8 @@ import asyncExec from "../lib/exec.js"
 import fs from "fs"
 import { writeError, writeInfo } from "../lib/write.js"
 
-async function isCommandAvailable(cmd) {
-  try {
-    await asyncExec(`command -v ${cmd}`, { stdio: "ignore" })
-    return true
-  } catch {
-    return false
-  }
-}
 export async function wpUpdate() {
   try {
-    if (!(await isCommandAvailable("jq"))) {
-      writeInfo("jq is not installed. Attempting to install...")
-      if (await isCommandAvailable("brew")) {
-        await asyncExec("brew install jq")
-      } else {
-        writeError("Homebrew is not installed. Install Homebrew and try again.")
-
-        process.exit(1)
-      }
-    }
-
-    if (!(await isCommandAvailable("composer"))) {
-      writeError("composer is not installed.")
-      process.exit(1)
-    }
-
     try {
       await asyncExec("composer validate --no-check-all --strict", {
         stdio: "inherit",
