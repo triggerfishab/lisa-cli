@@ -29,7 +29,7 @@ export async function wpUpdate() {
       composerJson.require
     )) {
       if (requiredComposerPackage === "php") {
-        requiredComposerPackages += `${requiredComposerPackage}${phpVersion} `
+        requiredComposerPackages += `"${requiredComposerPackage}:${phpVersion}" `
       }
       if (requiredComposerPackage !== "php") {
         requiredComposerPackages += `${requiredComposerPackage} `
