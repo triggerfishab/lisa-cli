@@ -201,3 +201,16 @@ Use this command to create user account and generate api key for SendGrid
 Example: `lisa sendgrid create`
 </p>
 </details>
+
+&nbsp;
+
+### `wp update`
+Update WordPress and Composer dependencies.
+
+<details>
+<summary>Read more</summary>
+<p>
+
+Example: `lisa wp update`
+</p>
+</details>
