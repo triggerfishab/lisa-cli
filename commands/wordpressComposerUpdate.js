@@ -15,30 +15,6 @@ export async function wpUpdate() {
     cwd: process.env.PWD,
   }
 
-  //  TODO: list composer major package version updates as output at the end
-  // TODO: * bonus check configured repositories for correct kinsta
-  // TODO: * bonus check configured repositories for correct triggerfish
-  // TODO: * bonus check if --format=json is available in all commands (required´)
-  //   "repositories": {
-  //     "0": {
-  //       "type": "composer",
-  //       "url": "https://wpackagist.org",
-  //       "only": [
-  //         "wpackagist-plugin/*",
-  //         "wpackagist-theme/*"
-  //       ]
-  //     },
-  //     "composer.triggerfish.cloud": {
-  //       "type": "composer",
-  //       "url": "https://composer.triggerfish.cloud/",
-  //       "only": [
-  //         "triggerfish/*",
-  //         "rocketgenius/gravity-forms",
-  //         "wpengine/advanced-custom-fields-pro"
-  //       ]
-  //     }
-  //   },
-
   const parsedPhpVersion = semver.parse(versions.php, {})
   const phpVersion = `>=${parsedPhpVersion.major}.${parsedPhpVersion.minor}`
 
