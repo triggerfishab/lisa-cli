@@ -1,6 +1,11 @@
 import asyncExec from "../lib/exec.js"
 import fs from "fs"
-import { writeError, writeInfo, writeSuccess, writeWarning } from "../lib/write.js"
+import {
+  writeError,
+  writeInfo,
+  writeSuccess,
+  writeWarning,
+} from "../lib/write.js"
 import { versions } from "../lib/versions.js"
 import semver from "semver"
 
@@ -11,7 +16,6 @@ export async function wpUpdate() {
   }
 
   //  TODO: list composer major package version updates as output at the end
-  // TODO:  update dev dependencies
   // TODO: * bonus check configured repositories for correct kinsta
   // TODO: * bonus check configured repositories for correct triggerfish
   // TODO: * bonus check if --format=json is available in all commands (required´)
@@ -41,18 +45,18 @@ export async function wpUpdate() {
   try {
     const composerValidateOutput = await asyncExec(
       "composer validate --no-check-all --strict --no-interaction --ansi",
-      asyncExecOptions,
+      asyncExecOptions
     )
     console.log(composerValidateOutput.stdout)
 
     const composerJson = JSON.parse(
-      fs.readFileSync(process.env.PWD + "/composer.json", "utf8"),
+      fs.readFileSync(process.env.PWD + "/composer.json", "utf8")
     )
 
     for (const [requiredComposerPackage] of Object.entries(
-      composerJson.require,
+      composerJson.require
     )) {
-      let requireCommand = ''
+      let requireCommand = ""
       if (requiredComposerPackage === "php") {
         requireCommand = `composer require "${requiredComposerPackage}:${phpVersion}" --with-all-dependencies --no-interaction  --ansi`
       }
@@ -60,7 +64,19 @@ export async function wpUpdate() {
         requireCommand = `composer require ${requiredComposerPackage} --with-all-dependencies --no-interaction --no-progress --ansi`
       }
       let requiredOutput = await asyncExec(requireCommand, asyncExecOptions)
-      writeInfo('running: ' + requireCommand)
+      writeInfo("running: " + requireCommand)
+      console.log(requiredOutput.stdout || requiredOutput.stderr)
+    }
+
+    for (const [requiredDevComposerPackage] of Object.entries(
+      composerJson["require-dev"]
+    )) {
+      const requireCommand = `composer require ${requiredDevComposerPackage} --dev --with-all-dependencies --no-interaction --no-progress --ansi`
+      let requiredOutput = await asyncExec(
+        `composer require ${requiredDevComposerPackage} --dev --with-all-dependencies --no-interaction --no-progress --ansi`,
+        asyncExecOptions
+      )
+      writeInfo("running: " + requireCommand)
       console.log(requiredOutput.stdout || requiredOutput.stderr)
     }
 
