@@ -12,11 +12,10 @@ export async function wpUpdate() {
 
   //  TODO: list major vesionsas as output at the end
   //  TODO: add done yay message
-  //  TODO: add description to program
   // TODO: loop through every packaage change
   // TODO:  update dev dependencies
   // TODO: * bonus check configured repositories for correct kinsta
-  // TODO: * bonus check configured repositories for correct triggerfish composer
+  // TODO: * bonus check configured repositories for correct triggerfish
   //   "repositories": {
   //     "0": {
   //       "type": "composer",

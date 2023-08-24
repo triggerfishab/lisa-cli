@@ -117,7 +117,11 @@ async function initProgram() {
 
   program
     .command("wp update")
-    .description("Update WordPress and Composer dependencies")
+    .description(
+      `Update WordPress and Composer dependencies.
+Make sure your standing in the folder where your composer.json file is located.
+    `
+    )
     .action(wpUpdate)
 
   program.parse()
