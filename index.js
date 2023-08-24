@@ -18,9 +18,10 @@ import exec from "./lib/exec.js"
 import { getSitesPath } from "./lib/path.js"
 import { set } from "./lib/store.js"
 import { checkLisaVersion } from "./lib/versions.js"
+import { wpUpdate } from "./commands/wordpressComposerUpdate.js"
 
 export const program = new Command()
-export const LISA_VERSION = "2.11.2"
+export const LISA_VERSION = "2.12.0"
 
 resetConf()
 checkNodeVersion()
@@ -113,6 +114,15 @@ async function initProgram() {
     .command("sendgrid create")
     .description("Create SendGrid account")
     .action(createSendGrid)
+
+  program
+    .command("wp update")
+    .description(
+      `Update WordPress and Composer dependencies.
+Make sure your standing in the folder where your composer.json file is located.
+    `
+    )
+    .action(wpUpdate)
 
   program.parse()
 }
