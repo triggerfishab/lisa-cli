@@ -1,7 +1,22 @@
 ## Unreleased
 
 ### Changes
+🛠 Add better error handling if Sendgrid account name already exists.
+
+## 2.11.2 (2023-07-10)
+
+### Changes
+🛠 Check if `1password-cli` is installed before running `cdn create`.
+🛠 Print version of `1password-cli` in `status` command.
+
+### Features
+📦 Add `--version` option to display current version of `lisa-cli`.
+
+## 2.11.1 (2023-07-06)
+
+### Changes
 🛠 Retrieve credentials for services from 1password instead of having them stored in configs.
+
 ## 2.11.0 (2023-06-13)
 
 ### Features

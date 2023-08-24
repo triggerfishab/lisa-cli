@@ -1,9 +1,14 @@
 import client from "@sendgrid/client"
 import passwordGenerator from "generate-password"
 import { getProjectName } from "../../lib/app-name.js"
-import * as store from "../../lib/store.js"
-import { writeError, writeStep, writeSuccess } from "../../lib/write.js"
 import exec from "../../lib/exec.js"
+import * as store from "../../lib/store.js"
+import {
+  writeError,
+  writeInfo,
+  writeStep,
+  writeSuccess,
+} from "../../lib/write.js"
 
 async function setupSendgridAccount() {
   let projectName = await getProjectName()
@@ -58,14 +63,6 @@ async function setupSendgridAccount() {
 
     writeStep("Creating Sendgrid subuser api key")
 
-    /*
-    {
-      api_key: "",
-      api_key_id: "",
-      name: "",
-      scopes: [""]
-    }
-    */
     const [, data] = await client.request({
       method: "POST",
       url: "/v3/api_keys",
@@ -88,9 +85,14 @@ async function setupSendgridAccount() {
 
     writeSuccess("Sendgrid subuser api key created")
   } catch (e) {
-    console.error(e)
-    console.error(e.response.body.errors)
     writeError("Error setting up Sendgrid subuser")
+    if (e.response.body.errors[0].message === "username exists") {
+      writeInfo(
+        "The project name you used is already used for a Sendgrid account. Please try another name."
+      )
+    } else {
+      console.error(e.response.body.errors)
+    }
   }
 }
 
