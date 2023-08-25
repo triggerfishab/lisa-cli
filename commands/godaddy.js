@@ -27,7 +27,7 @@ export async function createGoDaddy() {
         return "Enter record name"
       },
       validate: (value) =>
-        /^[a-z0-9-\.]+$/.test(value)
+        /^[a-z0-9-_\.]+$/.test(value)
           ? true
           : "Please use lowercase, periods and hyphens only",
     },
