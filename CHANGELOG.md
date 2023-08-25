@@ -1,5 +1,10 @@
 ## Unreleased
 
+## 2.12.0 (2023-08-24)
+
+### Features
+✨ HACKDAY - wp update command by @chrillep in https://github.com/triggerfishab/lisa-cli/pull/45
+
 ### Changes
 🛠 Add better error handling if Sendgrid account name already exists.
 
