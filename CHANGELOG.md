@@ -1,4 +1,6 @@
 ## Unreleased
+### Changes
+🛠 Use Amazon issued certificate when creating CloudFront Distribution.
 
 ## 2.12.0 (2023-08-24)
 
