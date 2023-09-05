@@ -86,7 +86,7 @@ async function setupAWS(environment = "production") {
       },
       ViewerCertificate: {
         ACMCertificateArn:
-          "arn:aws:acm:us-east-1:928011160524:certificate/9afe4f04-7b2f-43bf-895f-ad75865aad5f",
+          "arn:aws:acm:us-east-1:928011160524:certificate/7383b293-d589-4171-86d6-af3d808003c3",
         SSLSupportMethod: "sni-only",
         MinimumProtocolVersion: "TLSv1.2_2021",
       },
