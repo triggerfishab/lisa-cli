@@ -31,7 +31,8 @@ export async function createGoDaddyDnsRecord(recordData) {
         ]),
       }
     )
-    let body = await response.json()
+    let body = await response.text()
+
     if (response?.ok) {
       writeSuccess(`DNS-record for ${name}.triggerfish.cloud created.`)
     } else {
