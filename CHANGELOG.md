@@ -1,6 +1,8 @@
-## Unreleased
+## 2.13.0 (2023-09-26)
 ### Features
 📦 Allow creating dns-records in GoDaddy (`godaddy create`). Allowed record types are `A, CNAME, TXT`.
+### Changes
+🛠 Use correct Amazon issued certificate when creating CloudFront Distribution.
 
 ## 2.12.1 (2023-09-05)
 ### Changes
