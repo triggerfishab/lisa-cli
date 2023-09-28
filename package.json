@@ -7,13 +7,15 @@
     "lisa": "./index.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "format": "prettier --write \"./**/*.{js,ts,tsx,json}\""
   },
   "author": "Johan Möller",
   "license": "ISC",
   "type": "module",
   "dependencies": {
     "@aws-sdk/client-cloudfront": "^3.245.0",
+    "@aws-sdk/client-iam": "^3.418.0",
     "@aws-sdk/client-s3": "^3.245.0",
     "@sendgrid/client": "^7.6.2",
     "chalk": "^4.1.2",
@@ -28,6 +30,7 @@
     "semver": "^7.3.8"
   },
   "devDependencies": {
-    "prettier": "^2.6.1"
+    "@trivago/prettier-plugin-sort-imports": "^4.2.0",
+    "prettier": "^3"
   }
 }
