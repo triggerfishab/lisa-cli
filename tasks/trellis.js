@@ -1,5 +1,6 @@
 import fs from "fs"
 import generator from "generate-password"
+
 import conf from "../lib/conf.js"
 import exec from "../lib/exec.js"
 import { getGroupVarsPath, getTrellisPath } from "../lib/trellis.js"
@@ -44,37 +45,37 @@ export async function changeVaultPasswords() {
   await writeTempLisaVaultPass()
 
   await exec(
-    `ansible-vault decrypt ${allGroupVarsPath}/vault.yml --vault-password-file ${lisaVaultPassPath}`
+    `ansible-vault decrypt ${allGroupVarsPath}/vault.yml --vault-password-file ${lisaVaultPassPath}`,
   )
   await exec(
-    `ansible-vault encrypt ${allGroupVarsPath}/vault.yml --vault-password-file ${vaultPassPath}`
+    `ansible-vault encrypt ${allGroupVarsPath}/vault.yml --vault-password-file ${vaultPassPath}`,
   )
 
   writeSuccess(`Vault pass updated on ${allGroupVarsPath}/vault.yml.`)
 
   await exec(
-    `ansible-vault decrypt ${developmentGroupVarsPath}/vault.yml --vault-password-file ${lisaVaultPassPath}`
+    `ansible-vault decrypt ${developmentGroupVarsPath}/vault.yml --vault-password-file ${lisaVaultPassPath}`,
   )
   await exec(
-    `ansible-vault encrypt ${developmentGroupVarsPath}/vault.yml --vault-password-file ${vaultPassPath}`
+    `ansible-vault encrypt ${developmentGroupVarsPath}/vault.yml --vault-password-file ${vaultPassPath}`,
   )
 
   writeSuccess(`Vault pass updated on ${developmentGroupVarsPath}/vault.yml.`)
 
   await exec(
-    `ansible-vault decrypt ${stagingGroupVarsPath}/vault.yml --vault-password-file ${lisaVaultPassPath}`
+    `ansible-vault decrypt ${stagingGroupVarsPath}/vault.yml --vault-password-file ${lisaVaultPassPath}`,
   )
   await exec(
-    `ansible-vault encrypt ${stagingGroupVarsPath}/vault.yml --vault-password-file ${vaultPassPath}`
+    `ansible-vault encrypt ${stagingGroupVarsPath}/vault.yml --vault-password-file ${vaultPassPath}`,
   )
 
   writeSuccess(`Vault pass updated on ${stagingGroupVarsPath}/vault.yml.`)
 
   await exec(
-    `ansible-vault decrypt ${productionGroupVarsPath}/vault.yml --vault-password-file ${lisaVaultPassPath}`
+    `ansible-vault decrypt ${productionGroupVarsPath}/vault.yml --vault-password-file ${lisaVaultPassPath}`,
   )
   await exec(
-    `ansible-vault encrypt ${productionGroupVarsPath}/vault.yml --vault-password-file ${vaultPassPath}`
+    `ansible-vault encrypt ${productionGroupVarsPath}/vault.yml --vault-password-file ${vaultPassPath}`,
   )
 
   writeSuccess(`Vault pass updated on ${productionGroupVarsPath}/vault.yml.`)

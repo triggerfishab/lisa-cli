@@ -1,4 +1,5 @@
 import prompts from "prompts"
+
 import { askForProjectName, getProjectName } from "../lib/app-name.js"
 import conf from "../lib/conf.js"
 import { writeError, writeStep, writeSuccess } from "../lib/write.js"
@@ -7,7 +8,7 @@ import setupGoDaddy from "../tasks/services/godaddy.js"
 
 export async function createCdnS3GoDaddy() {
   writeStep(
-    "Creating S3 Bucket, CloudFront Distribution & GoDaddy DNS Records!"
+    "Creating S3 Bucket, CloudFront Distribution & GoDaddy DNS Records!",
   )
 
   const cdnDomain = ".cdn.triggerfish.cloud"
@@ -15,7 +16,7 @@ export async function createCdnS3GoDaddy() {
 
   if (conf.get("projectName").includes("staging")) {
     writeError(
-      "Please do NOT include the word staging in your project name. This will be added automatically and buckets for both ennvironments will be created."
+      "Please do NOT include the word staging in your project name. This will be added automatically and buckets for both ennvironments will be created.",
     )
     await askForProjectName()
   }
@@ -51,7 +52,7 @@ export async function createCdnS3GoDaddy() {
 
   writeSuccess(
     `Services created! The urls to be used are as follows: ${cdnUrls.join(
-      ", "
-    )}`
+      ", ",
+    )}`,
   )
 }

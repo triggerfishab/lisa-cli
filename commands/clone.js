@@ -2,6 +2,7 @@ import chalk from "chalk"
 import { spawnSync } from "child_process"
 import fs from "fs"
 import prompts from "prompts"
+
 import { askForProjectName } from "../lib/app-name.js"
 import { askForCorrectRepoNames } from "../lib/clone.js"
 import conf from "../lib/conf.js"
@@ -106,8 +107,8 @@ async function cloneLisaProject() {
   writeSuccess(`Admin URL: ${chalk.underline(adminUrl)}/wp/wp-admin`)
   writeSuccess(
     `Run this command for local development: ${chalk.underline(
-      `cd ${appName} && yarn dev`
-    )}`
+      `cd ${appName} && yarn dev`,
+    )}`,
   )
 }
 

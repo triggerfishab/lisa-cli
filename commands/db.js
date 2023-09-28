@@ -1,5 +1,6 @@
 import fs from "fs"
 import prompts from "prompts"
+
 import { getProjectName } from "../lib/app-name.js"
 import exec from "../lib/exec.js"
 import { getTrellisPath, getTrellisSitePath } from "../lib/trellis.js"
@@ -24,7 +25,7 @@ async function dbImport() {
 
   let mainFile = fs.readFileSync(
     `${trellisPath}/group_vars/${environment}/main.yml`,
-    "utf-8"
+    "utf-8",
   )
 
   let host = hostFile.match(/ansible_host=([^\s]+)/)[1]
@@ -35,7 +36,7 @@ async function dbImport() {
   writeInfo(`Making database dump on ${environment}...`)
 
   await exec(
-    `ssh ${user}@${host} -p ${port} 'wp db export --path="${docroot}/current/web/wp" ~/db.sql'`
+    `ssh ${user}@${host} -p ${port} 'wp db export --path="${docroot}/current/web/wp" ~/db.sql'`,
   )
 
   writeSuccess(`Database dump on ${environment} successful created!`)

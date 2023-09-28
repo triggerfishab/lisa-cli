@@ -1,5 +1,6 @@
 import chalk from "chalk"
 import semver from "semver"
+
 import { LISA_VERSION } from "../index.js"
 import asyncExec from "../lib/exec.js"
 import { versions } from "../lib/versions.js"
