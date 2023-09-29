@@ -246,6 +246,9 @@ export async function createIAMUserIfNotExists(fullProjectName) {
       accessKeyResponse.AccessKey.SecretAccessKey,
       fullProjectName,
     )
+    writeSuccess(
+      `1password item for ${fullProjectName} created in the AWS vault.`,
+    )
   } catch (err) {
     console.error(err)
   }
