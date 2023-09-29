@@ -77,7 +77,7 @@ async function setupAWS(environment = "production") {
               Status: "Enabled",
               NoncurrentVersionExpiration: { NoncurrentDays: 1 },
               AbortIncompleteMultipartUpload: { DaysAfterInitiation: 30 },
-              Filter: { Prefix: {} },
+              Filter: { Prefix: "" },
             },
           ],
         },
