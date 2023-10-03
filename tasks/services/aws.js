@@ -52,37 +52,8 @@ export async function setupAWS(environment = "production") {
       }),
     )
 
-    await s3Client.send(
-      new PutPublicAccessBlockCommand({
-        Bucket: bucketName,
-        ExpectedBucketOwner: accountId,
-        PublicAccessBlockConfiguration: {
-          BlockPublicAcls: false,
-          IgnorePublicAcls: true,
-          BlockPublicPolicy: true,
-          RestrictPublicBuckets: true,
-        },
-      }),
-    )
-
-    await s3Client.send(
-      new PutBucketLifecycleConfigurationCommand({
-        Bucket: bucketName,
-        ExpectedBucketOwner: accountId,
-        LifecycleConfiguration: {
-          Rules: [
-            {
-              Expiration: { ExpiredObjectDeleteMarker: true },
-              ID: "TF default lifecycle rule",
-              Status: "Enabled",
-              NoncurrentVersionExpiration: { NoncurrentDays: 1 },
-              AbortIncompleteMultipartUpload: { DaysAfterInitiation: 30 },
-              Filter: { Prefix: "" },
-            },
-          ],
-        },
-      }),
-    )
+    await putBucketPublicAccessBlock(bucketName)
+    await putBucketLifeCycleRule(bucketName)
 
     writeSuccess(`S3 bucket for ${environment} created.`)
 
@@ -249,6 +220,70 @@ export async function createIAMUserIfNotExists(fullProjectName) {
     writeSuccess(
       `1password item for ${fullProjectName} created in the AWS vault.`,
     )
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+export async function putBucketLifeCycleRule(bucketName) {
+  try {
+    const [accessKeyId, secretAccessKey, canonicalUserId, accountId] =
+      await getAWSKeys()
+
+    const s3Client = new S3Client({
+      region: DEFAULT_REGION,
+      credentials: { accessKeyId, secretAccessKey },
+      canonicalUserId,
+    })
+    // Break out to a function
+    await s3Client.send(
+      new PutBucketLifecycleConfigurationCommand({
+        Bucket: bucketName,
+        ExpectedBucketOwner: accountId,
+        LifecycleConfiguration: {
+          Rules: [
+            {
+              Expiration: { ExpiredObjectDeleteMarker: true },
+              ID: "TF default lifecycle rule",
+              Status: "Enabled",
+              NoncurrentVersionExpiration: { NoncurrentDays: 1 },
+              AbortIncompleteMultipartUpload: { DaysAfterInitiation: 30 },
+              Filter: { Prefix: "" },
+            },
+          ],
+        },
+      }),
+    )
+
+    writeSuccess(`Lifecycle rule for ${bucketName} created.`)
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+export async function putBucketPublicAccessBlock(bucketName) {
+  try {
+    const [accessKeyId, secretAccessKey, canonicalUserId, accountId] =
+      await getAWSKeys()
+
+    const s3Client = new S3Client({
+      region: DEFAULT_REGION,
+      credentials: { accessKeyId, secretAccessKey },
+      canonicalUserId,
+    })
+    await s3Client.send(
+      new PutPublicAccessBlockCommand({
+        Bucket: bucketName,
+        ExpectedBucketOwner: accountId,
+        PublicAccessBlockConfiguration: {
+          BlockPublicAcls: false,
+          IgnorePublicAcls: true,
+          BlockPublicPolicy: true,
+          RestrictPublicBuckets: true,
+        },
+      }),
+    )
+    writeSuccess(`Public access rule for ${bucketName} created.`)
   } catch (err) {
     console.error(err)
   }
