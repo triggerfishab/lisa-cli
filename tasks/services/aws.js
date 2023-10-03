@@ -25,7 +25,7 @@ import { writeStep, writeSuccess, writeWarning } from "../../lib/write.js"
 
 const DEFAULT_REGION = "eu-north-1"
 
-async function setupAWS(environment = "production") {
+export async function setupAWS(environment = "production") {
   const projectName = await getProjectName()
   const fullProjectName = `${projectName}.cdn.triggerfish.cloud`
   const bucketName = `${
@@ -265,5 +265,3 @@ async function getAWSKeys() {
     `op item get l2i57yslyjfr5jsieew4imwxgq --fields label="aws.access key id",label="aws.secret access key",label="aws.canonical user id",label="aws.account id"`,
   ).then((res) => res.stdout.trim().split(","))
 }
-
-export default setupAWS

@@ -2,7 +2,10 @@
 import chalk from "chalk"
 import { Command } from "commander"
 
-import { createCdnS3GoDaddy } from "./commands/cdnS3GoDaddy.js"
+import {
+  createCdnS3GoDaddy,
+  promptAndCreateIAMUser,
+} from "./commands/cdnS3GoDaddy.js"
 import cloneLisaProject from "./commands/clone.js"
 import configure from "./commands/configure.js"
 import dbImport from "./commands/db.js"
@@ -129,6 +132,11 @@ Make sure your standing in the folder where your composer.json file is located.
     .command("godaddy create")
     .description("Create DNS-records in GoDaddy")
     .action(createGoDaddy)
+
+  program
+    .command("aws user create")
+    .description("Create IAM user in AWS")
+    .action(promptAndCreateIAMUser)
 
   program.parse()
 }

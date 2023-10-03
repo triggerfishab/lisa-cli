@@ -3,7 +3,7 @@ import prompts from "prompts"
 import { askForProjectName, getProjectName } from "../lib/app-name.js"
 import conf from "../lib/conf.js"
 import { writeError, writeStep, writeSuccess } from "../lib/write.js"
-import setupAWS from "../tasks/services/aws.js"
+import { createIAMUserIfNotExists, setupAWS } from "../tasks/services/aws.js"
 import setupGoDaddy from "../tasks/services/godaddy.js"
 
 export async function createCdnS3GoDaddy() {
@@ -55,4 +55,28 @@ export async function createCdnS3GoDaddy() {
       ", ",
     )}`,
   )
+}
+
+export async function promptAndCreateIAMUser() {
+  writeStep("Creation of IAM User started.")
+
+  const cdnDomain = "cdn.triggerfish.cloud"
+  await getProjectName()
+
+  if (conf.get("projectName").includes("staging")) {
+    writeError(
+      "Please do NOT include the word staging in your project name. The user will be granted access to both ennvironments.",
+    )
+    await askForProjectName()
+  }
+
+  if (conf.get("projectName").includes(cdnDomain)) {
+    writeError(
+      `Please do NOT include ${cdnDomain} in your project name. This will be added automatically.`,
+    )
+    await askForProjectName()
+  }
+
+  const projectName = await getProjectName()
+  await createIAMUserIfNotExists(`${projectName}.${cdnDomain}`)
 }
