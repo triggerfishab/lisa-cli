@@ -15,11 +15,14 @@ async function setupSendgridAccount() {
   let projectName = await getProjectName()
 
   writeStep("Creating Sendgrid subuser")
-
-  const apiKey = await exec(
-    `op item get l2i57yslyjfr5jsieew4imwxgq --fields label="sendgrid.api key"`,
-  ).then((res) => res.stdout.trim())
-
+  try {
+    const apiKey = await exec(
+      `op item get l2i57yslyjfr5jsieew4imwxgq --fields label="sendgrid.api key"`,
+    ).then((res) => res.stdout.trim())
+  } catch (error) {
+    writeError(`Failed accessing 1Password. \n ${error}`)
+    process.exit(1)
+  }
   client.setApiKey(apiKey)
 
   try {

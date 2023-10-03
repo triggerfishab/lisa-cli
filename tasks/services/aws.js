@@ -158,7 +158,7 @@ export async function setupAWS(environment = "production") {
   }
 }
 
-export async function createIAMUserIfNotExists(fullProjectName) {
+async function createIAMUserIfNotExists(fullProjectName) {
   const [accessKeyId, secretAccessKey] = await getAWSKeys()
 
   const iamClient = new IAMClient({
@@ -225,7 +225,7 @@ export async function createIAMUserIfNotExists(fullProjectName) {
   }
 }
 
-export async function putBucketLifeCycleRule(bucketName) {
+async function putBucketLifeCycleRule(bucketName) {
   try {
     const [accessKeyId, secretAccessKey, canonicalUserId, accountId] =
       await getAWSKeys()
@@ -261,7 +261,7 @@ export async function putBucketLifeCycleRule(bucketName) {
   }
 }
 
-export async function putBucketPublicAccessBlock(bucketName) {
+async function putBucketPublicAccessBlock(bucketName) {
   try {
     const [accessKeyId, secretAccessKey, canonicalUserId, accountId] =
       await getAWSKeys()
@@ -290,13 +290,31 @@ export async function putBucketPublicAccessBlock(bucketName) {
 }
 
 async function saveAccessKey(accessKeyId, secretAccessKey, fullProjectName) {
-  return await exec(
-    `op item create --category login --title ${fullProjectName} 'username=${accessKeyId}' 'secretAccessKey=${secretAccessKey}' --vault g5rjl6vo44f3fnucye7zonybs4`,
-  )
+  try {
+    return await exec(
+      `op item create --category login --title ${fullProjectName} 'username=${accessKeyId}' 'secretAccessKey=${secretAccessKey}' --vault g5rjl6vo44f3fnucye7zonybs4`,
+    )
+  } catch (error) {
+    writeError(`Failed saving access keys to 1Password. \n ${error}`)
+    process.exit(1)
+  }
 }
 
 async function getAWSKeys() {
-  return await exec(
-    `op item get l2i57yslyjfr5jsieew4imwxgq --fields label="aws.access key id",label="aws.secret access key",label="aws.canonical user id",label="aws.account id"`,
-  ).then((res) => res.stdout.trim().split(","))
+  try {
+    return await exec(
+      `op item get l2i57yslyjfr5jsieew4imwxgq --fields label="aws.access key id",label="aws.secret access key",label="aws.canonical user id",label="aws.account id"`,
+    ).then((res) => res.stdout.trim().split(","))
+  } catch (error) {
+    writeError(`Failed accessing 1Password. \n ${error}`)
+    process.exit(1)
+  }
 }
+
+export {
+  createIAMUserIfNotExists,
+  putBucketLifeCycleRule,
+  putBucketPublicAccessBlock,
+}
+
+export default setupAWS

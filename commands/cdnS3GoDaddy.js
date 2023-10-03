@@ -6,7 +6,7 @@ import { writeError, writeStep, writeSuccess } from "../lib/write.js"
 import { createIAMUserIfNotExists, setupAWS } from "../tasks/services/aws.js"
 import setupGoDaddy from "../tasks/services/godaddy.js"
 
-export async function createCdnS3GoDaddy() {
+async function createCdnS3GoDaddy() {
   writeStep(
     "Creating S3 Bucket, CloudFront Distribution & GoDaddy DNS Records!",
   )
@@ -57,7 +57,7 @@ export async function createCdnS3GoDaddy() {
   )
 }
 
-export async function promptAndCreateIAMUser() {
+async function promptAndCreateIAMUser() {
   writeStep("Creation of IAM User started.")
 
   const cdnDomain = "cdn.triggerfish.cloud"
@@ -80,3 +80,5 @@ export async function promptAndCreateIAMUser() {
   const projectName = await getProjectName()
   await createIAMUserIfNotExists(`${projectName}.${cdnDomain}`)
 }
+
+export { createCdnS3GoDaddy, promptAndCreateIAMUser }
