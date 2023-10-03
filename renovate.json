@@ -3,7 +3,7 @@
   "labels": ["dependencies"],
   "baseBranches": ["main"],
   "commitMessageAction": "⬆️ Bump",
-  "extends": ["config:base", "schedule:weekly", ":dependencyDashboard"],
+  "extends": ["config:best-practices", "schedule:weekly"],
   "commitMessageTopic": "{{depName}}",
   "forkProcessing": "enabled",
   "packageRules": [
