@@ -193,12 +193,13 @@ async function createIAMUserIfNotExists(fullProjectName) {
         Statement: [
           {
             Effect: "Allow",
-            Action: ["s3:ListBucket", "s3:GetBucketLocation"],
-            Resource: `arn:aws:s3:::*${fullProjectName}`,
-          },
-          {
-            Effect: "Allow",
-            Action: ["s3:*Object", "s3:PutObjectAcl", "s3:PutObjectVersionAcl"],
+            Action: [
+              "s3:PutObject",
+              "s3:GetObject",
+              "s3:DeleteObject",
+              "s3:PutObjectAcl",
+              "s3:PutObjectVersionAcl",
+            ],
             Resource: `arn:aws:s3:::*${fullProjectName}/*`,
           },
         ],
