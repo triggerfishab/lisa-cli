@@ -4,7 +4,7 @@ import { Command } from "commander"
 
 import {
   createCdnS3GoDaddy,
-  promptAndCreateIAMUser,
+  updateBucketAccessPolicyAndCreateIAMUser,
 } from "./commands/cdnS3GoDaddy.js"
 import cloneLisaProject from "./commands/clone.js"
 import configure from "./commands/configure.js"
@@ -135,8 +135,8 @@ Make sure your standing in the folder where your composer.json file is located.
 
   program
     .command("aws user create")
-    .description("Create IAM user in AWS")
-    .action(promptAndCreateIAMUser)
+    .description("Update Bucket Access Policy and create IAM user in AWS")
+    .action(updateBucketAccessPolicyAndCreateIAMUser)
 
   program.parse()
 }

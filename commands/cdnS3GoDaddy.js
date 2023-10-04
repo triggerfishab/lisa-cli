@@ -3,7 +3,11 @@ import prompts from "prompts"
 import { askForProjectName, getProjectName } from "../lib/app-name.js"
 import conf from "../lib/conf.js"
 import { writeError, writeStep, writeSuccess } from "../lib/write.js"
-import { createIAMUserIfNotExists, setupAWS } from "../tasks/services/aws.js"
+import {
+  createIAMUserIfNotExists,
+  putBucketPublicAccessBlock,
+  setupAWS,
+} from "../tasks/services/aws.js"
 import setupGoDaddy from "../tasks/services/godaddy.js"
 
 async function createCdnS3GoDaddy() {
@@ -57,7 +61,7 @@ async function createCdnS3GoDaddy() {
   )
 }
 
-async function promptAndCreateIAMUser() {
+async function updateBucketAccessPolicyAndCreateIAMUser() {
   writeStep("Creation of IAM User started.")
 
   const cdnDomain = "cdn.triggerfish.cloud"
@@ -79,6 +83,35 @@ async function promptAndCreateIAMUser() {
 
   const projectName = await getProjectName()
   await createIAMUserIfNotExists(`${projectName}.${cdnDomain}`)
+
+  const { environments } = await prompts([
+    {
+      type: "multiselect",
+      name: "environments",
+      message: `Select environment(s) to update access policy for bucket ${projectName}.${cdnDomain}`,
+      instructions: "",
+      choices: [
+        { title: "Staging", value: "staging", selected: false },
+        { title: "Production", value: "production", selected: false },
+      ],
+      hint: "- Space to select. Return to submit",
+      min: 1,
+    },
+  ])
+
+  if (environments.includes("staging")) {
+    await putBucketPublicAccessBlock(`staging-${projectName}.${cdnDomain}`)
+  }
+
+  if (environments.includes("production")) {
+    await putBucketPublicAccessBlock(`${projectName}.${cdnDomain}`)
+  }
 }
 
-export { createCdnS3GoDaddy, promptAndCreateIAMUser }
+async function updateBucketLicecyclePolicy() {}
+
+export {
+  createCdnS3GoDaddy,
+  updateBucketAccessPolicyAndCreateIAMUser,
+  updateBucketLicecyclePolicy,
+}

@@ -21,7 +21,12 @@ import {
 import { getProjectName } from "../../lib/app-name.js"
 import exec from "../../lib/exec.js"
 import * as store from "../../lib/store.js"
-import { writeStep, writeSuccess, writeWarning } from "../../lib/write.js"
+import {
+  writeError,
+  writeStep,
+  writeSuccess,
+  writeWarning,
+} from "../../lib/write.js"
 
 const DEFAULT_REGION = "eu-north-1"
 
@@ -154,7 +159,7 @@ export async function setupAWS(environment = "production") {
 
     store.set(`${environment}CdnUrl`, distribution.Distribution.DomainName)
   } catch (err) {
-    console.error(err)
+    writeError(err)
   }
 }
 
@@ -221,8 +226,8 @@ async function createIAMUserIfNotExists(fullProjectName) {
     writeSuccess(
       `1password item for ${fullProjectName} created in the AWS vault.`,
     )
-  } catch (err) {
-    console.error(err)
+  } catch (error) {
+    writeError(error)
   }
 }
 
@@ -257,8 +262,8 @@ async function putBucketLifeCycleRule(bucketName) {
     )
 
     writeSuccess(`Lifecycle rule for ${bucketName} created.`)
-  } catch (err) {
-    console.error(err)
+  } catch (error) {
+    writeError(error)
   }
 }
 
@@ -285,8 +290,8 @@ async function putBucketPublicAccessBlock(bucketName) {
       }),
     )
     writeSuccess(`Public access rule for ${bucketName} created.`)
-  } catch (err) {
-    console.error(err)
+  } catch (error) {
+    writeError(`${bucketName}: ${error}`)
   }
 }
 
