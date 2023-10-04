@@ -5,6 +5,7 @@ import conf from "../lib/conf.js"
 import { writeError, writeStep, writeSuccess } from "../lib/write.js"
 import {
   createIAMUserIfNotExists,
+  putBucketLifeCycleRule,
   putBucketPublicAccessBlock,
   setupAWS,
 } from "../tasks/services/aws.js"
@@ -108,7 +109,49 @@ async function updateBucketAccessPolicyAndCreateIAMUser() {
   }
 }
 
-async function updateBucketLicecyclePolicy() {}
+async function updateBucketLicecyclePolicy() {
+  const cdnDomain = "cdn.triggerfish.cloud"
+  await getProjectName()
+
+  if (conf.get("projectName").includes("staging")) {
+    writeError(
+      "Please do NOT include the word staging in your project name. The user will be granted access to both ennvironments.",
+    )
+    await askForProjectName()
+  }
+
+  if (conf.get("projectName").includes(cdnDomain)) {
+    writeError(
+      `Please do NOT include ${cdnDomain} in your project name. This will be added automatically.`,
+    )
+    await askForProjectName()
+  }
+
+  const projectName = await getProjectName()
+
+  const { environments } = await prompts([
+    {
+      type: "multiselect",
+      name: "environments",
+      message: `Select environment(s) to update access policy for bucket ${projectName}.${cdnDomain}`,
+      instructions: "",
+      choices: [
+        { title: "Staging", value: "staging", selected: false },
+        { title: "Production", value: "production", selected: false },
+      ],
+      hint: "- Space to select. Return to submit",
+      min: 1,
+    },
+  ])
+
+  if (environments.includes("staging")) {
+    await putBucketLifeCycleRule(`staging-${projectName}.${cdnDomain}`)
+  }
+
+  if (environments.includes("production")) {
+    await putBucketLifeCycleRule(`${projectName}.${cdnDomain}`)
+  }
+}
 
 export {
   createCdnS3GoDaddy,
