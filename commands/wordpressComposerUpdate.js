@@ -1,13 +1,14 @@
-import asyncExec from "../lib/exec.js"
 import fs from "fs"
+import semver from "semver"
+
+import asyncExec from "../lib/exec.js"
+import { versions } from "../lib/versions.js"
 import {
   writeError,
   writeInfo,
   writeSuccess,
   writeWarning,
 } from "../lib/write.js"
-import { versions } from "../lib/versions.js"
-import semver from "semver"
 
 export async function wpUpdate() {
   const asyncExecOptions = {
@@ -21,16 +22,16 @@ export async function wpUpdate() {
   try {
     const composerValidateOutput = await asyncExec(
       "composer validate --no-check-all --strict --no-interaction --ansi",
-      asyncExecOptions
+      asyncExecOptions,
     )
     console.log(composerValidateOutput.stdout)
 
     const composerJson = JSON.parse(
-      fs.readFileSync(process.env.PWD + "/composer.json", "utf8")
+      fs.readFileSync(process.env.PWD + "/composer.json", "utf8"),
     )
 
     for (const [requiredComposerPackage] of Object.entries(
-      composerJson.require
+      composerJson.require,
     )) {
       let requireCommand = ""
       if (requiredComposerPackage === "php") {
@@ -45,12 +46,12 @@ export async function wpUpdate() {
     }
 
     for (const [requiredDevComposerPackage] of Object.entries(
-      composerJson["require-dev"]
+      composerJson["require-dev"],
     )) {
       const requireCommand = `composer require ${requiredDevComposerPackage} --dev --with-all-dependencies --no-interaction --no-progress --ansi`
       let requiredOutput = await asyncExec(
         `composer require ${requiredDevComposerPackage} --dev --with-all-dependencies --no-interaction --no-progress --ansi`,
-        asyncExecOptions
+        asyncExecOptions,
       )
       writeInfo("running: " + requireCommand)
       console.log(requiredOutput.stdout || requiredOutput.stderr)

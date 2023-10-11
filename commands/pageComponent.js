@@ -3,6 +3,7 @@ import { cpSync, existsSync, mkdirSync, readFileSync, writeFileSync } from "fs"
 import path from "path"
 import prompts from "prompts"
 import { fileURLToPath } from "url"
+
 import { getApiName, getAppName, getProjectName } from "../lib/app-name.js"
 import exec from "../lib/exec.js"
 import { getSitesPath } from "../lib/path.js"
@@ -61,23 +62,23 @@ export async function createPageComponent() {
 
   cpSync(
     `${__dirname}/templates/pageComponents/query.ts`,
-    `${targetPath}/query.ts`
+    `${targetPath}/query.ts`,
   )
   cpSync(
     `${__dirname}/templates/pageComponents/index.tsx`,
-    `${targetPath}/index.tsx`
+    `${targetPath}/index.tsx`,
   )
   cpSync(
     `${__dirname}/templates/pageComponents/types.ts`,
-    `${targetPath}/types.ts`
+    `${targetPath}/types.ts`,
   )
   cpSync(
     `${__dirname}/templates/pageComponents/componentName.tsx`,
-    `${targetPath}/${name}.tsx`
+    `${targetPath}/${name}.tsx`,
   )
   cpSync(
     `${__dirname}/templates/pageComponents/componentName.stories.tsx`,
-    `${storybookPath}/${name}.stories.tsx`
+    `${storybookPath}/${name}.stories.tsx`,
   )
 
   writeInfo(`${targetPath}/query.ts created.`)
@@ -87,19 +88,19 @@ export async function createPageComponent() {
   writeInfo(`${storybookPath}/${name}.stories.tsx created.`)
 
   exec(
-    `sed -i '' 's/COMPONENTNAME/${pascalCaseName}/g' ${targetPath}/${name}.tsx`
+    `sed -i '' 's/COMPONENTNAME/${pascalCaseName}/g' ${targetPath}/${name}.tsx`,
   )
   exec(`sed -i '' 's/COMPONENTNAME/${pascalCaseName}/g' ${targetPath}/query.ts`)
   exec(`sed -i '' 's/COMPONENTNAME/${pascalCaseName}/g' ${targetPath}/types.ts`)
   exec(
-    `sed -i '' 's/COMPONENTNAME/${pascalCaseName}/g' ${targetPath}/index.tsx`
+    `sed -i '' 's/COMPONENTNAME/${pascalCaseName}/g' ${targetPath}/index.tsx`,
   )
   exec(`sed -i '' 's/componentName/${name}/g' ${targetPath}/index.tsx`)
   exec(
-    `sed -i '' 's/COMPONENTNAME/${pascalCaseName}/g' ${storybookPath}/${name}.stories.tsx`
+    `sed -i '' 's/COMPONENTNAME/${pascalCaseName}/g' ${storybookPath}/${name}.stories.tsx`,
   )
   exec(
-    `sed -i '' 's/componentName/${name}/g' ${storybookPath}/${name}.stories.tsx`
+    `sed -i '' 's/componentName/${name}/g' ${storybookPath}/${name}.stories.tsx`,
   )
 
   const fragmentsPath = `${gitRoot}/lib/graphql/fragments.ts`
@@ -117,11 +118,11 @@ export async function createPageComponent() {
 
   let formattedFragmentsTs = fragmentsTs.replace(
     fragmentsMatch,
-    fragmentsFormattedValue
+    fragmentsFormattedValue,
   )
   formattedFragmentsTs = formattedFragmentsTs.replace(
     fragmentsImportMatch,
-    fragmentsImportFormattedValue
+    fragmentsImportFormattedValue,
   )
 
   writeFileSync(fragmentsPath, formattedFragmentsTs, { encoding: "utf-8" })
@@ -133,7 +134,7 @@ export async function createPageComponent() {
   })
 
   const pageComponentsMatches = pageComponentsFile.match(
-    /Page_Pagecomponentsgroup_PageComponents_(.*\S)\n(.*)\n(.*)\)/gm
+    /Page_Pagecomponentsgroup_PageComponents_(.*\S)\n(.*)\n(.*)\)/gm,
   )
 
   const pageComponentsMatch = pageComponentsMatches.pop()
@@ -145,7 +146,7 @@ export async function createPageComponent() {
 
   const formattedPageComponentsFile = pageComponentsFile.replace(
     pageComponentsMatch,
-    formattedPageComponentImportValue
+    formattedPageComponentImportValue,
   )
 
   writeFileSync(pageComponentsPath, formattedPageComponentsFile, {
@@ -168,7 +169,7 @@ export async function createPageComponent() {
   let formattedTypesTs = typesTs.replace(typesMatch, typesImportFormattedValue)
   formattedTypesTs = formattedTypesTs.replace(
     typesImportMatch,
-    typesFormattedValue
+    typesFormattedValue,
   )
 
   writeFileSync(typesPath, formattedTypesTs, {
@@ -189,7 +190,7 @@ export async function createPageComponent() {
 
   cpSync(`${__dirname}/templates/pageComponents/page-component.php`, targetPath)
   await exec(
-    `sed -i '' 's/COMPONENTNAMESNAKECASE/${snakeCaseName}/g' ${targetPath}`
+    `sed -i '' 's/COMPONENTNAMESNAKECASE/${snakeCaseName}/g' ${targetPath}`,
   )
   await exec(`sed -i '' 's/COMPONENTLABEL/${label}/g' ${targetPath}`)
 
@@ -202,7 +203,7 @@ export async function createPageComponent() {
     _page_components: "field_page_components_flexible",
   })
   const postIdOutput = await exec(
-    `wp post create --post_type=page --post_title="Component: ${label}" --post_name=${kebabCaseName} --post_status=publish --porcelain --meta_input='${meta}'`
+    `wp post create --post_type=page --post_title="Component: ${label}" --post_name=${kebabCaseName} --post_status=publish --porcelain --meta_input='${meta}'`,
   )
 
   const postId = postIdOutput.stdout.trim()
@@ -213,14 +214,14 @@ export async function createPageComponent() {
   writeStep(`Page ${label} created.`)
   writeInfo(
     `Edit it here: ${chalk.bold(
-      `https://${apiName}.test/wp/wp-admin/post.php?post=${postId}&action=edit`
-    )}`
+      `https://${apiName}.test/wp/wp-admin/post.php?post=${postId}&action=edit`,
+    )}`,
   )
   writeInfo(
-    `Visit it here: ${chalk.bold(`http://localhost:3000/${kebabCaseName}`)}`
+    `Visit it here: ${chalk.bold(`http://localhost:3000/${kebabCaseName}`)}`,
   )
   writeInfo(
-    "Your next step is to add the needed ACF fields in the api repo, add them to your new type, your new query and use them in your new component."
+    "Your next step is to add the needed ACF fields in the api repo, add them to your new type, your new query and use them in your new component.",
   )
   writeSuccess("GLHF!")
 }

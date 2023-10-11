@@ -14,7 +14,7 @@ import setupSendgridAccount from "./sendgrid.js"
 
 async function setupServices() {
   writeStep(
-    "Installing the following services for staging and production environment: Amason AWS, GoDaddy and Sendgrid!"
+    "Installing the following services for staging and production environment: Amason AWS, GoDaddy and Sendgrid!",
   )
 
   await getProjectName()
@@ -31,7 +31,7 @@ async function setupServices() {
   await commitAndPushTrellisConfig()
 
   writeSuccess(
-    "All services have been configured. You are now ready to go with Amazon AWS, GoDaddy and Sendgrid!"
+    "All services have been configured. You are now ready to go with Amazon AWS, GoDaddy and Sendgrid!",
   )
 }
 
@@ -62,7 +62,7 @@ async function writeTrellisConfig() {
       tf_serve_media_from_cdn: true,
       cdn_delivery_domain: s3BucketStaging,
     },
-    "staging"
+    "staging",
   )
 
   writeEnvDataToWordPressSites(
@@ -72,7 +72,7 @@ async function writeTrellisConfig() {
       tf_serve_media_from_cdn: true,
       cdn_delivery_domain: s3BucketProduction,
     },
-    "production"
+    "production",
   )
 
   writeEnvDataToWordPressSites(
@@ -82,7 +82,7 @@ async function writeTrellisConfig() {
       tf_serve_media_from_cdn: true,
       cdn_delivery_domain: s3BucketStaging,
     },
-    "development"
+    "development",
   )
 
   writeEnvDataToVault(
@@ -91,7 +91,7 @@ async function writeTrellisConfig() {
       s3_access_key_id: awsConfig.accessKeyId,
       s3_secret_access_key: awsConfig.secretAccessKey,
     },
-    "all"
+    "all",
   )
 
   writeEnvDataToVault(
@@ -99,7 +99,7 @@ async function writeTrellisConfig() {
       tf_smtp_username: "apikey",
       tf_smtp_password: sendgridApiKey,
     },
-    "production"
+    "production",
   )
 
   writeEnvDataToVault(
@@ -107,7 +107,7 @@ async function writeTrellisConfig() {
       tf_smtp_username: "apikey",
       tf_smtp_password: sendgridApiKey,
     },
-    "staging"
+    "staging",
   )
 
   await exec("trellis dotenv", { cwd: trellisPath })

@@ -1,4 +1,5 @@
 import prompts from "prompts"
+
 import conf from "../lib/conf.js"
 import { writeError, writeInfo, writeSuccess } from "../lib/write.js"
 
@@ -12,8 +13,8 @@ async function configure(service, options) {
     if (!services.includes(service)) {
       writeError(
         `The service named ${service} is not available. The available services are: ${services.join(
-          ", "
-        )}`
+          ", ",
+        )}`,
       )
       process.exit()
     }

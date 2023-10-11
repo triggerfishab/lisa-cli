@@ -1,24 +1,29 @@
 #!/usr/bin/env node
-
 import chalk from "chalk"
 import { Command } from "commander"
-import { createCdnS3GoDaddy } from "./commands/cdnS3GoDaddy.js"
+
+import {
+  createCdnS3GoDaddy,
+  updateBucketAccessPolicyAndCreateIAMUser,
+  updateBucketLicecyclePolicy,
+} from "./commands/cdnS3GoDaddy.js"
 import cloneLisaProject from "./commands/clone.js"
 import configure from "./commands/configure.js"
 import dbImport from "./commands/db.js"
+import { createGoDaddy } from "./commands/godaddy.js"
 import init from "./commands/init.js"
 import { kinsta } from "./commands/kinsta.js"
 import { createPageComponent } from "./commands/pageComponent.js"
 import setupPath from "./commands/path.js"
 import { createSendGrid } from "./commands/sendgrid.js"
 import writeLisaStatusSummary from "./commands/status.js"
+import { wpUpdate } from "./commands/wordpressComposerUpdate.js"
 import { resetConf } from "./lib/conf.js"
 import { checkDependencies, checkNodeVersion } from "./lib/dependencies.js"
 import exec from "./lib/exec.js"
 import { getSitesPath } from "./lib/path.js"
 import { set } from "./lib/store.js"
 import { checkLisaVersion } from "./lib/versions.js"
-import { wpUpdate } from "./commands/wordpressComposerUpdate.js"
 
 export const program = new Command()
 export const LISA_VERSION = "2.12.0"
@@ -44,7 +49,7 @@ async function initProgram() {
     .description("Run this command to set your global sites path")
     .argument(
       "[path]",
-      `Your global sites path, for example ${chalk.bold("~/Sites")}`
+      `Your global sites path, for example ${chalk.bold("~/Sites")}`,
     )
     .action(setupPath)
 
@@ -53,7 +58,7 @@ async function initProgram() {
     .description("Output Kinsta configuration file template")
     .argument(
       "<action>",
-      "Pass an argument for which action to perform, available actions: show-config, create"
+      "Pass an argument for which action to perform, available actions: show-config, create",
     )
     .action(kinsta)
 
@@ -63,8 +68,8 @@ async function initProgram() {
     .requiredOption(
       "-c, --config-file <file>",
       `File with configuration options from Kinsta (relative or absolute path). Generate this file with ${chalk.bold(
-        chalk.underline("lisa kinsta")
-      )}`
+        chalk.underline("lisa kinsta"),
+      )}`,
     )
     .action(init)
 
@@ -78,11 +83,11 @@ async function initProgram() {
     .description("Configure all credentials for third party services")
     .option(
       "--reset",
-      "Reset the config for one or all services, see argument [service] for available services."
+      "Reset the config for one or all services, see argument [service] for available services.",
     )
     .argument(
       "[service]",
-      "Pass an argument for which service to configure, available services: aws, godaddy, sendgrid"
+      "Pass an argument for which service to configure, available services: aws, godaddy, sendgrid",
     )
     .action(configure)
 
@@ -106,7 +111,7 @@ async function initProgram() {
   program
     .command("cdn create")
     .description(
-      "Create S3 bucket and CloudFront distribution. Also create CNAME recrods in GoDaddy DNS."
+      "Create S3 bucket and CloudFront distribution. Also create CNAME recrods in GoDaddy DNS.",
     )
     .action(createCdnS3GoDaddy)
 
@@ -120,9 +125,24 @@ async function initProgram() {
     .description(
       `Update WordPress and Composer dependencies.
 Make sure your standing in the folder where your composer.json file is located.
-    `
+    `,
     )
     .action(wpUpdate)
+
+  program
+    .command("godaddy create")
+    .description("Create DNS-records in GoDaddy")
+    .action(createGoDaddy)
+
+  program
+    .command("aws user create")
+    .description("Update Bucket Access Policy and create IAM user in AWS")
+    .action(updateBucketAccessPolicyAndCreateIAMUser)
+
+  program
+    .command("s3 bucket set-lifecycle-policy")
+    .description("Update Bucket Lifecycle Policy in S3")
+    .action(updateBucketLicecyclePolicy)
 
   program.parse()
 }

@@ -206,7 +206,6 @@ Example: `lisa sendgrid create`
 
 ### `wp update`
 Update WordPress and Composer dependencies.
-
 <details>
 <summary>Read more</summary>
 <p>
@@ -214,3 +213,42 @@ Update WordPress and Composer dependencies.
 Example: `lisa wp update`
 </p>
 </details>
+
+&nbsp;
+### `godaddy create`
+Use this command to create DNS-records in GoDaddy. I.e. for validation and pointing in Kinsta.
+
+<details>
+<summary>Read more</summary>
+<p>
+
+Example: `lisa godaddy create`
+</p>
+</details>
+
+### `aws user create`
+This command creates an aws iam user that's restricted to specific bucket(s).
+<details>
+<summary>Read more</summary>
+<p>
+ Once the user's been created access keys will be generated and stored in the AWS vault in 1password. Copy these keys and paste them in the vault-file of your site/project.
+
+Example: `lisa aws user create`
+</p>
+</details>
+
+&nbsp;
+
+### `s3 bucket set-lifecycle-policy`
+This command creates lifecycle rule for objects in the bucket
+<details>
+<summary>Read more</summary>
+<p>
+Create lifecycle rule for dealing with deletion of non-current versions of objects after 1 day. Objects with a delete flag will be removed after 30 days.
+
+Example: `lisa s3 bucket set-lifecycle-policy`
+</p>
+</details>
+
+&nbsp;
+
