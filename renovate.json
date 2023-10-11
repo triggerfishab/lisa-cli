@@ -8,6 +8,10 @@
   "forkProcessing": "enabled",
   "packageRules": [
     {
+      "matchCategories": ["js"],
+      "addLabels": ["javascript"]
+    },
+    {
       "matchUpdateTypes": ["major", "minor", "patch", "pin"]
     },
     {
@@ -27,8 +31,5 @@
       "addLabels": ["patch"]
     }
   ],
-  "js": {
-    "addLabels": ["javascript"]
-  },
   "timezone": "Europe/Stockholm"
 }
