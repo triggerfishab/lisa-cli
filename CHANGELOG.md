@@ -1,3 +1,8 @@
+## 2.14.2 (2023-10-11)
+
+### Changes
+🛠 Adjust aws user permissions.
+
 ## 2.14.1 (2023-10-11)
 
 ### Changes
