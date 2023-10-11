@@ -26,7 +26,7 @@ import { set } from "./lib/store.js"
 import { checkLisaVersion } from "./lib/versions.js"
 
 export const program = new Command()
-export const LISA_VERSION = "2.12.0"
+export const LISA_VERSION = "2.14.1"
 
 resetConf()
 checkNodeVersion()
