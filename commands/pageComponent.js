@@ -7,6 +7,7 @@ import { getApiName, getAppName, getProjectName } from "../lib/app-name.js"
 import exec from "../lib/exec.js"
 import { getSitesPath } from "../lib/path.js"
 import { writeInfo, writeStep, writeSuccess } from "../lib/write.js"
+import { camelToSnakeCase, snakeToKebabCase } from "../lib/helpers.js"
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(path.dirname(__filename))
@@ -224,8 +225,3 @@ export async function createPageComponent() {
   )
   writeSuccess("GLHF!")
 }
-
-const camelToSnakeCase = (str) =>
-  str.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`)
-
-const snakeToKebabCase = (str) => str.replace("_", "-")

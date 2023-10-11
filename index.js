@@ -13,6 +13,7 @@ import setupPath from "./commands/path.js"
 import { createSendGrid } from "./commands/sendgrid.js"
 import { createGoDaddy } from "./commands/godaddy.js"
 import writeLisaStatusSummary from "./commands/status.js"
+import { createPostType } from "./commands/postType.js"
 import { resetConf } from "./lib/conf.js"
 import { checkDependencies, checkNodeVersion } from "./lib/dependencies.js"
 import exec from "./lib/exec.js"
@@ -129,6 +130,11 @@ Make sure your standing in the folder where your composer.json file is located.
     .command("godaddy create")
     .description("Create DNS-records in GoDaddy")
     .action(createGoDaddy)
+
+  program
+    .command("post-type create")
+    .description("Create a new post type")
+    .action(createPostType)
 
   program.parse()
 }
