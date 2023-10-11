@@ -1,6 +1,6 @@
 {
   "name": "@triggerfishab/lisa-cli",
-  "version": "2.13.0",
+  "version": "2.14.0",
   "description": "CLI commands to generate a new project based on Lisa",
   "main": "./index.js",
   "bin": {

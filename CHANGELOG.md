@@ -1,3 +1,13 @@
+## 2.14.0 (2023-10-11)
+
+### Features
+📦 Create IAM user and access keys in AWS (`aws user create`).
+📦 Create Lifecycle rules for a bucket in S3 (`s3 bucket set-lifecycle-policy`).
+
+### Changes
+🛠 Better error handling when communicating with 1password-cli (`op`).
+🛠 Prettier config updated.
+
 ## 2.13.0 (2023-09-26)
 ### Features
 📦 Allow creating dns-records in GoDaddy (`godaddy create`). Allowed record types are `A, CNAME, TXT`.
