@@ -26,7 +26,7 @@ async function installApiDependencies() {
 
   let sitePromise = exec(`composer install --working-dir=${apiName}/site`)
   let themePromise = exec(
-    `composer install --working-dir=${apiName}/site/web/app/themes/lisa`
+    `composer install --working-dir=${apiName}/site/web/app/themes/lisa`,
   )
 
   return Promise.all([sitePromise, themePromise])

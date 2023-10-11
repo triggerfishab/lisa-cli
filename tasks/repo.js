@@ -1,4 +1,5 @@
 import fetch from "node-fetch"
+
 import { getApiName } from "../lib/app-name.js"
 import conf from "../lib/conf.js"
 import exec from "../lib/exec.js"
@@ -22,7 +23,7 @@ export async function createRepos() {
   let apiGithubURL = `https://github.com/triggerfishab/${apiName}`
 
   let appResponse = await exec(
-    `gh repo create --template triggerfishab/lisa-app triggerfishab/${appName} --private --clone`
+    `gh repo create --template triggerfishab/lisa-app triggerfishab/${appName} --private --clone`,
   )
 
   if (appResponse.error) {
@@ -33,7 +34,7 @@ export async function createRepos() {
   writeSuccess(`Repo created: ${appGithubURL}.`)
 
   let apiResponse = await exec(
-    `gh repo create --template triggerfishab/lisa-api triggerfishab/${apiName} --private --clone`
+    `gh repo create --template triggerfishab/lisa-api triggerfishab/${apiName} --private --clone`,
   )
 
   if (apiResponse.error) {
@@ -60,14 +61,14 @@ async function checkGithubApiStatus() {
   const filter = ["Git Operations", "API Requests"]
 
   const filteredComponents = components.filter((component) =>
-    filter.includes(component.name)
+    filter.includes(component.name),
   )
 
   if (
     filteredComponents.some((component) => component.status !== "operational")
   ) {
     writeError(
-      "GitHub is having some issues right now, read more at: https://www.githubstatus.com/"
+      "GitHub is having some issues right now, read more at: https://www.githubstatus.com/",
     )
     process.exit()
   }

@@ -1,7 +1,7 @@
-import { writeInfo, writeStep, writeSuccess } from "../lib/write.js"
-import { createGoDaddyDnsRecord } from "../tasks/services/godaddy.js"
-import prompts from "prompts"
 import { isIP } from "net"
+import prompts from "prompts"
+
+import { createGoDaddyDnsRecord } from "../tasks/services/godaddy.js"
 
 export async function createGoDaddy() {
   let previousGlobal = ""
