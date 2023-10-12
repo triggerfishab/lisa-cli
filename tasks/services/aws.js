@@ -11,6 +11,7 @@ import {
 } from "@aws-sdk/client-iam"
 import {
   CreateBucketCommand,
+  GetBucketLocationCommand,
   PutBucketLifecycleConfigurationCommand,
   PutBucketPolicyCommand,
   PutBucketVersioningCommand,
@@ -122,6 +123,31 @@ export async function setupAWS(environment = "production") {
 
     writeStep(`Update bucket policy for bucket: ${bucketName}`)
 
+    await putBucketPolicy(bucketName)
+
+    await s3Client.send(
+      new PutBucketVersioningCommand({
+        Bucket: bucketName,
+        VersioningConfiguration: {
+          Status: "Enabled",
+        },
+      }),
+    )
+
+    writeSuccess(`Cloudfront distribution for ${environment} created.`)
+
+    store.set(`${environment}CdnUrl`, distribution.Distribution.DomainName)
+  } catch (err) {
+    writeError(err)
+  }
+}
+
+async function putBucketPolicy(bucketName) {
+  try {
+    const [accessKeyId, secretAccessKey, canonicalUserId, accountId] =
+      await getAWSKeys()
+
+    const bucketRegion = await GetBucketRegion(bucketName)
     // Update bucket policy
     const bucketPolicy = {
       Version: "2008-10-17",
@@ -139,28 +165,19 @@ export async function setupAWS(environment = "production") {
       ],
     }
 
+    const s3Client = new S3Client({
+      region: bucketRegion,
+      credentials: { accessKeyId, secretAccessKey },
+      canonicalUserId,
+    })
+
     await s3Client.send(
       new PutBucketPolicyCommand({
         Bucket: bucketName,
         Policy: JSON.stringify(bucketPolicy),
       }),
     )
-
-    await s3Client.send(
-      new PutBucketVersioningCommand({
-        Bucket: bucketName,
-        VersioningConfiguration: {
-          Status: "Enabled",
-        },
-      }),
-    )
-
-    writeSuccess(`Cloudfront distribution for ${environment} created.`)
-
-    store.set(`${environment}CdnUrl`, distribution.Distribution.DomainName)
-  } catch (err) {
-    writeError(err)
-  }
+  } catch (error) {}
 }
 
 async function createIAMUserIfNotExists(fullProjectName) {
@@ -241,11 +258,14 @@ async function putBucketLifeCycleRule(bucketName) {
     const [accessKeyId, secretAccessKey, canonicalUserId, accountId] =
       await getAWSKeys()
 
+    const bucketRegion = await GetBucketRegion(bucketName)
+
     const s3Client = new S3Client({
-      region: DEFAULT_REGION,
+      region: bucketRegion,
       credentials: { accessKeyId, secretAccessKey },
       canonicalUserId,
     })
+
     // Break out to a function
     await s3Client.send(
       new PutBucketLifecycleConfigurationCommand({
@@ -277,8 +297,10 @@ async function putBucketPublicAccessBlock(bucketName) {
     const [accessKeyId, secretAccessKey, canonicalUserId, accountId] =
       await getAWSKeys()
 
+    const bucketRegion = await GetBucketRegion(bucketName)
+
     const s3Client = new S3Client({
-      region: DEFAULT_REGION,
+      region: bucketRegion,
       credentials: { accessKeyId, secretAccessKey },
       canonicalUserId,
     })
@@ -297,6 +319,29 @@ async function putBucketPublicAccessBlock(bucketName) {
     writeSuccess(`Public access rule for ${bucketName} created.`)
   } catch (error) {
     writeError(`${bucketName}: ${error}`)
+  }
+}
+
+async function GetBucketRegion(bucketName) {
+  try {
+    const [accessKeyId, secretAccessKey, canonicalUserId, accountId] =
+      await getAWSKeys()
+    const s3Client = new S3Client({
+      region: "eu-central-1",
+      credentials: { accessKeyId, secretAccessKey },
+      canonicalUserId,
+    })
+    const bucketLocation = await s3Client.send(
+      new GetBucketLocationCommand({
+        Bucket: bucketName,
+        ExpectedBucketOwner: accountId,
+      }),
+    )
+
+    return bucketLocation.LocationConstraint
+  } catch (error) {
+    writeError(error)
+    process.exit(1)
   }
 }
 
@@ -326,6 +371,7 @@ export {
   createIAMUserIfNotExists,
   putBucketLifeCycleRule,
   putBucketPublicAccessBlock,
+  putBucketPolicy,
 }
 
 export default setupAWS

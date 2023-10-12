@@ -6,6 +6,7 @@ import { writeError, writeStep, writeSuccess } from "../lib/write.js"
 import {
   createIAMUserIfNotExists,
   putBucketLifeCycleRule,
+  putBucketPolicy,
   putBucketPublicAccessBlock,
   setupAWS,
 } from "../tasks/services/aws.js"
@@ -102,10 +103,12 @@ async function updateBucketAccessPolicyAndCreateIAMUser() {
 
   if (environments.includes("staging")) {
     await putBucketPublicAccessBlock(`staging-${projectName}.${cdnDomain}`)
+    await putBucketPolicy(`staging-${projectName}.${cdnDomain}`)
   }
 
   if (environments.includes("production")) {
     await putBucketPublicAccessBlock(`${projectName}.${cdnDomain}`)
+    await putBucketPolicy(`${projectName}.${cdnDomain}`)
   }
 }
 
