@@ -1,6 +1,7 @@
 import fs from "fs"
 import generator from "generate-password"
 import yaml from "js-yaml"
+
 import { getApiName, getProjectName } from "../lib/app-name.js"
 import exec from "../lib/exec.js"
 import { getGroupVarsPath, getTrellisPath } from "../lib/trellis.js"
@@ -32,7 +33,10 @@ async function setupLocalSiteForDevelopment() {
 
   try {
     let wordpressSites = yaml.load(
-      fs.readFileSync(`${developmentGroupVarsPath}/wordpress_sites.yml`, "utf8")
+      fs.readFileSync(
+        `${developmentGroupVarsPath}/wordpress_sites.yml`,
+        "utf8",
+      ),
     )
 
     let config = { ...wordpressSites }
@@ -54,7 +58,9 @@ async function setupLocalSiteForDevelopment() {
       `${developmentGroupVarsPath}/wordpress_sites.yml`,
       yaml.dump(config),
       () =>
-        writeSuccess(`${developmentGroupVarsPath}/wordpress_sites.yml updated.`)
+        writeSuccess(
+          `${developmentGroupVarsPath}/wordpress_sites.yml updated.`,
+        ),
     )
 
     let vaultConfig = {
@@ -104,11 +110,11 @@ async function setupLocalSiteForDevelopment() {
     fs.writeFile(
       `${developmentGroupVarsPath}/vault.yml`,
       yaml.dump(vaultConfig),
-      () => writeSuccess(`${developmentGroupVarsPath}/vault.yml updated.`)
+      () => writeSuccess(`${developmentGroupVarsPath}/vault.yml updated.`),
     )
 
     await exec(
-      `ansible-vault encrypt ${developmentGroupVarsPath}/vault.yml --vault-password-file ${trellisPath}/.vault_pass`
+      `ansible-vault encrypt ${developmentGroupVarsPath}/vault.yml --vault-password-file ${trellisPath}/.vault_pass`,
     )
 
     await exec(`trellis dotenv`, {

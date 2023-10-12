@@ -3,12 +3,16 @@
   "labels": ["dependencies"],
   "baseBranches": ["main"],
   "commitMessageAction": "⬆️ Bump",
-  "extends": ["config:base", "schedule:weekly", ":dependencyDashboard"],
+  "extends": ["config:best-practices", "schedule:weekly"],
   "commitMessageTopic": "{{depName}}",
   "forkProcessing": "enabled",
   "packageRules": [
     {
-      "matchUpdateTypes": ["major","minor", "patch", "pin"]
+      "matchCategories": ["js"],
+      "addLabels": ["javascript"]
+    },
+    {
+      "matchUpdateTypes": ["major", "minor", "patch", "pin"]
     },
     {
       "matchManagers": ["npm"],
@@ -27,8 +31,5 @@
       "addLabels": ["patch"]
     }
   ],
-  "js": {
-    "addLabels": ["javascript"]
-  },
   "timezone": "Europe/Stockholm"
 }

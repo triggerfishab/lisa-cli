@@ -1,33 +1,36 @@
 {
   "name": "@triggerfishab/lisa-cli",
-  "version": "2.13.0",
+  "version": "2.14.2",
   "description": "CLI commands to generate a new project based on Lisa",
   "main": "./index.js",
   "bin": {
     "lisa": "./index.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "format": "prettier --write \"./**/*.{js,ts,tsx,json}\""
   },
   "author": "Johan Möller",
   "license": "ISC",
   "type": "module",
   "dependencies": {
     "@aws-sdk/client-cloudfront": "^3.245.0",
+    "@aws-sdk/client-iam": "^3.418.0",
     "@aws-sdk/client-s3": "^3.245.0",
     "@sendgrid/client": "^7.6.2",
     "chalk": "^4.1.2",
     "command-exists": "^1.2.9",
-    "commander": "^8.2.0",
-    "conf": "^10.0.3",
+    "commander": "^11.0.0",
+    "conf": "^11.0.0",
     "generate-password": "^1.6.1",
     "js-yaml": "^4.1.0",
-    "node-fetch": "2",
+    "node-fetch": "3",
     "oauth-1.0a": "^2.2.6",
     "prompts": "^2.4.2",
     "semver": "^7.3.8"
   },
   "devDependencies": {
-    "prettier": "^2.6.1"
+    "@trivago/prettier-plugin-sort-imports": "^4.2.0",
+    "prettier": "^3"
   }
 }

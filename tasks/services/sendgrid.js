@@ -1,5 +1,6 @@
 import client from "@sendgrid/client"
 import passwordGenerator from "generate-password"
+
 import { getProjectName } from "../../lib/app-name.js"
 import exec from "../../lib/exec.js"
 import * as store from "../../lib/store.js"
@@ -14,11 +15,14 @@ async function setupSendgridAccount() {
   let projectName = await getProjectName()
 
   writeStep("Creating Sendgrid subuser")
-
-  const apiKey = await exec(
-    `op item get l2i57yslyjfr5jsieew4imwxgq --fields label="sendgrid.api key"`
-  ).then((res) => res.stdout.trim())
-
+  try {
+    const apiKey = await exec(
+      `op item get l2i57yslyjfr5jsieew4imwxgq --fields label="sendgrid.api key"`,
+    ).then((res) => res.stdout.trim())
+  } catch (error) {
+    writeError(`Failed accessing 1Password. \n ${error}`)
+    process.exit(1)
+  }
   client.setApiKey(apiKey)
 
   try {
@@ -88,7 +92,7 @@ async function setupSendgridAccount() {
     writeError("Error setting up Sendgrid subuser")
     if (e.response.body.errors[0].message === "username exists") {
       writeInfo(
-        "The project name you used is already used for a Sendgrid account. Please try another name."
+        "The project name you used is already used for a Sendgrid account. Please try another name.",
       )
     } else {
       console.error(e.response.body.errors)
