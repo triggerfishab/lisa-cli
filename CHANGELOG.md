@@ -1,3 +1,8 @@
+## Unreleased
+
+### Changes
+🛠 The program now exits if a newer version of it can be installed.
+
 ## 2.14.2 (2023-10-11)
 
 ### Changes
