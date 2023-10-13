@@ -1,7 +1,7 @@
+## PR Summary
 wtd:summary
 
-## Description
-
+## Dev's Notes
 Short text about what has been done in this feature branch. Copy the same info that has been added to CHANGELOG.md
 
 ## ToDo
