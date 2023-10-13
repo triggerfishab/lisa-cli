@@ -15,7 +15,7 @@ import init from "./commands/init.js"
 import { kinsta } from "./commands/kinsta.js"
 import { createPageComponent } from "./commands/pageComponent.js"
 import setupPath from "./commands/path.js"
-import { createSendGrid } from "./commands/sendgrid.js"
+import { checkIfUserIsInOffice } from "./commands/sendgrid.js"
 import writeLisaStatusSummary from "./commands/status.js"
 import { wpUpdate } from "./commands/wordpressComposerUpdate.js"
 import { resetConf } from "./lib/conf.js"
@@ -118,7 +118,7 @@ async function initProgram() {
   program
     .command("sendgrid create")
     .description("Create SendGrid account")
-    .action(createSendGrid)
+    .action(checkIfUserIsInOffice)
 
   program
     .command("wp update")
