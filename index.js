@@ -17,7 +17,7 @@ import { createPageComponent } from "./commands/pageComponent.js"
 import setupPath from "./commands/path.js"
 import { createSendGrid } from "./commands/sendgrid.js"
 import writeLisaStatusSummary from "./commands/status.js"
-import { wpUpdate } from "./commands/wordpressComposerUpdate.js"
+import wpUpdate from "./commands/wordpressComposerUpdate.js"
 import { resetConf } from "./lib/conf.js"
 import { checkDependencies, checkNodeVersion } from "./lib/dependencies.js"
 import exec from "./lib/exec.js"
@@ -31,7 +31,7 @@ export const LISA_VERSION = "2.14.2"
 resetConf()
 checkNodeVersion()
 
-let command = process.argv[2]
+const command = process.argv[2]
 
 async function initProgram() {
   await checkLisaVersion()
