@@ -1,0 +1,17 @@
+{
+  "env": {
+    "es6": true,
+    "node": true
+  },
+  "extends": "standard",
+  "plugins": ["jsdoc", "prettier"],
+  "rules": {
+    "comma-dangle": "off",
+    "no-else-return": ["error", { "allowElseIf": false }],
+    "no-extra-semi": "error",
+    "prettier/prettier": "error",
+    "quotes": ["error", "double"],
+    "semi": ["error", "never"],
+    "space-before-function-paren": ["error", "never"]
+  }
+}
