@@ -13,10 +13,11 @@ import {
 
 async function setupSendgridAccount() {
   let projectName = await getProjectName()
+  let apiKey = ""
 
   writeStep("Creating Sendgrid subuser")
   try {
-    const apiKey = await exec(
+    apiKey = await exec(
       `op item get l2i57yslyjfr5jsieew4imwxgq --fields label="sendgrid.api key"`,
     ).then((res) => res.stdout.trim())
   } catch (error) {
