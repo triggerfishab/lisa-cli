@@ -1,6 +1,10 @@
 import {
   CloudFrontClient,
   CreateDistributionCommand,
+  GetDistributionConfigCommand,
+  ListDistributionsCommand,
+  UpdateCloudFrontOriginAccessIdentityCommand,
+  UpdateDistributionCommand,
 } from "@aws-sdk/client-cloudfront"
 import {
   CreateAccessKeyCommand,
@@ -177,6 +181,7 @@ async function putBucketPolicy(bucketName) {
         Policy: JSON.stringify(bucketPolicy),
       }),
     )
+    writeSuccess(`Bucket policy for ${bucketName} created.`)
   } catch (error) {}
 }
 
@@ -327,7 +332,7 @@ async function GetBucketRegion(bucketName) {
     const [accessKeyId, secretAccessKey, canonicalUserId, accountId] =
       await getAWSKeys()
     const s3Client = new S3Client({
-      region: "eu-central-1",
+      region: DEFAULT_REGION,
       credentials: { accessKeyId, secretAccessKey },
       canonicalUserId,
     })
@@ -367,11 +372,141 @@ async function getAWSKeys() {
   }
 }
 
+async function UpdateCloudFrontOriginAccessIdentity(distributionId) {
+  const [accessKeyId, secretAccessKey] = await getAWSKeys()
+
+  const cloudFrontClient = new CloudFrontClient({
+    region: DEFAULT_REGION,
+    credentials: { accessKeyId, secretAccessKey },
+  })
+
+  await cloudFrontClient.send(
+    new UpdateCloudFrontOriginAccessIdentityCommand({
+      CloudFrontOriginAccessIdentityConfig: {
+        CallerReference: Date.now(),
+        Comment: "Triggerfish CDN",
+      },
+      Id: distributionId,
+      IfMatch: "EXA6BVZLQ1EY",
+    }),
+  )
+}
+
+async function findDistibutionForBucket(bucketName, distributions) {
+  return (
+    distributions.find((distribution) => distribution.cname === bucketName) ??
+    false
+  )
+}
+
+async function listCloudFrontDistributions() {
+  const [accessKeyId, secretAccessKey] = await getAWSKeys()
+
+  const cloudFrontClient = new CloudFrontClient({
+    region: DEFAULT_REGION,
+    credentials: { accessKeyId, secretAccessKey },
+  })
+
+  let Marker = "",
+    isTruncated = false,
+    totalCount = 0
+
+  const distributions = []
+
+  try {
+    do {
+      const list = await cloudFrontClient.send(
+        new ListDistributionsCommand({
+          Marker,
+        }),
+      )
+
+      Marker = list.DistributionList.NextMarker
+      isTruncated = list.DistributionList.IsTruncated
+
+      totalCount += list.DistributionList.Items.length
+
+      list.DistributionList.Items.forEach((item) => {
+        distributions.push({
+          id: item.Id,
+          cname: item.AliasICPRecordals?.[0].CNAME,
+        })
+      })
+    } while (isTruncated)
+  } catch (error) {
+    writeError(error)
+  }
+
+  return distributions
+}
+
+async function getDistributionConfig(distributionId) {
+  const [accessKeyId, secretAccessKey] = await getAWSKeys()
+
+  try {
+    const cloudFrontClient = new CloudFrontClient({
+      region: DEFAULT_REGION,
+      credentials: { accessKeyId, secretAccessKey },
+    })
+
+    return await cloudFrontClient.send(
+      new GetDistributionConfigCommand({
+        Id: distributionId,
+      }),
+    )
+  } catch (error) {
+    writeError(error)
+  }
+}
+
+async function updateDistributionConfig(distributionId, eTag, config) {
+  try {
+    const [accessKeyId, secretAccessKey] = await getAWSKeys()
+
+    const cloudFrontClient = new CloudFrontClient({
+      region: DEFAULT_REGION,
+      credentials: { accessKeyId, secretAccessKey },
+    })
+
+    await cloudFrontClient.send(
+      new UpdateDistributionCommand({
+        Id: distributionId,
+        IfMatch: eTag,
+        DistributionConfig: config,
+      }),
+    )
+    writeSuccess(`Distribution config updated!`)
+  } catch (error) {
+    writeError(error)
+    process.exit(1)
+  }
+}
+
+async function getAndUpdateDistributionConfig(distributionId) {
+  const { ETag: eTag, DistributionConfig: currentConfig } =
+    await getDistributionConfig(distributionId)
+
+  let originConfig = currentConfig.Origins.Items[0]
+  originConfig.S3OriginConfig.OriginAccessIdentity =
+    "origin-access-identity/cloudfront/EXA6BVZLQ1EY"
+
+  const config = {
+    ...currentConfig,
+    Origins: { Quantity: 1, Items: [originConfig] },
+  }
+
+  await updateDistributionConfig(distributionId, eTag, config)
+}
+
 export {
   createIAMUserIfNotExists,
+  findDistibutionForBucket,
+  getAndUpdateDistributionConfig,
+  listCloudFrontDistributions,
   putBucketLifeCycleRule,
   putBucketPublicAccessBlock,
   putBucketPolicy,
+  UpdateCloudFrontOriginAccessIdentity,
 }
 
 export default setupAWS
