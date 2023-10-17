@@ -2,6 +2,7 @@
 
 ### Changes
 🛠 The program now exits if a newer version of it can be installed.
+🛠 Improve checking of bucket region before executing commands against aws/s3
 
 ## 2.14.2 (2023-10-11)
 

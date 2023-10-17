@@ -5,7 +5,11 @@ import conf from "../lib/conf.js"
 import { writeError, writeStep, writeSuccess } from "../lib/write.js"
 import {
   createIAMUserIfNotExists,
+  findDistibutionForBucket,
+  getAndUpdateDistributionConfig,
+  listCloudFrontDistributions,
   putBucketLifeCycleRule,
+  putBucketPolicy,
   putBucketPublicAccessBlock,
   setupAWS,
 } from "../tasks/services/aws.js"
@@ -100,12 +104,37 @@ async function updateBucketAccessPolicyAndCreateIAMUser() {
     },
   ])
 
+  // Find matching distributions to add Cloudfront access policy to
+  const distributions = await listCloudFrontDistributions()
+
+  let bucketName = `${projectName}.${cdnDomain}`
+
   if (environments.includes("staging")) {
-    await putBucketPublicAccessBlock(`staging-${projectName}.${cdnDomain}`)
+    bucketName = `staging-${bucketName}`
+
+    const distribution = await findDistibutionForBucket(
+      bucketName,
+      distributions,
+    )
+    if (distribution) {
+      writeSuccess(`Found distribution for bucket ${bucketName}`)
+      await getAndUpdateDistributionConfig(distribution.id)
+      await putBucketPublicAccessBlock(bucketName)
+      await putBucketPolicy(bucketName)
+    }
   }
 
   if (environments.includes("production")) {
-    await putBucketPublicAccessBlock(`${projectName}.${cdnDomain}`)
+    const distribution = await findDistibutionForBucket(
+      bucketName,
+      distributions,
+    )
+    if (distribution) {
+      writeSuccess(`Found distribution for bucket ${bucketName}`)
+      await getAndUpdateDistributionConfig(distribution.id)
+      await putBucketPublicAccessBlock(bucketName)
+      await putBucketPolicy(bucketName)
+    }
   }
 }
 
