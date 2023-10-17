@@ -44,8 +44,7 @@ export async function setupAWS(environment = "production") {
 
   await createIAMUserIfNotExists(fullProjectName)
 
-  const [accessKeyId, secretAccessKey, canonicalUserId, accountId] =
-    await getAWSKeys()
+  const [accessKeyId, secretAccessKey, canonicalUserId] = await getAWSKeys()
 
   try {
     writeStep(`Setting up S3 bucket for ${environment} environment`)
@@ -67,7 +66,7 @@ export async function setupAWS(environment = "production") {
 
     writeSuccess(`S3 bucket for ${environment} created.`)
 
-    let s3BucketUrl = `https://s3.${DEFAULT_REGION}.amazonaws.com/${bucketName}`
+    const s3BucketUrl = `https://s3.${DEFAULT_REGION}.amazonaws.com/${bucketName}`
 
     store.set(`s3Bucket-${environment}`, bucketName)
     store.set(`s3BucketUrl-${environment}`, s3BucketUrl)
@@ -148,8 +147,7 @@ export async function setupAWS(environment = "production") {
 
 async function putBucketPolicy(bucketName) {
   try {
-    const [accessKeyId, secretAccessKey, canonicalUserId, accountId] =
-      await getAWSKeys()
+    const [accessKeyId, secretAccessKey, canonicalUserId] = await getAWSKeys()
 
     const bucketRegion = await GetBucketRegion(bucketName)
     // Update bucket policy
@@ -206,9 +204,7 @@ async function createIAMUserIfNotExists(fullProjectName) {
 
   writeStep(` Creating IAM user for ${fullProjectName}`)
   // Create user
-  const user = await iamClient.send(
-    new CreateUserCommand({ UserName: fullProjectName }),
-  )
+  await iamClient.send(new CreateUserCommand({ UserName: fullProjectName }))
 
   // Create inline policy
   await iamClient.send(
@@ -364,7 +360,7 @@ async function saveAccessKey(accessKeyId, secretAccessKey, fullProjectName) {
 async function getAWSKeys() {
   try {
     return await exec(
-      `op item get l2i57yslyjfr5jsieew4imwxgq --fields label="aws.access key id",label="aws.secret access key",label="aws.canonical user id",label="aws.account id"`,
+      "op item get l2i57yslyjfr5jsieew4imwxgq --fields label='aws.access key id',label='aws.secret access key',label='aws.canonical user id',label='aws.account id'",
     ).then((res) => res.stdout.trim().split(","))
   } catch (error) {
     writeError(`Failed accessing 1Password. \n ${error}`)
@@ -407,9 +403,8 @@ async function listCloudFrontDistributions() {
     credentials: { accessKeyId, secretAccessKey },
   })
 
-  let Marker = "",
-    isTruncated = false,
-    totalCount = 0
+  let Marker = ""
+  let isTruncated = false
 
   const distributions = []
 
@@ -423,8 +418,6 @@ async function listCloudFrontDistributions() {
 
       Marker = list.DistributionList.NextMarker
       isTruncated = list.DistributionList.IsTruncated
-
-      totalCount += list.DistributionList.Items.length
 
       list.DistributionList.Items.forEach((item) => {
         distributions.push({
@@ -475,7 +468,7 @@ async function updateDistributionConfig(distributionId, eTag, config) {
         DistributionConfig: config,
       }),
     )
-    writeSuccess(`Distribution config updated!`)
+    writeSuccess("Distribution config updated!")
   } catch (error) {
     writeError(error)
     process.exit(1)
@@ -486,7 +479,7 @@ async function getAndUpdateDistributionConfig(distributionId) {
   const { ETag: eTag, DistributionConfig: currentConfig } =
     await getDistributionConfig(distributionId)
 
-  let originConfig = currentConfig.Origins.Items[0]
+  const originConfig = currentConfig.Origins.Items[0]
   originConfig.S3OriginConfig.OriginAccessIdentity =
     "origin-access-identity/cloudfront/EXA6BVZLQ1EY"
 
