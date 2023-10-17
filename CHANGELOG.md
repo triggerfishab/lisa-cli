@@ -1,7 +1,7 @@
 ## 2.15.0 (2023-10-17)
-
-
-## Unreleased
+### Features
+📦 Add ESLint for catching bugs
+📦 Update Cloudfront Distribution origin access identity so that it matches the one the bucket is looking for.
 
 ### Changes
 🛠 The program now exits if a newer version of it can be installed.
