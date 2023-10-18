@@ -107,20 +107,20 @@ async function updateBucketAccessPolicyAndCreateIAMUser() {
   // Find matching distributions to add Cloudfront access policy to
   const distributions = await listCloudFrontDistributions()
 
-  let bucketName = `${projectName}.${cdnDomain}`
+  const bucketName = `${projectName}.${cdnDomain}`
 
   if (environments.includes("staging")) {
-    bucketName = `staging-${bucketName}`
+    const stagingBucketName = `staging-${bucketName}`
 
     const distribution = await findDistibutionForBucket(
-      bucketName,
+      stagingBucketName,
       distributions,
     )
     if (distribution) {
-      writeSuccess(`Found distribution for bucket ${bucketName}`)
+      writeSuccess(`Found distribution for bucket ${stagingBucketName}`)
       await getAndUpdateDistributionConfig(distribution.id)
-      await putBucketPublicAccessBlock(bucketName)
-      await putBucketPolicy(bucketName)
+      await putBucketPublicAccessBlock(stagingBucketName)
+      await putBucketPolicy(stagingBucketName)
     }
   }
 
