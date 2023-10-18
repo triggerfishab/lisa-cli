@@ -1,3 +1,8 @@
+## 2.15.2 (2023-10-18)
+### Fixes
+🐛 Check that 1password-cli (`op`) is installed when trying to run any of the following commands: `"aws", "cdn", "godaddy", "s3", "sendgrid"`
+
+
 ## 2.15.1 (2023-10-17)
 ### Fixes
 🐛 Fix bug with bucketName when updating multiple environments.
