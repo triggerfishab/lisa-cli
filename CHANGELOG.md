@@ -1,7 +1,34 @@
-## Unreleased
+## 2.15.2 (2023-10-18)
+### Fixes
+🐛 Check that 1password-cli (`op`) is installed when trying to run any of the following commands: `"aws", "cdn", "godaddy", "s3", "sendgrid"`
+
+
+## 2.15.1 (2023-10-17)
+### Fixes
+🐛 Fix bug with bucketName when updating multiple environments.
+
+## 2.15.0 (2023-10-17)
+
+### Features
+🔧 config:best-practices by @ChrilleP in https://github.com/triggerfishab/lisa-cli/pull/54
+👷 run prettier on PR's by @ChrilleP in https://github.com/triggerfishab/lisa-cli/pull/55
+✨ template for creating PR's by @ChrilleP in https://github.com/triggerfishab/lisa-cli/pull/67
+📦 Add ESLint for catching bugs by @ChrilleP in https://github.com/triggerfishab/lisa-cli/pull/75
+📦 Update Cloudfront Distribution origin access identity so that it matches the one the bucket is looking for.
 
 ### Changes
 🛠 The program now exits if a newer version of it can be installed.
+🛠 Improve checking of bucket region before executing commands against aws/s3
+⬆️ bump actions/checkout action to v4 by @renovate in https://github.com/triggerfishab/lisa-cli/pull/51
+migrate renovate config by @renovate in https://github.com/triggerfishab/lisa-cli/pull/60
+
+### Fixes
+🐛 fixing bug with uninitialized variable apiKey by @jmeriksson in https://github.com/triggerfishab/lisa-cli/pull/65
+⬆️ bump commander to v11 by @renovate in https://github.com/triggerfishab/lisa-cli/pull/39
+⬆️ bump conf to v11 by @renovate in https://github.com/triggerfishab/lisa-cli/pull/42
+⬆️ bump node-fetch to v3 by @renovate in https://github.com/triggerfishab/lisa-cli/pull/43
+⬆️ bump semver to v7.5.2 [security] by @renovate in https://github.com/triggerfishab/lisa-cli/pull/61
+⬆️ bump aws-sdk-js-v3 monorepo to v3.427.0 by @renovate in https://github.com/triggerfishab/lisa-cli/pull/48
 
 ## 2.14.2 (2023-10-11)
 
