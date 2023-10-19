@@ -6,11 +6,11 @@ import exec from "../../lib/exec.js"
 import { writeError, writeSuccess } from "../../lib/write.js"
 
 async function createKinstaSite() {
-  let apiKey = ''
-  let companyId = ''
-  
+  let apiKey = ""
+  let companyId = ""
+
   try {
-    [apiKey, companyId] = await exec(
+    ;[apiKey, companyId] = await exec(
       `op item get l2i57yslyjfr5jsieew4imwxgq --fields label="kinsta.api key",label="kinsta.company id"`,
     ).then((res) => res.stdout.trim().split(","))
   } catch (error) {
