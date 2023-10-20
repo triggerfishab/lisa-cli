@@ -48,29 +48,53 @@ function setPreferredStability(composerJson, preferStable) {
  * @param {object} asyncExecOptions
  * @param {string} asyncExecOptions.stdio
  * @param {string} asyncExecOptions.cwd
+ * @param {boolean} [fast=false]
  * @returns {Promise<void>}
  */
 async function updateRequirePackages(
   composerJson,
   phpVersion,
   asyncExecOptions,
+  fast,
 ) {
-  for (const [requiredComposerPackage] of Object.entries(
-    composerJson.require,
-  )) {
-    let requireCommand = ""
-    if (requiredComposerPackage.startsWith("ext-")) {
-      continue
+  if (fast === true) {
+    let requiredComposerPackages = ""
+    for (const [requiredComposerPackage] of Object.entries(
+      composerJson.require,
+    )) {
+      if (requiredComposerPackage.startsWith("ext-")) {
+        continue
+      }
+      if (requiredComposerPackage === "php") {
+        requiredComposerPackages += `"${requiredComposerPackage}:${phpVersion}" `
+      }
+      if (requiredComposerPackage !== "php") {
+        requiredComposerPackages += `${requiredComposerPackage} `
+      }
     }
-    if (requiredComposerPackage === "php") {
-      requireCommand = `composer require "${requiredComposerPackage}:${phpVersion}" --with-all-dependencies --no-interaction  --ansi`
-    }
-    if (requiredComposerPackage !== "php") {
-      requireCommand = `composer require ${requiredComposerPackage} --with-all-dependencies --no-interaction --no-progress --ansi`
-    }
+    const requireCommand = `composer require ${requiredComposerPackages} --with-all-dependencies --no-interaction --no-progress --ansi`
     const requiredOutput = await asyncExec(requireCommand, asyncExecOptions)
     writeInfo(`running: ${requireCommand}`)
     console.log(requiredOutput.stdout || requiredOutput.stderr)
+  }
+  if (fast === false) {
+    for (const [requiredComposerPackage] of Object.entries(
+      composerJson.require,
+    )) {
+      let requireCommand = ""
+      if (requiredComposerPackage.startsWith("ext-")) {
+        continue
+      }
+      if (requiredComposerPackage === "php") {
+        requireCommand = `composer require "${requiredComposerPackage}:${phpVersion}" --with-all-dependencies --no-interaction  --ansi`
+      }
+      if (requiredComposerPackage !== "php") {
+        requireCommand = `composer require ${requiredComposerPackage} --with-all-dependencies --no-interaction --no-progress --ansi`
+      }
+      const requiredOutput = await asyncExec(requireCommand, asyncExecOptions)
+      writeInfo(`running: ${requireCommand}`)
+      console.log(requiredOutput.stdout || requiredOutput.stderr)
+    }
   }
 }
 
@@ -79,19 +103,34 @@ async function updateRequirePackages(
  * @param {object} asyncExecOptions
  * @param {string} asyncExecOptions.stdio
  * @param {string} asyncExecOptions.cwd
+ * @param {boolean} [fast=false]
  * @returns {Promise<void>}
  */
-async function updateRequireDevPackages(composerJson, asyncExecOptions) {
-  for (const [requiredDevComposerPackage] of Object.entries(
-    composerJson["require-dev"],
-  )) {
-    const requireCommand = `composer require ${requiredDevComposerPackage} --dev --with-all-dependencies --no-interaction --no-progress --ansi`
+async function updateRequireDevPackages(composerJson, asyncExecOptions, fast) {
+  if (fast === true) {
+    const requiredDevComposerPackages = Object.keys(
+      composerJson["require-dev"],
+    ).join(" ")
+    const requireCommand = `composer require ${requiredDevComposerPackages} --dev --with-all-dependencies --no-interaction --no-progress --ansi`
     const requiredOutput = await asyncExec(
-      `composer require ${requiredDevComposerPackage} --dev --with-all-dependencies --no-interaction --no-progress --ansi`,
+      `composer require ${requiredDevComposerPackages} --dev --with-all-dependencies --no-interaction --no-progress --ansi`,
       asyncExecOptions,
     )
     writeInfo(`running: ${requireCommand}`)
     console.log(requiredOutput.stdout || requiredOutput.stderr)
+  }
+  if (fast === false) {
+    for (const [requiredDevComposerPackage] of Object.entries(
+      composerJson["require-dev"],
+    )) {
+      const requireCommand = `composer require ${requiredDevComposerPackage} --dev --with-all-dependencies --no-interaction --no-progress --ansi`
+      const requiredOutput = await asyncExec(
+        `composer require ${requiredDevComposerPackage} --dev --with-all-dependencies --no-interaction --no-progress --ansi`,
+        asyncExecOptions,
+      )
+      writeInfo(`running: ${requireCommand}`)
+      console.log(requiredOutput.stdout || requiredOutput.stderr)
+    }
   }
 }
 
@@ -117,9 +156,14 @@ function getComposerJson() {
 }
 
 /**
+ * @param {string} args
+ * @param {object} options
+ * @param {boolean} [options.fast=false]
  * @returns {Promise<void>}
  */
-export default async function wpUpdate() {
+export default async function wpUpdate(args, options) {
+  const fast = options.fast
+
   const asyncExecOptions = {
     stdio: "inherit",
     cwd: process.env.PWD,
@@ -135,8 +179,13 @@ export default async function wpUpdate() {
     const composerJson = getComposerJson()
     setMinimumStability(composerJson, minimumStability)
     setPreferredStability(composerJson, preferStable)
-    await updateRequirePackages(composerJson, phpVersion, asyncExecOptions)
-    await updateRequireDevPackages(composerJson, asyncExecOptions)
+    await updateRequirePackages(
+      composerJson,
+      phpVersion,
+      asyncExecOptions,
+      fast,
+    )
+    await updateRequireDevPackages(composerJson, asyncExecOptions, fast)
 
     writeWarning("Don't forget to Check your Major Updates.")
     writeSuccess("Composer update completed")
