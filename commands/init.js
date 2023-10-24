@@ -1,3 +1,4 @@
+import { addCredentialsTo1Password } from "../lib/1password.js"
 import { askForProjectName } from "../lib/app-name.js"
 import { configureTrellisForKinsta } from "../lib/kinsta.js"
 import { getSitesPath } from "../lib/path.js"
@@ -23,6 +24,7 @@ export async function init({ configFile }) {
   await configureNextConfig()
   await generateSecrets()
   await setupServices()
+  await addCredentialsTo1Password()
   await writeSummary()
 
   writeStep("All done! Good luck and have fun!")
