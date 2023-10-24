@@ -1,3 +1,9 @@
+## 2.15.4 (2023-10-24)
+### Changes
+🛠 Store credentials in 1password when creating new Lisa-app
+🛠 Rename deafult wp user
+
+
 ## 2.15.3 (2023-10-24)
 ### Fixes
 🛠 Read credentials from 1password instead of using config file
