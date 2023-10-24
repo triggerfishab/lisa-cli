@@ -241,6 +241,9 @@ async function createIAMUserIfNotExists(fullProjectName) {
       new CreateAccessKeyCommand({ UserName: fullProjectName }),
     )
 
+    store.set("awsAccessKeyId", accessKeyResponse.AccessKey.AccessKeyId)
+    store.set("awsSecretAccessKey", accessKeyResponse.AccessKey.SecretAccessKey)
+
     await saveAccessKey(
       accessKeyResponse.AccessKey.AccessKeyId,
       accessKeyResponse.AccessKey.SecretAccessKey,

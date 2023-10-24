@@ -1,3 +1,8 @@
+## 2.15.3 (2023-10-24)
+### Fixes
+🛠 Read credentials from 1password instead of using config file
+
+
 ## 2.15.2 (2023-10-18)
 ### Fixes
 🐛 Check that 1password-cli (`op`) is installed when trying to run any of the following commands: `"aws", "cdn", "godaddy", "s3", "sendgrid"`
