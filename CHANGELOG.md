@@ -1,3 +1,7 @@
+## 2.15.5 (2023-10-24)
+### Features
+✨ Ask user if the redirection page should be opened in default browser upon finishing app creation
+
 ## 2.15.4 (2023-10-24)
 ### Changes
 🛠 Store credentials in 1password when creating new Lisa-app
