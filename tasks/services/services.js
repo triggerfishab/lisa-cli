@@ -1,5 +1,4 @@
 import { getProjectName } from "../../lib/app-name.js"
-import conf from "../../lib/conf.js"
 import exec from "../../lib/exec.js"
 import * as store from "../../lib/store.js"
 import { getTrellisPath } from "../../lib/trellis.js"
@@ -47,11 +46,10 @@ async function commitAndPushTrellisConfig() {
 }
 
 async function writeTrellisConfig() {
-  let trellisPath = getTrellisPath()
-  let s3BucketStaging = conf.get("s3Bucket-staging")
-  let s3BucketProduction = conf.get("s3Bucket-production")
-  let sendgridApiKey = store.get("sendgridApiKey")
-  let awsConfig = conf.get("aws")
+  const trellisPath = getTrellisPath()
+  const s3BucketStaging = store.get("s3Bucket-staging")
+  const s3BucketProduction = store.get("s3Bucket-production")
+  const sendgridApiKey = store.get("sendgridApiKey")
 
   writeStep("Writing all services data to vault files.")
 
@@ -88,8 +86,8 @@ async function writeTrellisConfig() {
   writeEnvDataToVault(
     {
       s3_region: "eu-north-1",
-      s3_access_key_id: awsConfig.accessKeyId,
-      s3_secret_access_key: awsConfig.secretAccessKey,
+      s3_access_key_id: store.get("awsAccessKeyId"),
+      s3_secret_access_key: store.get("awsSecretAccessKey"),
     },
     "all",
   )
