@@ -85,10 +85,6 @@ async function initProgram() {
       "--reset",
       "Reset the config for one or all services, see argument [service] for available services.",
     )
-    .argument(
-      "[service]",
-      "Pass an argument for which service to configure, available services: aws, godaddy, sendgrid",
-    )
     .action(configure)
 
   program
