@@ -26,7 +26,7 @@ import { set } from "./lib/store.js"
 import { checkLisaVersion } from "./lib/versions.js"
 
 export const program = new Command()
-export const LISA_VERSION = "2.15.2"
+export const LISA_VERSION = "2.15.5"
 
 resetConf()
 checkNodeVersion()
@@ -84,10 +84,6 @@ async function initProgram() {
     .option(
       "--reset",
       "Reset the config for one or all services, see argument [service] for available services.",
-    )
-    .argument(
-      "[service]",
-      "Pass an argument for which service to configure, available services: aws, godaddy, sendgrid",
     )
     .action(configure)
 

@@ -1,3 +1,22 @@
+## Unreleased
+### Changes
+🛠 Fix wrong name for revalidate secret in API vault.
+
+## 2.15.5 (2023-10-24)
+### Features
+✨ Ask user if the redirection page should be opened in default browser upon finishing app creation
+
+## 2.15.4 (2023-10-24)
+### Changes
+🛠 Store credentials in 1password when creating new Lisa-app
+🛠 Rename deafult wp user
+
+
+## 2.15.3 (2023-10-24)
+### Fixes
+🛠 Read credentials from 1password instead of using config file
+
+
 ## 2.15.2 (2023-10-18)
 ### Fixes
 🐛 Check that 1password-cli (`op`) is installed when trying to run any of the following commands: `"aws", "cdn", "godaddy", "s3", "sendgrid"`
