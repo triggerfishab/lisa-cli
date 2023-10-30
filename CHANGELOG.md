@@ -2,11 +2,11 @@
 
 ## 2.15.6 (2023-10-30)
 
-### FIXED
+### Fixes
 🛠 Fix wrong name for revalidate secret in API vault.
 🛠 scope for api key in sendgrid create
 
-## 2.15. (2023-10-24)
+## 2.15.5 (2023-10-24)
 ### Features
 ✨ Ask user if the redirection page should be opened in default browser upon finishing app creation
 
