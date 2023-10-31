@@ -1,6 +1,10 @@
 ## Unreleased
-### Changes
+
+## 2.15.6 (2023-10-30)
+
+### Fixes
 🛠 Fix wrong name for revalidate secret in API vault.
+🛠 scope for api key in sendgrid create
 
 ## 2.15.5 (2023-10-24)
 ### Features
