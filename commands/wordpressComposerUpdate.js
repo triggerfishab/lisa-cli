@@ -107,6 +107,13 @@ async function updateRequirePackages(
  * @returns {Promise<void>}
  */
 async function updateRequireDevPackages(composerJson, asyncExecOptions, fast) {
+  if (
+    !Object.prototype.hasOwnProperty.call(composerJson, "require-dev") ||
+    Object.keys(composerJson["require-dev"]).length === 0
+  ) {
+    return
+  }
+
   if (fast === true) {
     const requiredDevComposerPackages = Object.keys(
       composerJson["require-dev"],
