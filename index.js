@@ -13,6 +13,7 @@ import dbImport from "./commands/db.js"
 import { createGoDaddy } from "./commands/godaddy.js"
 import init from "./commands/init.js"
 import { kinsta } from "./commands/kinsta.js"
+import { makeWandaCommand } from "./commands/makeWandaCommand.js"
 import { createPageComponent } from "./commands/pageComponent.js"
 import setupPath from "./commands/path.js"
 import { createSendGrid } from "./commands/sendgrid.js"
@@ -25,7 +26,14 @@ import { getSitesPath } from "./lib/path.js"
 import { set } from "./lib/store.js"
 import { checkLisaVersion } from "./lib/versions.js"
 
-export const program = new Command()
+export const program = new Command().configureHelp({
+  sortSubcommands: true,
+  subcommandTerm: (cmd) =>
+    chalk.bold.blue(cmd.name()) + " " + chalk.yellow(cmd.usage()),
+  commandDescription: (command) => chalk.greenBright(command.description()), // leave out the extra info
+  subcommandDescription: (subcommand) => chalk.green(subcommand.description()), // leave out the extra info
+})
+
 export const LISA_VERSION = "2.15.6"
 
 resetConf()
@@ -139,6 +147,8 @@ Make sure your standing in the folder where your composer.json file is located.
     .command("s3 bucket set-lifecycle-policy")
     .description("Update Bucket Lifecycle Policy in S3")
     .action(updateBucketLicecyclePolicy)
+
+  program.addCommand(await makeWandaCommand())
 
   program.parse()
 }
