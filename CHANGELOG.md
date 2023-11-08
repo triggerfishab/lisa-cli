@@ -1,4 +1,6 @@
-## Unreleased
+## 2.15.7 (2023-11-08)
+### Features
+✨ Add custom tags (cost allocation tags) to S3 buckets and CloudFront distribution. This will allow us to see cost per bucket and distributions.
 
 ## 2.15.6 (2023-10-30)
 
