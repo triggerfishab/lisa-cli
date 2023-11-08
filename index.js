@@ -26,12 +26,12 @@ import { set } from "./lib/store.js"
 import { checkLisaVersion } from "./lib/versions.js"
 
 export const program = new Command()
-export const LISA_VERSION = "2.15.5"
+export const LISA_VERSION = "2.15.7"
 
 resetConf()
 checkNodeVersion()
 
-let command = process.argv[2]
+const command = process.argv[2]
 
 async function initProgram() {
   await checkLisaVersion()
