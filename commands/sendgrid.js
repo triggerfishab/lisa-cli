@@ -18,10 +18,9 @@ async function connectToVPN(vpnName) {
       console.error(stderr)
       proceedWithSendGrid()
     } else {
-      // Countdown before showing writeSuccess
       let countdown = 3
       const countdownInterval = setInterval(() => {
-        console.log(`Connecting in ${countdown} seconds...`)
+        console.log(`Connecting ${countdown}`)
         countdown--
         if (countdown === 0) {
           clearInterval(countdownInterval)
