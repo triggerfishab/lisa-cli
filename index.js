@@ -17,7 +17,7 @@ import { createPageComponent } from "./commands/pageComponent.js"
 import setupPath from "./commands/path.js"
 import { createSendGrid } from "./commands/sendgrid.js"
 import writeLisaStatusSummary from "./commands/status.js"
-import { wpUpdate } from "./commands/wordpressComposerUpdate.js"
+import wpUpdate from "./commands/wordpressComposerUpdate.js"
 import { resetConf } from "./lib/conf.js"
 import { checkDependencies, checkNodeVersion } from "./lib/dependencies.js"
 import exec from "./lib/exec.js"
@@ -118,12 +118,16 @@ async function initProgram() {
 
   program
     .command("wp update")
-    .description(
-      `Update WordPress and Composer dependencies.
-Make sure your standing in the folder where your composer.json file is located.
-    `,
+    .description("Update WordPress and Composer dependencies.")
+    .addHelpCommand(
+      "Make sure your standing in the folder where your composer.json file is located.",
     )
     .action(wpUpdate)
+    .option(
+      "-f, --fast",
+      "Combines all commands into one, for example: lisa wp update fast",
+      false,
+    )
 
   program
     .command("godaddy create")
