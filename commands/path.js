@@ -13,7 +13,7 @@ async function setupPath(path) {
     if (currentPath) {
       writeInfo(`Your path is: ${currentPath}`)
     } else {
-      writeError(`No path is set, run \`lisa path [path]\` to set a paht.`)
+      writeError("No path is set, run `lisa path [path]` to set a path.")
     }
 
     return

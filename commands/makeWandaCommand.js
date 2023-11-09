@@ -1,36 +1,44 @@
 import { Command } from "commander"
 
 import { askForProjectName } from "../lib/app-name.js"
+import { writeSummary } from "../lib/summary.js"
 import { isTriggerfishOfficeIp } from "../lib/triggerfish.js"
 import { writeStep } from "../lib/write.js"
+import { createRepos } from "../tasks/repo.js"
 
 export async function makeWandaCommand() {
-  const wanda = new Command("wanda")
+  const wanda = new Command("wanda").description(
+    "Wanda is a command to help you handle Radicle projects.",
+  )
+
   wanda
-    .version("0.0.1")
-    .description("Wanda is a tool to help you create a new Radicle project.")
-    .option("-c, --config-file <file>", "Path to Kinsta config file")
-    .helpOption("-h, --help", "Display help for command")
-    .alias("w")
+    .command("init")
+    .description("Initialize a new Wanda project")
+    .argument("[project-name]", "Name of the project")
+    .action(async (projectName) => {
+      console.log("projectName", projectName)
+      writeStep("Creating new Wanda project!")
+      await isTriggerfishOfficeIp()
+      await askForProjectName("", projectName)
+      await createRepos("wanda")
+      // await setupLocalSiteForDevelopment()
+      // await configureTrellisForKinsta(configFile || "")
+      // await generateSecrets()
+      // await setupServices()
+      // await addCredentialsTo1Password()
+      await writeSummary()
+    })
+  wanda
+    .command("generate secrets")
+    .description("Generate secrets for a Wanda project")
+    .argument("[project-name]", "Name of the project")
+    .action(async (projectName) => {
+      await isTriggerfishOfficeIp()
+      await generateSecrets(projectName)
+    })
 
-  wanda.command("init").action(async () => {
-    writeStep("Creating new Wanda project!")
-    await isTriggerfishOfficeIp()
-    await askForProjectName()
-    // await createRepos()
-    // await setupLocalSiteForDevelopment()
-    // await configureTrellisForKinsta(configFile || "")
-    // await addSiteToVercel()
-    // await configureNextConfig()
-    // await generateSecrets()
-    // await setupServices()
-    // await addCredentialsTo1Password()
-    await writeSummary()
-  })
-  const wandaNewCommand = new Command("new")
-
-  wanda.addCommand(wandaNewCommand).action(() => {
-    console.log("wanda pot")
+  wanda.command("new").action(() => {
+    console.log("wanda new")
   })
   return wanda
 }

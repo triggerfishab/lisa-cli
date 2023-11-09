@@ -27,7 +27,7 @@ async function setupServices() {
   await setupSendgridAccount()
 
   await writeTrellisConfig()
-  await commitAndPushTrellisConfig()
+  // await commitAndPushTrellisConfig()
 
   writeSuccess(
     "All services have been configured. You are now ready to go with Amazon AWS, GoDaddy and Sendgrid!",
@@ -53,7 +53,7 @@ async function writeTrellisConfig() {
 
   writeStep("Writing all services data to vault files.")
 
-  writeEnvDataToWordPressSites(
+  await writeEnvDataToWordPressSites(
     {
       s3_bucket: s3BucketStaging,
       tf_upload_media_to_s3: true,
@@ -63,7 +63,7 @@ async function writeTrellisConfig() {
     "staging",
   )
 
-  writeEnvDataToWordPressSites(
+  await writeEnvDataToWordPressSites(
     {
       s3_bucket: s3BucketProduction,
       tf_upload_media_to_s3: true,
@@ -73,7 +73,7 @@ async function writeTrellisConfig() {
     "production",
   )
 
-  writeEnvDataToWordPressSites(
+  await writeEnvDataToWordPressSites(
     {
       s3_bucket: s3BucketStaging,
       tf_upload_media_to_s3: false,
@@ -83,7 +83,7 @@ async function writeTrellisConfig() {
     "development",
   )
 
-  writeEnvDataToVault(
+  await writeEnvDataToVault(
     {
       s3_region: "eu-north-1",
       s3_access_key_id: store.get("awsAccessKeyId"),
@@ -92,7 +92,7 @@ async function writeTrellisConfig() {
     "all",
   )
 
-  writeEnvDataToVault(
+  await writeEnvDataToVault(
     {
       tf_smtp_username: "apikey",
       tf_smtp_password: sendgridApiKey,
@@ -100,7 +100,7 @@ async function writeTrellisConfig() {
     "production",
   )
 
-  writeEnvDataToVault(
+  await writeEnvDataToVault(
     {
       tf_smtp_username: "apikey",
       tf_smtp_password: sendgridApiKey,

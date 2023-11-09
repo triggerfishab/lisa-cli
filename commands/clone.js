@@ -9,15 +9,15 @@ import conf from "../lib/conf.js"
 import exec from "../lib/exec.js"
 import { getTrellisPath } from "../lib/trellis.js"
 import { getAdminUrl } from "../lib/wordpress.js"
-import { writeStep, writeSuccess } from "../lib/write.js"
+import { writeInfo, writeStep, writeSuccess } from "../lib/write.js"
 import installDependencies from "../tasks/dependencies.js"
 import linkValetSite from "../tasks/valet.js"
 import dbImport from "./db.js"
 
-async function cloneLisaProject() {
+export default async function cloneLisaProject() {
   writeStep("Cloning Lisa project")
 
-  let projectName = await askForProjectName()
+  const projectName = await askForProjectName()
 
   let apiRepoName = `git@github.com:triggerfishab/${projectName}-api.git`
   let appRepoName = `git@github.com:triggerfishab/${projectName}-app.git`
@@ -30,8 +30,8 @@ async function cloneLisaProject() {
   apiRepoName = conf.get("apiRepoName")
   appRepoName = conf.get("appRepoName")
 
-  let apiName = apiRepoName.split("/")[1].replace(".git", "")
-  let appName = appRepoName.split("/")[1].replace(".git", "")
+  const apiName = apiRepoName.split("/")[1].replace(".git", "")
+  const appName = appRepoName.split("/")[1].replace(".git", "")
 
   conf.set("apiName", apiName)
   conf.set("appName", appName)
@@ -42,16 +42,16 @@ async function cloneLisaProject() {
   await installDependencies()
   await linkValetSite()
 
-  let trellisPath = getTrellisPath()
+  const trellisPath = getTrellisPath()
 
-  let { vaultPass } = await prompts({
+  const { vaultPass } = await prompts({
     type: "invisible",
     message:
       "Enter the vault pass for the project, can be found under the project item in 1Password",
     name: "vaultPass",
   })
 
-  let vaultPassPath = `${trellisPath}/.vault_pass`
+  const vaultPassPath = `${trellisPath}/.vault_pass`
 
   fs.writeFile(vaultPassPath, vaultPass, (err) => {
     if (err) {
@@ -59,23 +59,23 @@ async function cloneLisaProject() {
     }
   })
 
-  await exec(`trellis init`, {
+  await exec("trellis init", {
     cwd: trellisPath,
   })
 
-  await exec(`trellis dotenv`, {
+  await exec("trellis dotenv", {
     cwd: trellisPath,
   })
 
   writeSuccess("Generated .env file with trellis-cli.")
 
-  await exec(`wp db create`, {
+  await exec("wp db create", {
     cwd: `${apiName}/site`,
   })
 
   writeSuccess("Created empty local database.")
 
-  let { doDbImport } = await prompts([
+  const { doDbImport } = await prompts([
     {
       type: "confirm",
       name: "doDbImport",
@@ -87,13 +87,13 @@ async function cloneLisaProject() {
     await dbImport()
   }
 
-  spawnSync(`vercel link --yes`, [], {
+  spawnSync("vercel link --yes", [], {
     cwd: appName,
     stdio: "inherit",
     shell: true,
   })
 
-  spawnSync(`vercel env pull`, [], {
+  spawnSync("vercel env pull", [], {
     cwd: appName,
     stdio: "inherit",
     shell: true,
@@ -101,7 +101,7 @@ async function cloneLisaProject() {
 
   writeSuccess("Generated .env file with environment variables from Vercel.")
 
-  let adminUrl = await getAdminUrl()
+  const adminUrl = await getAdminUrl()
 
   writeSuccess(chalk.bold("All done!"))
   writeSuccess(`Admin URL: ${chalk.underline(adminUrl)}/wp/wp-admin`)
@@ -111,5 +111,88 @@ async function cloneLisaProject() {
     )}`,
   )
 }
+export async function cloneWandaProject(projectNameOption) {
+  writeStep("Cloning Wanda project")
+  let projectName = projectNameOption
+  if (!projectName) {
+    projectName = await askForProjectName()
+  }
+  let apiRepoName = `git@github.com:triggerfishab/${projectName}.git`
 
-export default cloneLisaProject
+  conf.set("apiRepoName", apiRepoName)
+
+  await askForCorrectRepoNames()
+
+  apiRepoName = conf.get("apiRepoName")
+
+  const apiName = apiRepoName.split("/")[1].replace(".git", "")
+
+  conf.set("apiName", apiName)
+
+  await exec(`git clone ${apiRepoName}`)
+
+  await installDependencies()
+  await linkValetSite()
+
+  const trellisPath = getTrellisPath()
+
+  writeInfo(
+    `Fetching Wanda Project ${projectName} Vault Pass from 1Password...`,
+  )
+  await exec(`op item get op://Shared/${projectName}/vaultPass`)
+    .then((res) => res.stdout.trim())
+    .catch(async () => {
+      writeInfo(
+        `Can't find vault pass for ${projectName} in 1Password, please enter it manually.`,
+      )
+      const { vaultPass } = await prompts({
+        type: "invisible",
+        message: "Enter the vault pass for the project",
+        name: "vaultPass",
+      })
+
+      const vaultPassPath = ".vault_pass"
+
+      fs.writeFile(vaultPassPath, vaultPass, (err) => {
+        if (err) {
+          console.log(err)
+        }
+      })
+    })
+
+  await exec("trellis init", {
+    cwd: trellisPath,
+  })
+
+  await exec("trellis dotenv", {
+    cwd: trellisPath,
+  })
+
+  writeSuccess("Generated .env file with trellis-cli.")
+
+  await exec("wp db create", {
+    cwd: `${apiName}/`,
+  })
+
+  writeSuccess("Created empty local database.")
+
+  const { doDbImport } = await prompts([
+    {
+      type: "confirm",
+      name: "doDbImport",
+      message: "Do you want to import a database?",
+    },
+  ])
+
+  if (doDbImport) {
+    await dbImport()
+  }
+
+  const adminUrl = await getAdminUrl()
+
+  writeSuccess(chalk.bold("All done!"))
+  writeSuccess(`Admin URL: ${chalk.underline(adminUrl)}/wp/wp-admin`)
+  writeSuccess(
+    `Run this command for local development: ${chalk.underline("yarn dev")}`,
+  )
+}
