@@ -18,8 +18,17 @@ async function connectToVPN(vpnName) {
       console.error(stderr)
       proceedWithSendGrid()
     } else {
-      writeSuccess("Connected to the VPN!")
-      proceedWithSendGrid()
+      // Countdown before showing writeSuccess
+      let countdown = 3
+      const countdownInterval = setInterval(() => {
+        console.log(`Connecting in ${countdown} seconds...`)
+        countdown--
+        if (countdown === 0) {
+          clearInterval(countdownInterval)
+          writeSuccess("Connected to the VPN!")
+          proceedWithSendGrid()
+        }
+      }, 1000)
     }
   })
 }
