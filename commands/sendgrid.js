@@ -34,8 +34,8 @@ async function proceedWithSendGrid() {
   if (sendgridApiKey) {
     writeSuccess("SendGrid account created!")
     writeInfo(`Add the following values to your vault file or .env: 
-        tf_smtp_username: "apikey",
-        tf_smtp_password: ${sendgridApiKey}
+      tf_smtp_username: "apikey",
+      tf_smtp_password: ${sendgridApiKey}
     `)
   } else {
     writeError("No SendGrid account was created.")
@@ -52,27 +52,39 @@ export async function checkIfUserIsInOffice() {
     .then((ip) => ip.trim() === "158.174.69.114")
 
   if (!ipCorrect) {
-    rl.question(
-      "Do you want to connect to Triggerfish VPN? (yes/no): ",
-      (answer) => {
-        if (answer.toLowerCase() === "yes") {
-          rl.question(
-            "Enter the name of the Triggerfish VPN to connect: ",
-            (vpnName) => {
-              rl.close()
-              if (vpnName) {
-                connectToVPN(vpnName)
-              } else {
-                writeError("No VPN name provided.")
-              }
-            },
-          )
+    // eslint-disable-next-line
+    exec('scutil --nc list | grep -o \'"[^"]*"\'', (error, stdout) => {
+      if (error) {
+        writeError("Failed to list available VPNs.")
+        rl.close()
+        proceedWithSendGrid()
+      } else {
+        const availableVPNs = stdout
+          .split("\n")
+          .filter((vpn) => vpn.trim().length > 0)
+
+        if (availableVPNs.length > 0) {
+          writeInfo("Available VPNs:")
+          availableVPNs.forEach((vpn, index) => {
+            writeInfo(`${index + 1}. ${vpn}`)
+          })
+
+          rl.question("Choose a VPN by entering its number: ", (answer) => {
+            rl.close()
+            const chosenVPN = availableVPNs[parseInt(answer) - 1]
+            if (chosenVPN) {
+              connectToVPN(chosenVPN)
+            } else {
+              writeError("Invalid choice.")
+            }
+          })
         } else {
+          writeError("No available VPNs found.")
           rl.close()
           proceedWithSendGrid()
         }
-      },
-    )
+      }
+    })
   } else {
     proceedWithSendGrid()
   }
