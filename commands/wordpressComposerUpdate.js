@@ -55,7 +55,7 @@ async function updateRequirePackages(
   phpVersion,
   asyncExecOptions,
 ) {
-  for (const [requiredComposerPackage] of Object.entries(
+  for (const requiredComposerPackage of Object.keys(
     composerJson.require,
   )) {
     let requireCommand = ""
