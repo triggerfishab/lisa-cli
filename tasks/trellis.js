@@ -17,7 +17,7 @@ export async function generateVaultPass(
 ) {
   console.log(vaultPassPath)
   const password = generator.generate({
-    length: 32,
+    length: 64,
     numbers: true,
   })
 

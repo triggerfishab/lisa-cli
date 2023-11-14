@@ -152,7 +152,19 @@ export async function getKinstaSiteByProjectName(projectName) {
     writeError(`No site found with name ${projectName}`)
     process.exit(1)
   }
-  console.log(site)
+  const { apiKey } = await getKinstaCredentials()
+  const siteId = site.id
+  const siteIdResp = await fetch(`https://api.kinsta.com/v2/sites/${siteId}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+    },
+  })
+  const siteIdJson = await siteIdResp.json()
+
+  siteIdJson.site.environments.forEach((env) => {
+    console.log(env)
+  })
 }
 
 export async function getKinstaOperationStatusById(operationId) {

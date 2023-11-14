@@ -32,7 +32,7 @@ export async function createGoDaddyDnsRecord(recordData) {
         ]),
       },
     )
-    let body = await response.text()
+    const body = await response.text()
 
     if (response?.ok) {
       writeSuccess(`DNS-record for ${name}.triggerfish.cloud created.`)
@@ -51,7 +51,7 @@ export async function createGoDaddyDnsRecord(recordData) {
 async function getCredentials() {
   try {
     return await exec(
-      `op item get l2i57yslyjfr5jsieew4imwxgq --fields label="godaddy.api key",label="godaddy.api secret"`,
+      'op item get l2i57yslyjfr5jsieew4imwxgq --fields label="godaddy.api key",label="godaddy.api secret"',
     ).then((res) => res.stdout.trim().split(","))
   } catch (error) {
     writeError(`Failed accessing 1Password. \n ${error}`)
@@ -60,16 +60,16 @@ async function getCredentials() {
 }
 
 async function goDaddy(environment = "production") {
-  writeStep(`Setting up GoDaddy DNS record for your project.`)
+  writeStep("Setting up GoDaddy DNS record for your project.")
 
   let projectName = await getProjectName()
-  let cdnUrl = store.get(`${environment}CdnUrl`)
+  const cdnUrl = store.get(`${environment}CdnUrl`)
 
   if (environment === "staging") {
     projectName = `staging-${projectName}`
   }
 
-  createGoDaddyDnsRecord({
+  await createGoDaddyDnsRecord({
     type: "CNAME",
     name: `${projectName}.cdn`,
     data: cdnUrl,
