@@ -82,7 +82,7 @@ async function updateRequirePackages(
  * @returns {Promise<void>}
  */
 async function updateRequireDevPackages(composerJson, asyncExecOptions) {
-  for (const [requiredDevComposerPackage] of Object.entries(
+  for (const requiredDevComposerPackage of Object.keys(
     composerJson["require-dev"],
   )) {
     const requireCommand = `composer require ${requiredDevComposerPackage} --dev --with-all-dependencies --no-interaction --no-progress --ansi`
