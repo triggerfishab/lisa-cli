@@ -55,9 +55,7 @@ async function updateRequirePackages(
   phpVersion,
   asyncExecOptions,
 ) {
-  for (const requiredComposerPackage of Object.keys(
-    composerJson.require,
-  )) {
+  for (const requiredComposerPackage of Object.keys(composerJson.require)) {
     let requireCommand = ""
     if (requiredComposerPackage.startsWith("ext-")) {
       continue
