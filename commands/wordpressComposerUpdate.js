@@ -11,11 +11,12 @@ import {
 } from "../lib/write.js"
 
 /**
- * @param {object} composerJson
  * @param {string} minimumStability
  * @returns {void}
  */
-function setMinimumStability(composerJson, minimumStability) {
+function setMinimumStability(minimumStability) {
+  const composerJson = getComposerJson()
+
   if (composerJson["minimum-stability"] !== minimumStability) {
     const updatedComposerJson = composerJson
     updatedComposerJson["minimum-stability"] = minimumStability
@@ -27,11 +28,12 @@ function setMinimumStability(composerJson, minimumStability) {
 }
 
 /**
- * @param {object} composerJson
  * @param {boolean} preferStable
  * @returns {void}
  */
-function setPreferredStability(composerJson, preferStable) {
+function setPreferredStability(preferStable) {
+  const composerJson = getComposerJson()
+
   if (composerJson["prefer-stable"] !== preferStable) {
     const updatedComposerJson = composerJson
     updatedComposerJson["prefer-stable"] = preferStable
@@ -43,18 +45,12 @@ function setPreferredStability(composerJson, preferStable) {
 }
 
 /**
- * @param {object} composerJson
  * @param {string} phpVersion
- * @param {object} asyncExecOptions
- * @param {string} asyncExecOptions.stdio
- * @param {string} asyncExecOptions.cwd
  * @returns {Promise<void>}
  */
-async function updateRequirePackages(
-  composerJson,
-  phpVersion,
-  asyncExecOptions,
-) {
+async function updateRequirePackages(phpVersion) {
+  const composerJson = getComposerJson()
+
   for (const requiredComposerPackage of Object.keys(composerJson.require)) {
     let requireCommand = ""
     if (requiredComposerPackage.startsWith("ext-")) {
@@ -66,27 +62,9 @@ async function updateRequirePackages(
     if (requiredComposerPackage !== "php") {
       requireCommand = `composer require ${requiredComposerPackage} --with-all-dependencies --no-interaction --no-progress --ansi`
     }
-    const requiredOutput = await asyncExec(requireCommand, asyncExecOptions)
-    writeInfo(`running: ${requireCommand}`)
-    console.log(requiredOutput.stdout || requiredOutput.stderr)
-  }
-}
-
-/**
- * @param {object} composerJson
- * @param {object} asyncExecOptions
- * @param {string} asyncExecOptions.stdio
- * @param {string} asyncExecOptions.cwd
- * @returns {Promise<void>}
- */
-async function updateRequireDevPackages(composerJson, asyncExecOptions) {
-  for (const requiredDevComposerPackage of Object.keys(
-    composerJson["require-dev"],
-  )) {
-    const requireCommand = `composer require ${requiredDevComposerPackage} --dev --with-all-dependencies --no-interaction --no-progress --ansi`
     const requiredOutput = await asyncExec(
-      `composer require ${requiredDevComposerPackage} --dev --with-all-dependencies --no-interaction --no-progress --ansi`,
-      asyncExecOptions,
+      requireCommand,
+      getAsyncExecOptionsForPWD(),
     )
     writeInfo(`running: ${requireCommand}`)
     console.log(requiredOutput.stdout || requiredOutput.stderr)
@@ -94,15 +72,31 @@ async function updateRequireDevPackages(composerJson, asyncExecOptions) {
 }
 
 /**
- * @param {object} asyncExecOptions
- * @param {string} asyncExecOptions.stdio
- * @param {string} asyncExecOptions.cwd
+ * @returns {Promise<void>}
+ */
+async function updateRequireDevPackages() {
+  const composerJson = getComposerJson()
+
+  for (const requiredDevComposerPackage of Object.keys(
+    composerJson["require-dev"],
+  )) {
+    const requireCommand = `composer require ${requiredDevComposerPackage} --dev --with-all-dependencies --no-interaction --no-progress --ansi`
+    const requiredOutput = await asyncExec(
+      `composer require ${requiredDevComposerPackage} --dev --with-all-dependencies --no-interaction --no-progress --ansi`,
+      getAsyncExecOptionsForPWD(),
+    )
+    writeInfo(`running: ${requireCommand}`)
+    console.log(requiredOutput.stdout || requiredOutput.stderr)
+  }
+}
+
+/**
  * @return {Promise<void>}
  */
-async function validateComposerFile(asyncExecOptions) {
+async function validateComposerFile() {
   const composerValidateOutput = await asyncExec(
     "composer validate --no-check-all --strict --no-interaction --ansi",
-    asyncExecOptions,
+    getAsyncExecOptionsForPWD(),
   )
   console.log(composerValidateOutput.stdout)
 }
@@ -115,26 +109,30 @@ function getComposerJson() {
 }
 
 /**
- * @returns {Promise<void>}
+ * @return {{cwd: string, stdio: string}}
  */
-export default async function wpUpdate() {
-  const asyncExecOptions = {
+function getAsyncExecOptionsForPWD() {
+  return {
     stdio: "inherit",
     cwd: process.env.PWD,
   }
+}
 
+/**
+ * @returns {Promise<void>}
+ */
+export default async function wpUpdate() {
   const parsedPhpVersion = semver.parse(versions.php, {})
   const phpVersion = `>=${parsedPhpVersion.major}.${parsedPhpVersion.minor}`
   const minimumStability = "dev"
   const preferStable = true
 
   try {
-    await validateComposerFile(asyncExecOptions)
-    const composerJson = getComposerJson()
-    setMinimumStability(composerJson, minimumStability)
-    setPreferredStability(composerJson, preferStable)
-    await updateRequirePackages(composerJson, phpVersion, asyncExecOptions)
-    await updateRequireDevPackages(composerJson, asyncExecOptions)
+    await validateComposerFile()
+    setMinimumStability(minimumStability)
+    setPreferredStability(preferStable)
+    await updateRequirePackages(phpVersion)
+    await updateRequireDevPackages()
 
     writeWarning("Don't forget to Check your Major Updates.")
     writeSuccess("Composer update completed")
