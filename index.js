@@ -1,6 +1,8 @@
 #!/usr/bin/env node
+import { generateCompletionSpec } from "@fig/complete-commander"
 import chalk from "chalk"
 import { Command } from "commander"
+import fs from "fs"
 
 import {
   createCdnS3GoDaddy,
@@ -24,6 +26,7 @@ import exec from "./lib/exec.js"
 import { getSitesPath } from "./lib/path.js"
 import { set } from "./lib/store.js"
 import { checkLisaVersion } from "./lib/versions.js"
+import { generateVaultPass } from "./tasks/trellis.js"
 
 export const program = new Command()
 export const LISA_VERSION = "2.15.7"
@@ -140,6 +143,25 @@ Make sure your standing in the folder where your composer.json file is located.
     .description("Update Bucket Lifecycle Policy in S3")
     .action(updateBucketLicecyclePolicy)
 
+  program
+    .command("vault-pass-generate")
+    .description(
+      "Generate a new vault password, use when no existing password is available",
+    )
+    .argument(
+      "[path]",
+      "Path to where the vault password should be saved",
+      `${process.cwd()}/.vault_pass`,
+    )
+    .action(generateVaultPass)
+
+  if (process.env.NODE_ENV === "development") {
+    const lisaFigSecContent = generateCompletionSpec(program)
+    const lisaFigSecPath = `${process.env.HOME}/.fig/autocomplete/lisa.ts`
+    fs.writeFileSync(lisaFigSecPath, lisaFigSecContent, { encoding: "utf8" })
+    // npx @fig/publish-spec@latest --spec-path ~/.fig/autocomplete/lisa.ts
+    // npx @fig/publish-spec@latest --spec-path ~/.fig/autocomplete/lisa.ts --team triggerfish
+  }
   program.parse()
 }
 
