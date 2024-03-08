@@ -10,6 +10,7 @@ The features that is included now is the following:
 * Create a development database
 * Add all the config needed to be able to deploy the site to Kinsta with Trellis
 
+## 📚 Table Of Contents
 ## 🔧 Prerequisites
 You will need to install and configure the following stuff to use Lisa CLI:
 * [Node](https://nodejs.org/en/) version >= 12
@@ -21,6 +22,7 @@ You will need to install and configure the following stuff to use Lisa CLI:
 * [Vercel CLI](https://vercel.com/cli) version >= 28.0
 * [AWS CLI](https://aws.amazon.com/cli/) version >= 2.4
 * [1Password CLI](https://developer.1password.com/docs/cli) version >= 2.18
+
 
 ## 🪚 Installation
 ```npm i -g @triggerfishab/lisa-cli```
@@ -252,3 +254,18 @@ Example: `lisa s3 bucket set-lifecycle-policy`
 
 &nbsp;
 
+### `vault-pass-generate`
+Generate a new .vault_pass file for the project.
+<details>
+<summary>Read more</summary>
+<p>
+This command will generate a new .vault_pass file for the project. This is used to encrypt and decrypt the vault files in the project.
+
+Example:
+```sh
+lisa vault-pass-generate
+```
+</p>
+</details>
+
+&nbsp;
