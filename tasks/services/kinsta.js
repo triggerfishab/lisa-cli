@@ -162,8 +162,22 @@ export async function getKinstaSiteByProjectName(projectName) {
   })
   const siteIdJson = await siteIdResp.json()
 
-  siteIdJson.site.environments.forEach((env) => {
-    console.log(env)
+  siteIdJson.site.environments.forEach((environment) => {
+    console.log(environment)
+  })
+  const siteIdEnvironmentsResp = await fetch(
+    `https://api.kinsta.com/v2/sites/${siteId}/environments`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+      },
+    },
+  )
+  const siteIdEnvironmentsJson = await siteIdEnvironmentsResp.json()
+
+  siteIdEnvironmentsJson.site.environments.forEach((environment) => {
+    console.log(environment)
   })
 }
 
