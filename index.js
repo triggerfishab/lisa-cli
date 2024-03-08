@@ -1,8 +1,6 @@
 #!/usr/bin/env node
-import { generateCompletionSpec } from "@fig/complete-commander"
 import chalk from "chalk"
 import { Command } from "commander"
-import fs from "fs"
 
 import {
   createCdnS3GoDaddy,
@@ -29,7 +27,7 @@ import { checkLisaVersion } from "./lib/versions.js"
 import { generateVaultPass } from "./tasks/trellis.js"
 
 export const program = new Command()
-export const LISA_VERSION = "2.16.0"
+export const LISA_VERSION = "2.16.1"
 
 resetConf()
 checkNodeVersion()
@@ -155,13 +153,6 @@ Make sure your standing in the folder where your composer.json file is located.
     )
     .action(generateVaultPass)
 
-  if (process.env.NODE_ENV === "development") {
-    const lisaFigSecContent = generateCompletionSpec(program)
-    const lisaFigSecPath = `${process.env.HOME}/.fig/autocomplete/lisa.ts`
-    fs.writeFileSync(lisaFigSecPath, lisaFigSecContent, { encoding: "utf8" })
-    // npx @fig/publish-spec@latest --spec-path ~/.fig/autocomplete/lisa.ts
-    // npx @fig/publish-spec@latest --spec-path ~/.fig/autocomplete/lisa.ts --team triggerfish
-  }
   program.parse()
 }
 

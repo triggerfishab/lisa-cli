@@ -1,6 +1,6 @@
 {
   "name": "@triggerfishab/lisa-cli",
-  "version": "2.16.0",
+  "version": "2.16.1",
   "description": "CLI commands to generate a new project based on Lisa",
   "main": "./index.js",
   "bin": {
@@ -32,7 +32,6 @@
     "semver": "^7.3.8"
   },
   "devDependencies": {
-    "@fig/complete-commander": "^2.0.1",
     "@trivago/prettier-plugin-sort-imports": "^4.2.0",
     "@types/node": "^20.8.6",
     "eslint": "^8.51.0",
