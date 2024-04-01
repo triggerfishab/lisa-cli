@@ -1,4 +1,11 @@
-## Unreleased
+## 2.16.0 (2024-02-08)
+### Features
+* feat(wpUpdate): ✨ standardize composer.json settings - minimum-stability, prefer-stable - skip php extensions by @chrillep in https://github.com/triggerfishab/lisa-cli/pull/73
+* feat(vault): ✨ Add command for generating .vault_pass by @chrillep in https://github.com/triggerfishab/lisa-cli/pull/100
+
+## 2.15.7 (2023-11-08)
+### Features
+✨ Add custom tags (cost allocation tags) to S3 buckets and CloudFront distribution. This will allow us to see cost per bucket and distributions.
 
 ## 2.15.6 (2023-10-30)
 
