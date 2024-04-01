@@ -20,26 +20,26 @@ async function setupLocalSiteForDevelopment() {
   await changeVaultPasswords()
   await addGithubRepoSecrets()
 
-  let projectName = await getProjectName()
-  let apiName = await getApiName()
-  let tld = await getValetTld()
-  let trellisPath = getTrellisPath()
+  const projectName = await getProjectName()
+  const apiName = await getApiName()
+  const tld = await getValetTld()
+  const trellisPath = getTrellisPath()
 
-  let developmentGroupVarsPath = getGroupVarsPath("development")
-  let siteName = `${projectName}.${tld}`
-  let apiDomain = `${apiName}.${tld}`
+  const developmentGroupVarsPath = getGroupVarsPath("development")
+  const siteName = `${projectName}.${tld}`
+  const apiDomain = `${apiName}.${tld}`
 
   writeStep("Setup development files")
 
   try {
-    let wordpressSites = yaml.load(
+    const wordpressSites = yaml.load(
       fs.readFileSync(
         `${developmentGroupVarsPath}/wordpress_sites.yml`,
         "utf8",
       ),
     )
 
-    let config = { ...wordpressSites }
+    const config = { ...wordpressSites }
 
     config.wordpress_sites[siteName] = {
       ...config.wordpress_sites["lisa.test"],
@@ -63,7 +63,7 @@ async function setupLocalSiteForDevelopment() {
         ),
     )
 
-    let vaultConfig = {
+    const vaultConfig = {
       vault_wordpress_sites: {
         [siteName]: {
           env: {
@@ -117,11 +117,11 @@ async function setupLocalSiteForDevelopment() {
       `ansible-vault encrypt ${developmentGroupVarsPath}/vault.yml --vault-password-file ${trellisPath}/.vault_pass`,
     )
 
-    await exec(`trellis dotenv`, {
+    await exec("trellis dotenv", {
       cwd: trellisPath,
     })
 
-    await exec(`wp db create`, { cwd: `${apiName}/site` })
+    await exec("wp db create", { cwd: `${apiName}/site` })
 
     writeSuccess(`Local database called "${apiName}" created.`)
   } catch (e) {

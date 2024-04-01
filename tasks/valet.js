@@ -5,9 +5,9 @@ import { writeInfo, writeSuccess } from "../lib/write.js"
 async function linkValetSite() {
   writeInfo("Linking site to Valet.")
 
-  let apiName = conf.get("apiName")
-  let tld = await getValetTld()
-  let apiUrl = `https://${apiName}.${tld}`
+  const apiName = conf.get("apiName")
+  const tld = await getValetTld()
+  const apiUrl = `https://${apiName}.${tld}`
 
   await exec(`valet link --secure ${apiName}`, { cwd: `${apiName}/site/web` })
 
@@ -16,7 +16,7 @@ async function linkValetSite() {
 }
 
 export async function getValetTld() {
-  let tld = await exec("valet tld")
+  const tld = await exec("valet tld")
 
   return tld.stdout.trim()
 }

@@ -5,27 +5,27 @@ import { writeInfo, writeSuccess } from "../lib/write.js"
 async function installDependencies() {
   writeInfo("Installing dependencies.")
 
-  let appPromise = installAppDependencies()
-  let apiPromise = installApiDependencies()
+  const appPromise = installAppDependencies()
+  const apiPromise = installApiDependencies()
 
   await Promise.all([appPromise, apiPromise])
   writeSuccess("All dependencies installed.")
 }
 
 async function installAppDependencies() {
-  let appName = conf.get("appName")
+  const appName = conf.get("appName")
 
   writeInfo("Installing app dependencies...")
   exec(`yarn --cwd=${appName}`)
 }
 
 async function installApiDependencies() {
-  let apiName = conf.get("apiName")
+  const apiName = conf.get("apiName")
 
   writeInfo("Installing composer dependencies...")
 
-  let sitePromise = exec(`composer install --working-dir=${apiName}/site`)
-  let themePromise = exec(
+  const sitePromise = exec(`composer install --working-dir=${apiName}/site`)
+  const themePromise = exec(
     `composer install --working-dir=${apiName}/site/web/app/themes/lisa`,
   )
 

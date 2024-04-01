@@ -38,13 +38,13 @@ export async function createGoDaddy() {
       validate: (value) => {
         if (previousGlobal === "TXT") {
           return true
-        } else if (previousGlobal === "CNAME") {
+        }
+        if (previousGlobal === "CNAME") {
           return /^[a-z0-9-\.]+$/.test(value)
             ? true
             : "Please use lowercase, periods and hyphens only"
-        } else {
-          return isIP(value) ? true : "Please enter a valid IP address"
         }
+        return isIP(value) ? true : "Please enter a valid IP address"
       },
     },
   ])

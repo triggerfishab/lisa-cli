@@ -9,12 +9,12 @@ import { writeInfo, writeStep } from "../lib/write.js"
 export default async function writeLisaStatusSummary() {
   writeStep("A summary of your Lisa setup")
 
-  let lisaPath = await asyncExec("lisa path")
+  const lisaPath = await asyncExec("lisa path")
 
   console.log(lisaPath.stdout.trim())
   writeInfo("Versions of your packages:")
 
-  let summary = []
+  const summary = []
 
   summary.push(`   Lisa CLI: ${chalk.green(LISA_VERSION)}`)
 

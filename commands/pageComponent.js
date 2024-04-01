@@ -30,13 +30,13 @@ export async function createPageComponent() {
 
   process.chdir(gitRoot)
 
-  let { name, label } = await prompts([
+  const { name, label } = await prompts([
     {
       type: "text",
       name: "name",
       message:
         "What will your new component be called? Use camelCase for the name.",
-      validate: async (name) => {
+      validate: async(name) => {
         targetPath = `${gitRoot}/components/pageComponents/${name}`
         storybookPath = `${gitRoot}/stories/pageComponents`
         if (existsSync(targetPath)) {
@@ -56,7 +56,7 @@ export async function createPageComponent() {
     },
   ])
 
-  let pascalCaseName = name[0].toUpperCase() + name.substring(1)
+  const pascalCaseName = name[0].toUpperCase() + name.substring(1)
 
   mkdirSync(targetPath)
 
@@ -160,7 +160,7 @@ export async function createPageComponent() {
   const typesMatches = typesTs.match(/import type { T(.*)/gm)
   const typesMatch = typesMatches.pop()
 
-  const typesImportMatches = typesTs.match(/  \| T(.*)/gm)
+  const typesImportMatches = typesTs.match(/ {2}\| T(.*)/gm)
   const typesImportMatch = typesImportMatches.pop()
 
   const typesImportFormattedValue = `${typesMatch}\nimport type { T${pascalCaseName} } from "@/pageComponents/${name}"`

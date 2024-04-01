@@ -9,7 +9,7 @@ export async function createSendGrid() {
 
   await setupSendgridAccount()
 
-  let sendgridApiKey = store.get("sendgridApiKey")
+  const sendgridApiKey = store.get("sendgridApiKey")
 
   if (sendgridApiKey) {
     writeSuccess("SendGrid account created!")

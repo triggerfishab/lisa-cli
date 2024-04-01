@@ -9,9 +9,9 @@ import { writeInfo, writeSuccess } from "../lib/write.js"
 async function dbImport() {
   await getProjectName()
 
-  let trellisPath = getTrellisPath()
+  const trellisPath = getTrellisPath()
 
-  let { environment } = await prompts({
+  const { environment } = await prompts({
     type: "select",
     name: "environment",
     choices: [
@@ -21,17 +21,20 @@ async function dbImport() {
     message: "From which environment do you want to import the database?",
   })
 
-  let hostFile = fs.readFileSync(`${trellisPath}/hosts/${environment}`, "utf-8")
+  const hostFile = fs.readFileSync(
+    `${trellisPath}/hosts/${environment}`,
+    "utf-8",
+  )
 
-  let mainFile = fs.readFileSync(
+  const mainFile = fs.readFileSync(
     `${trellisPath}/group_vars/${environment}/main.yml`,
     "utf-8",
   )
 
-  let host = hostFile.match(/ansible_host=([^\s]+)/)[1]
-  let port = hostFile.match(/ansible_ssh_port=([^\s]+)/)[1]
-  let user = mainFile.match(/web_user: ([^\s]+)/)[1]
-  let docroot = mainFile.match(/www_root: ([^\s]+)/)[1]
+  const host = hostFile.match(/ansible_host=([^\s]+)/)[1]
+  const port = hostFile.match(/ansible_ssh_port=([^\s]+)/)[1]
+  const user = mainFile.match(/web_user: ([^\s]+)/)[1]
+  const docroot = mainFile.match(/www_root: ([^\s]+)/)[1]
 
   writeInfo(`Making database dump on ${environment}...`)
 
