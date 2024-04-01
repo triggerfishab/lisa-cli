@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import chalk from "chalk"
-import { Command } from "commander"
+import { Argument, Command } from "commander"
 
 import {
   createCdnS3GoDaddy,
@@ -28,13 +28,10 @@ import { checkLisaVersion } from "./lib/versions.js"
 import { checkGithubApiStatus } from "./tasks/repo.js"
 import { generateVaultPass } from "./tasks/trellis.js"
 
-export const program = new Command()
-export const LISA_VERSION = "2.16.1"
 export const program = new Command().configureHelp({
   sortSubcommands: true,
 })
-
-export const LISA_VERSION = "2.15.6"
+export const LISA_VERSION = "2.16.1"
 
 resetConf()
 checkNodeVersion()
