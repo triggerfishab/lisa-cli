@@ -1,6 +1,6 @@
 import {
   CloudFrontClient,
-  CreateDistributionCommand,
+  CreateDistributionWithTagsCommand,
   GetDistributionConfigCommand,
   ListDistributionsCommand,
   UpdateCloudFrontOriginAccessIdentityCommand,
@@ -18,6 +18,7 @@ import {
   GetBucketLocationCommand,
   PutBucketLifecycleConfigurationCommand,
   PutBucketPolicyCommand,
+  PutBucketTaggingCommand,
   PutBucketVersioningCommand,
   PutPublicAccessBlockCommand,
   S3Client,
@@ -63,6 +64,7 @@ export async function setupAWS(environment = "production") {
 
     await putBucketPublicAccessBlock(bucketName)
     await putBucketLifeCycleRule(bucketName)
+    await putBucketTags(bucketName)
 
     writeSuccess(`S3 bucket for ${environment} created.`)
 
@@ -118,8 +120,13 @@ export async function setupAWS(environment = "production") {
       },
     }
 
-    const command = new CreateDistributionCommand({
-      DistributionConfig: distributionConfig,
+    const command = new CreateDistributionWithTagsCommand({
+      DistributionConfigWithTags: {
+        DistributionConfig: distributionConfig,
+        Tags: {
+          Items: getTags(bucketName),
+        },
+      },
     })
 
     const distribution = await cloudFrontClient.send(command)
@@ -149,7 +156,7 @@ async function putBucketPolicy(bucketName) {
   try {
     const [accessKeyId, secretAccessKey, canonicalUserId] = await getAWSKeys()
 
-    const bucketRegion = await GetBucketRegion(bucketName)
+    const bucketRegion = await getBucketRegion(bucketName)
     // Update bucket policy
     const bucketPolicy = {
       Version: "2008-10-17",
@@ -262,7 +269,7 @@ async function putBucketLifeCycleRule(bucketName) {
     const [accessKeyId, secretAccessKey, canonicalUserId, accountId] =
       await getAWSKeys()
 
-    const bucketRegion = await GetBucketRegion(bucketName)
+    const bucketRegion = await getBucketRegion(bucketName)
 
     const s3Client = new S3Client({
       region: bucketRegion,
@@ -296,12 +303,21 @@ async function putBucketLifeCycleRule(bucketName) {
   }
 }
 
+function getTags(bucketName) {
+  return [
+    {
+      Key: "cdn.triggerfish.cloud",
+      Value: bucketName.replace(".cdn.triggerfish.cloud", ""),
+    },
+  ]
+}
+
 async function putBucketPublicAccessBlock(bucketName) {
   try {
     const [accessKeyId, secretAccessKey, canonicalUserId, accountId] =
       await getAWSKeys()
 
-    const bucketRegion = await GetBucketRegion(bucketName)
+    const bucketRegion = await getBucketRegion(bucketName)
 
     const s3Client = new S3Client({
       region: bucketRegion,
@@ -326,7 +342,34 @@ async function putBucketPublicAccessBlock(bucketName) {
   }
 }
 
-async function GetBucketRegion(bucketName) {
+async function putBucketTags(bucketName) {
+  try {
+    const [accessKeyId, secretAccessKey, canonicalUserId, accountId] =
+      await getAWSKeys()
+
+    const bucketRegion = await getBucketRegion(bucketName)
+
+    const s3Client = new S3Client({
+      region: bucketRegion,
+      credentials: { accessKeyId, secretAccessKey },
+      canonicalUserId,
+    })
+
+    await s3Client.send(
+      new PutBucketTaggingCommand({
+        Bucket: bucketName,
+        ExpectedBucketOwner: accountId,
+        Tagging: {
+          TagSet: getTags(bucketName),
+        },
+      }),
+    )
+  } catch (error) {
+    writeError(`${bucketName}: ${error}`)
+  }
+}
+
+async function getBucketRegion(bucketName) {
   try {
     const [accessKeyId, secretAccessKey, canonicalUserId, accountId] =
       await getAWSKeys()

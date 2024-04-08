@@ -12,35 +12,41 @@ import {
 } from "../lib/vault.js"
 import { writeStep, writeSuccess } from "../lib/write.js"
 
-export async function addVaultPassword() {
-  let trellisPath = getTrellisPath()
-  let vaultPassPath = `${trellisPath}/.vault_pass`
-  let password = generator.generate({
+export async function generateVaultPass(
+  vaultPassPath = `${process.cwd()}/.vault_pass`,
+) {
+  console.log(vaultPassPath)
+  const password = generator.generate({
     length: 32,
     numbers: true,
   })
 
-  fs.writeFile(vaultPassPath, password, (err) => {
+  fs.writeFile(vaultPassPath, password, { encoding: "utf8" }, (err) => {
     if (err) {
       console.log(err)
     }
   })
-
   conf.set("vaultPass", password)
 
   writeSuccess(`Vault pass written to ${vaultPassPath}`)
 }
 
+export async function addVaultPassword() {
+  const trellisPath = getTrellisPath()
+  const vaultPassPath = `${trellisPath}/.vault_pass`
+  await generateVaultPass(vaultPassPath)
+}
+
 export async function changeVaultPasswords() {
   writeStep("Update all vault files with new vault pass")
 
-  let lisaVaultPassPath = getLisaVaultPassPath()
-  let vaultPassPath = getVaultPassPath()
+  const lisaVaultPassPath = getLisaVaultPassPath()
+  const vaultPassPath = getVaultPassPath()
 
-  let allGroupVarsPath = getGroupVarsPath("all")
-  let developmentGroupVarsPath = getGroupVarsPath("development")
-  let stagingGroupVarsPath = getGroupVarsPath("staging")
-  let productionGroupVarsPath = getGroupVarsPath("production")
+  const allGroupVarsPath = getGroupVarsPath("all")
+  const developmentGroupVarsPath = getGroupVarsPath("development")
+  const stagingGroupVarsPath = getGroupVarsPath("staging")
+  const productionGroupVarsPath = getGroupVarsPath("production")
 
   await writeTempLisaVaultPass()
 

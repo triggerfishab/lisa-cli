@@ -24,9 +24,10 @@ import exec from "./lib/exec.js"
 import { getSitesPath } from "./lib/path.js"
 import { set } from "./lib/store.js"
 import { checkLisaVersion } from "./lib/versions.js"
+import { generateVaultPass } from "./tasks/trellis.js"
 
 export const program = new Command()
-export const LISA_VERSION = "2.15.5"
+export const LISA_VERSION = "2.16.1"
 
 resetConf()
 checkNodeVersion()
@@ -143,6 +144,18 @@ async function initProgram() {
     .command("s3 bucket set-lifecycle-policy")
     .description("Update Bucket Lifecycle Policy in S3")
     .action(updateBucketLicecyclePolicy)
+
+  program
+    .command("vault-pass-generate")
+    .description(
+      "Generate a new vault password, use when no existing password is available",
+    )
+    .argument(
+      "[path]",
+      "Path to where the vault password should be saved",
+      `${process.cwd()}/.vault_pass`,
+    )
+    .action(generateVaultPass)
 
   program.parse()
 }
