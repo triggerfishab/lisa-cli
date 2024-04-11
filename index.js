@@ -119,12 +119,16 @@ async function initProgram() {
 
   program
     .command("wp update")
-    .description(
-      `Update WordPress and Composer dependencies.
-Make sure your standing in the folder where your composer.json file is located.
-    `,
+    .description("Update WordPress and Composer dependencies.")
+    .addHelpCommand(
+      "Make sure your standing in the folder where your composer.json file is located.",
     )
     .action(wpUpdate)
+    .option(
+      "-f, --fast",
+      "combines required packages and required-dev packages into one command into one line",
+      false,
+    )
 
   program
     .command("godaddy create")
