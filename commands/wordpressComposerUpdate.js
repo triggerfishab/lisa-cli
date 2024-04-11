@@ -11,11 +11,12 @@ import {
 } from "../lib/write.js"
 
 /**
- * @param {object} composerJson
  * @param {string} minimumStability
  * @returns {void}
  */
-function setMinimumStability(composerJson, minimumStability) {
+function setMinimumStability(minimumStability) {
+  const composerJson = getComposerJson()
+
   if (composerJson["minimum-stability"] !== minimumStability) {
     const updatedComposerJson = composerJson
     updatedComposerJson["minimum-stability"] = minimumStability
@@ -27,11 +28,12 @@ function setMinimumStability(composerJson, minimumStability) {
 }
 
 /**
- * @param {object} composerJson
  * @param {boolean} preferStable
  * @returns {void}
  */
-function setPreferredStability(composerJson, preferStable) {
+function setPreferredStability(preferStable) {
+  const composerJson = getComposerJson()
+
   if (composerJson["prefer-stable"] !== preferStable) {
     const updatedComposerJson = composerJson
     updatedComposerJson["prefer-stable"] = preferStable
@@ -184,8 +186,8 @@ export default async function wpUpdate(args, options) {
   try {
     await validateComposerFile(asyncExecOptions)
     const composerJson = getComposerJson()
-    setMinimumStability(composerJson, minimumStability)
-    setPreferredStability(composerJson, preferStable)
+    setMinimumStability(minimumStability)
+    setPreferredStability(preferStable)
     await updateRequirePackages(
       composerJson,
       phpVersion,
