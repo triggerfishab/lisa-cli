@@ -126,7 +126,7 @@ async function initProgram() {
     .action(wpUpdate)
     .option(
       "-f, --fast",
-      "Combines all commands into one, for example: lisa wp update fast",
+      "combines required packages and required-dev packages into one command into one line",
       false,
     )
 
