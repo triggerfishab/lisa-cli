@@ -1,3 +1,14 @@
+
+## 2.17.0 (2024-04-11)
+### Features
+* feat(wp update): ✨ fast wp update by @chrillep in https://github.com/triggerfishab/lisa-cli/pull/82
+
+## 2.16.1 (2024-02-08)
+### Features
+* feat(wpUpdate): ✨ standardize composer.json settings - minimum-stability, prefer-stable - skip php extensions by @chrillep in https://github.com/triggerfishab/lisa-cli/pull/73
+* feat(vault): ✨ Add command for generating .vault_pass by @chrillep in https://github.com/triggerfishab/lisa-cli/pull/100
+
+
 ## 2.16.0 (2024-02-08)
 ### Features
 * feat(wpUpdate): ✨ standardize composer.json settings - minimum-stability, prefer-stable - skip php extensions by @chrillep in https://github.com/triggerfishab/lisa-cli/pull/73

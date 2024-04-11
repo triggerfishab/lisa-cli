@@ -211,8 +211,33 @@ Update WordPress and Composer dependencies.
 <details>
 <summary>Read more</summary>
 <p>
+Examples:
 
-Example: `lisa wp update`
+```sh
+lisa wp update
+```
+
+```sh
+lisa wp update --fast
+```
+
+commands that will be run:
+
+**without** _--fast_
+```sh
+composer require composer/installers -W
+composer require roots/acorn -W
+composer require roots/wordpress -W
+composer require rector/rector -W --dev
+composer require squizlabs/php_codesniffer -W --dev
+composer require johnbillion/query-monitor -W --dev
+```
+**with** _--fast_
+```sh
+composer require composer/installers roots/acorn roots/wordpress -W
+composer require rector/rector squizlabs/php_codesniffer johnbillion/query-monitor -W --dev
+```
+
 </p>
 </details>
 
