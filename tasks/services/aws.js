@@ -118,7 +118,7 @@ export async function setupAWS(environment = "production") {
         SSLSupportMethod: "sni-only",
         MinimumProtocolVersion: "TLSv1.2_2021",
       },
-       HttpVersion: "http2and3",
+      HttpVersion: "http2and3",
     }
 
     const command = new CreateDistributionWithTagsCommand({
