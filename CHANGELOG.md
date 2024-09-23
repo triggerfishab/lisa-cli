@@ -1,4 +1,9 @@
 
+## 2.18.0 (2024-04-11)
+### Features
+* feat(http3): ✨ Enable both http/2 and http/3 support by default when creating a cloudfront distro by @chrillep in https://github.com/triggerfishab/lisa-cli/pull/116
+  feat(wp update): ✨ fast wp update by @chrillep in https://github.com/triggerfishab/lisa-cli/pull/82
+
 ## 2.17.0 (2024-04-11)
 ### Features
 * feat(wp update): ✨ fast wp update by @chrillep in https://github.com/triggerfishab/lisa-cli/pull/82
