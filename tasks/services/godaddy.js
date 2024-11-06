@@ -51,7 +51,7 @@ export async function createGoDaddyDnsRecord(recordData) {
 async function getCredentials() {
   try {
     return await exec(
-      `op item get l2i57yslyjfr5jsieew4imwxgq --fields label="godaddy.api key",label="godaddy.api secret"`,
+      `op item get uhfxs25bmpaqk24fay4wz7qsie --fields label="godaddy.api key",label="godaddy.api secret"`,
     ).then((res) => res.stdout.trim().split(","))
   } catch (error) {
     writeError(`Failed accessing 1Password. \n ${error}`)
