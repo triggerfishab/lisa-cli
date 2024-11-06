@@ -1,3 +1,6 @@
+## 2.19.0 (2024-10-02)
+### Features
+* feat(sendgrid): ✨ Update checking of correct ip before accessing the Sendgrid api
 
 ## 2.18.0 (2024-04-11)
 ### Features
