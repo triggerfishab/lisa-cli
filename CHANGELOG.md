@@ -1,3 +1,7 @@
+## 2.20.0 (2024-11-06)
+### Fixes
+🛠 Fix faulty item id after changing vaults in 1Password.
+
 ## 2.19.0 (2024-10-02)
 ### Features
 * feat(sendgrid): ✨ Update checking of correct ip before accessing the Sendgrid api
