@@ -8,7 +8,7 @@ import { writeError, writeSuccess } from "../../lib/write.js"
 async function createKinstaSite() {
   try {
     const [apiKey, companyId] = await exec(
-      "op item get l2i57yslyjfr5jsieew4imwxgq --fields label='kinsta.api key',label='kinsta.company id'",
+      "op item get uhfxs25bmpaqk24fay4wz7qsie --fields label='kinsta.api key',label='kinsta.company id'",
     ).then((res) => res.stdout.trim().split(","))
 
     const projectName = await askForProjectName(
