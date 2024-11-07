@@ -27,7 +27,7 @@ import { checkLisaVersion } from "./lib/versions.js"
 import { generateVaultPass } from "./tasks/trellis.js"
 
 export const program = new Command()
-export const LISA_VERSION = "2.20.0"
+export const LISA_VERSION = "2.20.1"
 
 resetConf()
 checkNodeVersion()

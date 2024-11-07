@@ -396,7 +396,7 @@ async function getBucketRegion(bucketName) {
 async function saveAccessKey(accessKeyId, secretAccessKey, fullProjectName) {
   try {
     return await exec(
-      `op item create --category login --title ${fullProjectName} 'username=${accessKeyId}' 'secretAccessKey=${secretAccessKey}' --vault g5rjl6vo44f3fnucye7zonybs4`,
+      `op item create --category login --title ${fullProjectName} 'username=${accessKeyId}' 'secretAccessKey=${secretAccessKey}' --vault sgqdtx2zolsz4rwq7wjnvkmxhy`,
     )
   } catch (error) {
     writeError(`Failed saving access keys to 1Password. \n ${error}`)
@@ -407,7 +407,7 @@ async function saveAccessKey(accessKeyId, secretAccessKey, fullProjectName) {
 async function getAWSKeys() {
   try {
     return await exec(
-      "op item get l2i57yslyjfr5jsieew4imwxgq --fields label='aws.access key id',label='aws.secret access key',label='aws.canonical user id',label='aws.account id'",
+      "op item get uhfxs25bmpaqk24fay4wz7qsie --fields label='aws.access key id',label='aws.secret access key',label='aws.canonical user id',label='aws.account id'",
     ).then((res) => res.stdout.trim().split(","))
   } catch (error) {
     writeError(`Failed accessing 1Password. \n ${error}`)
