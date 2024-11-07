@@ -1,3 +1,8 @@
+## 2.20.1 (2024-11-07)
+### Fixes
+🛠 Fix faulty item id for aws after changing vaults in 1Password.
+🛠 Fix faulty item id for lisa after changing vaults in 1Password.
+
 ## 2.20.0 (2024-11-06)
 ### Fixes
 🛠 Fix faulty item id after changing vaults in 1Password.
@@ -14,7 +19,7 @@
 ## 2.17.0 (2024-04-11)
 ### Features
 * feat(wp update): ✨ fast wp update by @chrillep in https://github.com/triggerfishab/lisa-cli/pull/82
-
+g
 ## 2.16.1 (2024-02-08)
 ### Features
 * feat(wpUpdate): ✨ standardize composer.json settings - minimum-stability, prefer-stable - skip php extensions by @chrillep in https://github.com/triggerfishab/lisa-cli/pull/73
