@@ -28,7 +28,7 @@ jobs:
         run: yarn install
         
       - name: Prettify code
-        uses: creyD/prettier_action@v4.3
+        uses: creyD/prettier_action@8c18391fdc98ed0d884c6345f03975edac71b8f0 # v4.6
         with:
           # This part is also where you can pass other options, for example:
           prettier_options: --write **/*.{js,md}
