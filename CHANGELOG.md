@@ -1,3 +1,7 @@
+## 2.20.2 (2025-10-06)
+### Fixes
+🛠 Bug fix checking of correct ip before accessing the Sendgrid api
+
 ## 2.20.1 (2024-11-07)
 ### Fixes
 🛠 Fix faulty item id for aws after changing vaults in 1Password.
