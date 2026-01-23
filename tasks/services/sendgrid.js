@@ -12,13 +12,13 @@ import {
 } from "../../lib/write.js"
 
 async function setupSendgridAccount() {
-  let projectName = await getProjectName()
+  const projectName = await getProjectName()
   let apiKey = ""
 
   writeStep("Creating Sendgrid subuser")
   try {
     apiKey = await exec(
-      `op item get uhfxs25bmpaqk24fay4wz7qsie --fields label="sendgrid.api key"`,
+      "op read \"op://STO TF Shared/LISA CLI/SENDGRID/api key\"",
     ).then((res) => res.stdout.trim())
   } catch (error) {
     writeError(`Failed accessing 1Password. \n ${error}`)
@@ -47,7 +47,7 @@ async function setupSendgridAccount() {
     }
     */
 
-    let body = {
+    const body = {
       username: projectName,
       email: `${projectName}@sendgrid.triggerfish.se`,
       password: passwordGenerator.generate({
@@ -57,14 +57,13 @@ async function setupSendgridAccount() {
       }),
       ips: [ip],
     }
-
     const [, subuser] = await client.request({
       method: "POST",
       url: "/v3/subusers",
       body,
     })
 
-    writeSuccess(`Sendgrid subuser created`)
+    writeSuccess("Sendgrid subuser created")
 
     writeStep("Creating Sendgrid subuser api key")
 

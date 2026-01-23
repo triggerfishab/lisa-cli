@@ -1,3 +1,7 @@
+## 2.20.3 (2026-01-23)
+### Fixes
+🛠 Fix faulty item id for Sendgrid after changing 1Password organisation.
+
 ## 2.20.2 (2025-10-06)
 ### Fixes
 🛠 Bug fix checking of correct ip before accessing the Sendgrid api
